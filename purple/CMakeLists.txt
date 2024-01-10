@@ -2,12 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(purple)
 
-include_directories(include 
-                    vendor)
+include_directories(include)
 
 aux_source_directory(src SRCS)
-# aux_source_directory(src/core SRCS_CORE)
-# aux_source_directory(src/log SRCS_LOG)
 
 # 动态库
 add_library(${PROJECT_NAME} 
@@ -18,5 +15,7 @@ add_library(${PROJECT_NAME}
 # add_library(${PROJECT_NAME} 
 #                 STATIC 
 #                 ${SRCS})
+
+target_link_libraries(${PROJECT_NAME} glfw)
 
 

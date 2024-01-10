@@ -19,10 +19,13 @@ file -> object for render or play
 ### 目录说明
     purple 
         引擎主体库
-        log 日志 提供三种日志等级 info warn err
+        log 日志 提供三种日志等级 info warn error
 
     sandbox 
         调用purple的应用程序
+
+    vender
+        第三方库
 
 
 
