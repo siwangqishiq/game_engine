@@ -18,6 +18,9 @@ aux_source_directory(sandbox SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-Wall")
+# set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-mwindows")
+
 target_link_libraries(${PROJECT_NAME} purple)
 target_link_libraries(${PROJECT_NAME} pan)
 target_link_libraries(${PROJECT_NAME} glfw)
