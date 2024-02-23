@@ -2,9 +2,18 @@
 #pragma once
 
 #include "log.h"
-#include "application.h"
 
 namespace purple{
-    void hello_purple();
+    
+    inline const char *TAG = "purple";
+    inline int ScreenWidth;
+    inline int ScreenHeight;
+
+    class Engine{
+    public:
+        static void init(int width , int height);
+
+        static void dispose();
+    };
 }
 
