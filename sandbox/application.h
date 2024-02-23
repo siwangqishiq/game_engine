@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+
+#define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
 class Application{
@@ -7,7 +9,7 @@ public:
     const std::string TAG = "SandBoxApp";
     //init application
     void init();
-
+    
     // main loop
     void runLoop();
     
@@ -21,6 +23,8 @@ public:
         dispose();
         return 0;
     }
+
+    void tick();
 
 private:
     GLFWwindow* window = nullptr;

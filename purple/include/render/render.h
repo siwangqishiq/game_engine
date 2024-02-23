@@ -10,7 +10,6 @@
  */
 #pragma once
 #include <memory>
-#include "glheader.h"
 #include <string>
 #include <vector>
 #include "glm/matrix.hpp"

@@ -21,14 +21,58 @@ void Application::init(){
         glfwTerminate();
         return;
     }
+
+    glfwMakeContextCurrent(window);
     
     purple::Engine::init(screenWidth , screenHeight);
+
+    purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
+        purple::Log::w("timer" , "ticker : %lld" , purple::currentTimeMillis());
+    } , 1000L);
+}
+
+void Application::tick(){
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    purple::TextPaint p4;
+    p4.setTextSize(purple::ScreenHeight / 20.0f);
+    p4.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
+    std::wstring name = L"你好世界";
+    std::wstring fpsStr = name;
+
+    purple::Rect outputRect;
+    outputRect.left = 0.0f;
+    outputRect.top = purple::ScreenHeight - 16.0f;
+    outputRect.width = purple::ScreenWidth - 16.0f;
+    outputRect.height = purple::ScreenHeight;
+    p4.textGravity = purple::TopRight;
+
+    purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , p4 , nullptr);
+
+    purple::Rect rect;
+    rect.left = 0.0f;
+    rect.top = purple::ScreenHeight;
+    rect.width = purple::ScreenWidth / 2.0f;
+    rect.height = purple::ScreenHeight / 2.0f;
+
+    purple::Paint rectPaint;
+    rectPaint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f); 
+
+    auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
+    batch->begin();
+    batch->renderRect(rect , rectPaint);
+    batch->end();
 }
 
 void Application::runLoop(){
     purple::Log::i(TAG , "Application runLoop");
     
     while(!glfwWindowShouldClose(window)) {
+        purple::Engine::tick();
+
+        tick();
+
         glfwSwapBuffers(window);
         glfwPollEvents();
         glfwSwapInterval(1);//锁定固定帧率

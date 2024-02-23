@@ -17,6 +17,11 @@
 #include <glad/glad.h>
 #endif
 
+// #ifndef _GLAD_
+// #define _GLAD_
+// #include "glad/glad.h"
+// #endif
+
 
 
 
