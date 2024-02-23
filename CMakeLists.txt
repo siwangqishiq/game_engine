@@ -6,6 +6,12 @@ project(app)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE}" -ldl)
+    set (CMAKE_CXX_FLAGS -pthread)
+endif()
+
+
 include_directories(purple/include)
 include_directories(vender/glfw)
 
