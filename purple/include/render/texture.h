@@ -28,7 +28,7 @@ namespace purple{
         int format;
     };
 
-    static GLint convertChanelToInternalFormat(int channelFormat);
+    GLint convertChanelToInternalFormat(int channelFormat);
 
     //纹理管理
     class TextureManager{

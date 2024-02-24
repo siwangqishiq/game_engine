@@ -7,6 +7,9 @@
 #include "render/render.h"
 #include "render/render_batch.h"
 #include "widget/timer.h"
+#include "render/texture.h"
+#include "render/sprite.h"
+
 
 namespace purple{
     

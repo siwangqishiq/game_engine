@@ -3,6 +3,8 @@
 
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
+#include <memory>
+#include "purple.h"
 
 class Application{
 public:
@@ -30,5 +32,7 @@ private:
     GLFWwindow* window = nullptr;
     int screenWidth = 800;
     int screenHeight = 600;
+
+    std::shared_ptr<purple::TextureImage> image;
 };
 

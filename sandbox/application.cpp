@@ -29,11 +29,24 @@ void Application::init(){
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
         purple::Log::w("timer" , "ticker : %lld" , purple::currentTimeMillis());
     } , 1000L);
+
+    image = purple::BuildImageByAsset(std::string("t2.jpg"));
 }
 
 void Application::tick(){
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    purple::Rect imgDstRect;
+    imgDstRect.left = 0.0f;
+    imgDstRect.top = purple::ScreenHeight;
+    imgDstRect.width = purple::ScreenWidth;
+    imgDstRect.height = purple::ScreenHeight;
+    auto spriteBatch  = purple::Engine::getRenderEngine()->getSpriteBatch();
+    spriteBatch->begin();
+    auto src = image->getRect();
+    spriteBatch->renderImage(*image , src , imgDstRect);
+    spriteBatch->end();
 
     purple::TextPaint p4;
     p4.setTextSize(purple::ScreenHeight / 20.0f);
@@ -57,12 +70,14 @@ void Application::tick(){
     rect.height = purple::ScreenHeight / 2.0f;
 
     purple::Paint rectPaint;
-    rectPaint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f); 
+    rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.2f); 
 
     auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
     batch->begin();
     batch->renderRect(rect , rectPaint);
     batch->end();
+
+   
 }
 
 void Application::runLoop(){
