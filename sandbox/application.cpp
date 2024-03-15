@@ -16,6 +16,10 @@ void Application::init(){
 
     window = glfwCreateWindow(screenWidth, screenHeight, "run", nullptr, nullptr);
     
+    glfwSetCharCallback(window , [](GLFWwindow* window_, unsigned int codepoint){
+        std::cout << "ime:" << codepoint << std::endl;
+    });
+
     if (window == nullptr) {
         purple::Log::e(TAG, "Failed to create GLFW window");
         glfwTerminate();

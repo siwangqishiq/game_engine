@@ -102,6 +102,10 @@ namespace purple{
         //arc
         ShaderManager::getInstance()->loadAssetShader("primitive_arc" , 
             "shader/primitive_arc_vert.glsl", "shader/primitive_arc_frag.glsl");
+
+        //triangle
+        ShaderManager::getInstance()->loadAssetShader("primitive_triangles",
+            "shader/primitive_triangles_vert.glsl", "shader/primitive_triangles_frag.glsl");
     }
 
     void RenderEngine::resetNormalMat(float w , float h){
@@ -550,34 +554,24 @@ namespace purple{
     }
 
     //三角形绘制
-    void RenderEngine::renderTriangles(
+    void RenderEngine::renderTriangle(
                         float p1x,  float p1y, 
                         float p2x , float p2y,
                         float p3x , float p3y,
-                        glm::mat4 &transMat, Paint &paint){
-        const int attrPerVer = 3 + 4;
-        std::vector<float> data(attrPerVer * 3);
-        int index = 0;
+                        glm::mat4 &mat, Paint &paint){
         std::vector<float> posVec = {p1x , p1y , p2x , p2y , p3x , p3y};
-        while(index < 3){
-            int offset = index * attrPerVer;
-            data[offset + 0] = posVec[index << 1 + 0];
-            data[offset + 1] = posVec[index << 1 + 1];
-            
-            data[offset + 2] = paint.color[0];
-            data[offset + 3] = paint.color[1];
-            data[offset + 4] = paint.color[2];
-            data[offset + 5] = paint.color[3];
-            index++;
-        }//end while
-        renderTriangles(data , transMat , paint);
+        renderTriangles(posVec , mat , paint);
     }
 
     //三角形绘制
-    void RenderEngine::renderTriangles(std::vector<float> &data ,glm::mat4 &transMat, Paint &paint){
-        const int attrPerVer = 2 + 4;
-        int vertexCount = data.size() / attrPerVer;
-
+    void RenderEngine::renderTriangles(std::vector<float> &vertex ,glm::mat4 &mat, Paint &paint){
+        TrianglesRenderCommand cmd(this);
+        Shader trianglesShader = ShaderManager::getInstance()->getShaderByName("primitive_triangles");
+        // std::cout << "vertex " << vertex[0]<< ", " << vertex[1]
+        //     << "  , "<< vertex[2]<< ", " << vertex[3]
+        //     << "  , "<< vertex[4]<< ", " << vertex[5] << std::endl;
+        cmd.putParams(trianglesShader , vertex , paint , mat);
+        cmd.runCommands();
     }
 
     //自定义带纹理的shader
@@ -630,6 +624,116 @@ namespace purple{
 
         buf[8] = buf[0];
         buf[9] = buf[1];
+    }
+
+    std::shared_ptr<TextureInfo> RenderEngine::buildVirtualTexture(
+            std::string texName,
+            int texWidth , 
+            int texHeight ,
+            std::function<void(int , int)> renderFn){
+        //craete a virtual texture
+        std::shared_ptr<TextureInfo> ret = TextureManager::getInstance()->createEmptyTexture(texName , texWidth , texHeight , GL_RGBA);
+        if(ret == nullptr){
+            Log::e("buildVirtualTexture" , "createEmptyTexture error");
+            return nullptr;
+        }
+
+        ret->category = TextureCategory::VIRTUAL_TEX;
+        const int viewWidth = texWidth;
+        const int viewHeight = texHeight;
+
+        int errCode = createFrameBufferForVirtualTexture(ret);
+        if(errCode < 0){
+            Log::e("buildVirtualTexture" , "createFrameBufferForVirtualTexture error");
+            return nullptr;
+        }
+        
+        glBindFramebuffer(GL_FRAMEBUFFER , ret->framebufferId);
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+            Log::e("buildVirtualTexture" , "framebuffer state is error");
+            glBindFramebuffer(GL_FRAMEBUFFER , 0);
+            return nullptr;
+        }
+            
+        glClearColor(0.0f , 0.0f, 0.0f , 0.0f);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0 , 0 , viewWidth , viewHeight);
+        resetNormalMat(viewWidth , viewHeight);
+
+        renderFn(viewWidth , viewHeight); // user custom render function callback
+
+        glBindFramebuffer(GL_FRAMEBUFFER , 0);
+        onScreenResize();
+        return ret;
+    }
+
+    int RenderEngine::createFrameBufferForVirtualTexture(std::shared_ptr<TextureInfo> texInfo){
+        if(texInfo == nullptr || texInfo->textureId == 0){
+            return -1;
+        }
+
+        GLuint frameBufferIds[1];
+        glGenFramebuffers(1 , frameBufferIds);
+        texInfo->framebufferId = frameBufferIds[0];
+        glBindFramebuffer(GL_FRAMEBUFFER , texInfo->framebufferId);
+
+        GLuint  renderBufferIds[1];
+        glGenRenderbuffers(1 , renderBufferIds);
+        texInfo->renderBufferId = renderBufferIds[0];
+
+        glBindRenderbuffer(GL_RENDERBUFFER , texInfo->renderBufferId);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8 
+            , texInfo->width , texInfo->height);
+        glBindRenderbuffer(GL_RENDERBUFFER , 0);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
+                            GL_TEXTURE_2D , texInfo->textureId , 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER , GL_DEPTH_STENCIL_ATTACHMENT ,
+                                GL_RENDERBUFFER , texInfo->renderBufferId);
+
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) !=GL_FRAMEBUFFER_COMPLETE){
+            Log::e("createFrameBuffer" , "createFrameBuffer error.");
+            glBindFramebuffer(GL_FRAMEBUFFER , 0);
+            return -1;
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER , 0);
+        return 0;
+    }
+
+    //更新虚拟纹理 
+    void RenderEngine::updateVirtualTexture(std::shared_ptr<TextureInfo> texInfo ,std::function<void(int , int)> renderFn){
+        if(texInfo == nullptr || texInfo->category != TextureCategory::VIRTUAL_TEX){
+            Log::e("updateVirtualTexture" , "texture state error");
+            return;
+        }
+
+        const int viewWidth = texInfo->width;
+        const int viewHeight = texInfo->height;
+        
+        glBindFramebuffer(GL_FRAMEBUFFER , texInfo->framebufferId);
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+            Log::e("updateVirtualTexture" , "framebuffer state is error");
+            glBindFramebuffer(GL_FRAMEBUFFER , 0);
+            return;
+        }
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+        
+        glClearColor(0.0f , 0.0f, 0.0f , 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0 , 0 , viewWidth , viewHeight);
+        resetNormalMat(viewWidth , viewHeight);
+
+        renderFn(viewWidth , viewHeight); // user custom render function callback
+
+        glBindFramebuffer(GL_FRAMEBUFFER , 0);
+        onScreenResize();
     }
 }
 

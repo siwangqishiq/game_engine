@@ -29,6 +29,7 @@ namespace purple{
 
     class ShapeBatch;
     class SpriteBatch;
+    class TextureInfo;
 
     class RenderEngine{
     public:
@@ -58,6 +59,9 @@ namespace purple{
 
         //归一化变换矩阵
         glm::mat3 normalMatrix_;
+        
+        //单位矩阵
+        glm::mat4 tmpTransMatrix_;
 
         //==============render api ================
 
@@ -77,11 +81,21 @@ namespace purple{
         void renderLines(std::vector<float> &points , Paint &paint);
 
         //三角形绘制
-        void renderTriangles(
+        void renderTriangle(
+                        float p1x,  float p1y, 
+                        float p2x , float p2y,
+                        float p3x , float p3y, Paint &paint){
+            renderTriangle(p1x , p1y , p2x , p2y , p3x , p3y , tmpTransMatrix_ , paint);
+        }
+
+        //三角形绘制
+        void renderTriangle(
                             float p1x,  float p1y, 
                             float p2x , float p2y,
                             float p3x , float p3y,
                             glm::mat4 &transMat, Paint &paint);
+
+
 
         //三角形绘制
         void renderTriangles(std::vector<float> &data ,glm::mat4 &transMat, Paint &paint);
@@ -131,6 +145,17 @@ namespace purple{
         void renderShader(Shader &shader , Rect &showRect , 
                 std::function<void(void)> preRenderCallback);
 
+        //创建虚拟纹理 
+        std::shared_ptr<TextureInfo> buildVirtualTexture(
+                std::string texName,
+                int texWidth , 
+                int texHeight ,
+                std::function<void(int , int)> renderFn);
+
+        //更新虚拟纹理 
+        void updateVirtualTexture(std::shared_ptr<TextureInfo> texInfo ,
+                std::function<void(int , int)> renderFn);
+
         std::shared_ptr<ShapeBatch> getShapeBatch();
 
         std::shared_ptr<SpriteBatch> getSpriteBatch();
@@ -169,6 +194,8 @@ namespace purple{
 
         int viewWidth_;
         int viewHeight_;
+
+        int createFrameBufferForVirtualTexture(std::shared_ptr<TextureInfo> texInfo);
     };
 
     //字符信息
