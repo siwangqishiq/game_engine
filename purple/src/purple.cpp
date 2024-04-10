@@ -45,12 +45,33 @@ namespace purple{
         long endTime = currentTimeMillis();
         Log::w(TAG , "purple engine start time : %ld ms" , endTime - startTime);
     }
+    
+    void Engine::resize(int w , int h){
+        if(ScreenWidth == w && ScreenHeight == h){
+            return;
+        }
+
+        ScreenWidth = w;
+        ScreenHeight = h;
+        Log::w(TAG , "scren resize %d x %d" , w , h);
+        if(renderEngine_ == nullptr){
+            renderEngine_ = std::make_shared<RenderEngine>();
+        }
+        renderEngine_->onScreenResize();
+    }
 
     void Engine::tick(){
         if(timer_ != nullptr){
             timer_->trick();
         }
+
+        if(renderEngine_->vramManager_ != nullptr){ //显存缓存清空
+            renderEngine_->vramManager_->onPostRender();
+            renderEngine_->getShapeBatch()->getVRamManager()->onPostRender();
+            renderEngine_->getSpriteBatch()->getVRamManager()->onPostRender();
+        }
     }
+
 
     void Engine::dispose(){
         Log::w(TAG,"engine dispose");

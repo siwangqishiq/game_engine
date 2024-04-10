@@ -28,6 +28,8 @@ namespace purple{
 
         static void tick();
 
+        static void resize(int w , int h);
+
         static std::shared_ptr<RenderEngine> getRenderEngine();
 
         static std::shared_ptr<Timer> getTimer();

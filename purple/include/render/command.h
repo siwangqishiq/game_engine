@@ -92,6 +92,8 @@ namespace purple{
         float calTextStyleItalicOffset(std::shared_ptr<CharInfo> charInfo , TextPaint &paint);
 
         unsigned int allocatorVRamForText(int textLength);
+
+        Rect createEmptyWrapRect(Rect &limitRect , TextPaint &paint);
     };
 
     //自定义shader渲染命令
@@ -167,6 +169,22 @@ namespace purple{
         Paint paint_;
 
         bool renderByLines = true;
+    };
+
+    class LinesSmoothRenderCommand: public RenderCommand{
+    public:
+        LinesSmoothRenderCommand(RenderEngine *engine) 
+            :RenderCommand(engine){
+        }
+
+        virtual void putParams(Shader shader,std::vector<float> &points ,Paint &paint);
+
+        virtual void runCommands() override;
+
+        void renderByRects(std::vector<float> &points);
+    private:
+        Shader shader_;
+        Paint paint_;
     };
 
     class ArcRenderCommand: public RenderCommand{

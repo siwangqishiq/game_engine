@@ -13,22 +13,22 @@
 namespace purple{
     std::unordered_map<wchar_t , wchar_t> SymbolMap;
 
-    void RenderEngine::render(){
-        // glClearColor(0.0f , 1.0f , 0.0f , 1.0f);
-        // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // glEnable(GL_DEPTH_TEST);
+    // void RenderEngine::render(){
+    //     // glClearColor(0.0f , 1.0f , 0.0f , 1.0f);
+    //     // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //     // glEnable(GL_DEPTH_TEST);
         
-        //gl render
-        for(auto &cmd : renderCommandList_){
-            cmd->runCommands();
-            cmd->used = false;
-        }
+    //     //gl render
+    //     for(auto &cmd : renderCommandList_){
+    //         cmd->runCommands();
+    //         cmd->used = false;
+    //     }
         
-        //clear cmd list
-        clearRenderCommands();
-        vramManager_->onPostRender();
-    }
+    //     //clear cmd list
+    //     clearRenderCommands();
+    //     vramManager_->onPostRender();
+    // }
 
     void RenderEngine::free(){
         if(shapeBatch_ != nullptr){
@@ -57,6 +57,7 @@ namespace purple{
         Log::i(TAG , "render engine init start");
 
         vramManager_ = std::make_shared<VRamManager>();
+        // vramManager_ = VRamManager::getInstance();
 
         loadTextRenderResource();//text render init
         // Logi(TAG , "render engine init end");
@@ -98,7 +99,10 @@ namespace purple{
         // GL_LINES 方式画线
         ShaderManager::getInstance()->loadAssetShader("primitive_lines" , 
             "shader/primitive_lines_vert.glsl", "shader/primitive_lines_frag.glsl");
-
+        //render smooth lines
+        ShaderManager::getInstance()->loadAssetShader("primitive_lines_smooth" , 
+            "shader/primitive_smooth_lines_vert.glsl", "shader/primitive_smooth_lines_frag.glsl");
+        
         //arc
         ShaderManager::getInstance()->loadAssetShader("primitive_arc" , 
             "shader/primitive_arc_vert.glsl", "shader/primitive_arc_frag.glsl");
@@ -553,6 +557,18 @@ namespace purple{
         cmd.runCommands();
     }
 
+    void RenderEngine::renderSmoothLines(std::vector<float> &points , Paint &paint){
+        if(paint.stokenWidth < 1.0f){
+            return;
+        }
+
+        LinesSmoothRenderCommand cmd(this);
+        Shader shader = ShaderManager::getInstance()->getShaderByName("primitive_lines_smooth");
+        cmd.putParams(shader , points , paint);
+        cmd.runCommands();
+    }
+
+
     //三角形绘制
     void RenderEngine::renderTriangle(
                         float p1x,  float p1y, 
@@ -666,6 +682,10 @@ namespace purple{
 
         renderFn(viewWidth , viewHeight); // user custom render function callback
 
+        glBindTexture(GL_TEXTURE_2D , ret->textureId);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D , 0);
+
         glBindFramebuffer(GL_FRAMEBUFFER , 0);
         onScreenResize();
         return ret;
@@ -731,6 +751,10 @@ namespace purple{
         resetNormalMat(viewWidth , viewHeight);
 
         renderFn(viewWidth , viewHeight); // user custom render function callback
+        
+        glBindTexture(GL_TEXTURE_2D , texInfo->textureId);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D , 0);
 
         glBindFramebuffer(GL_FRAMEBUFFER , 0);
         onScreenResize();

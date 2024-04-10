@@ -7,7 +7,6 @@ file -> object for render or play
 - Windwos 
 - Linux
 - MacOS
-- Android
 
 ### 构建工具 
 - cmake
@@ -22,8 +21,6 @@ file -> object for render or play
         log 日志 提供三种日志等级 info warn error
 
         render2d 2D渲染库
-
-        render3d 3D渲染库 
             
     sandbox 
         调用purple的应用程序

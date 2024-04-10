@@ -17,7 +17,12 @@ void Application::init(){
     window = glfwCreateWindow(screenWidth, screenHeight, "run", nullptr, nullptr);
     
     glfwSetCharCallback(window , [](GLFWwindow* window_, unsigned int codepoint){
-        std::cout << "ime:" << codepoint << std::endl;
+        // std::cout << "ime:" << codepoint << std::endl;
+    });
+
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
+        // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(windows_));
+        purple::Engine::resize(w , h);
     });
 
     if (window == nullptr) {
@@ -37,10 +42,7 @@ void Application::init(){
     image = purple::BuildImageByAsset(std::string("t2.jpg"));
 }
 
-void Application::tick(){
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+void Application::test1(){
     purple::Rect imgDstRect;
     imgDstRect.left = 0.0f;
     imgDstRect.top = purple::Engine::ScreenHeight;
@@ -80,8 +82,13 @@ void Application::tick(){
     batch->begin();
     batch->renderRect(rect , rectPaint);
     batch->end();
+}
 
-   
+void Application::tick(){
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // test1();
 }
 
 void Application::runLoop(){

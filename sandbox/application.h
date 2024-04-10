@@ -34,5 +34,8 @@ private:
     int screenHeight = 600;
 
     std::shared_ptr<purple::TextureImage> image;
+
+
+    void test1();
 };
 
