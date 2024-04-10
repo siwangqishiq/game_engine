@@ -5,12 +5,15 @@
 #include "GLFW/glfw3.h"
 #include <memory>
 #include "purple.h"
+#include "common.h"
 
 class Application{
 public:
     const std::string TAG = "SandBoxApp";
     //init application
     void init();
+
+    void onCreate();
     
     // main loop
     void runLoop();
@@ -33,9 +36,6 @@ private:
     int screenWidth = 800;
     int screenHeight = 600;
 
-    std::shared_ptr<purple::TextureImage> image;
-
-
-    void test1();
+    std::shared_ptr<IApp> mAppInstance = nullptr;
 };
 
