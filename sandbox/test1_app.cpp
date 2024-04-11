@@ -14,7 +14,7 @@ void Test1App::onInit(){
 }
 
 void Test1App::test1(){
- purple::Rect imgDstRect;
+    purple::Rect imgDstRect;
     imgDstRect.left = 0.0f;
     imgDstRect.top = purple::Engine::ScreenHeight;
     imgDstRect.width = purple::Engine::ScreenWidth;
@@ -28,7 +28,7 @@ void Test1App::test1(){
     purple::TextPaint p4;
     p4.setTextSize(purple::Engine::ScreenHeight / 20.0f);
     p4.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
-    std::wstring name = L"你好 世界";
+    std::wstring name = L"你好世界 HelloWorld";
     std::wstring fpsStr = name;
 
     purple::Rect outputRect;
@@ -59,10 +59,13 @@ void Test1App::onTick(){
     purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
         , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
 
-    purple::Engine::getRenderEngine()->renderShader(mSdfShader , rect , 
+    purple::Engine::getRenderEngine()->renderShader(mSdfShader , rect, 
         [this](){
-            mSdfShader.setUniformVec2("uSize" , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
-        });
+            mSdfShader.setUniformVec2("uSize" 
+                , purple::Engine::ScreenWidth 
+                , purple::Engine::ScreenHeight);
+        }
+    );
 }
 
 void Test1App::onDispose(){

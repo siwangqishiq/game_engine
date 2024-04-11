@@ -4,7 +4,6 @@ project(purple)
 
 include_directories(include)
 
-
 aux_source_directory(src SRCS)
 aux_source_directory(src/audio      SRC_AUDIO)
 aux_source_directory(src/input      SRC_INPUT)
@@ -32,7 +31,7 @@ add_library(${PROJECT_NAME}
                 ${SRC_WIDGET}
                 ${SRC_RENDER})
 
-target_link_libraries(${PROJECT_NAME} glfw)
+# target_link_libraries(${PROJECT_NAME} glfw)
 
 
 
