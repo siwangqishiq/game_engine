@@ -13,7 +13,7 @@ public:
 private:
     std::shared_ptr<purple::TextureImage> image = nullptr;
 
-    purple::Shader mSdfShader;
-
+    purple::Shader mCircleSdfShader;
+    
     void test1();
 };

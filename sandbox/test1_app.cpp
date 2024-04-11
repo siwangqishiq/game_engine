@@ -9,8 +9,8 @@ void Test1App::onInit(){
 
     image = purple::BuildImageByAsset(std::string("t2.jpg"));
 
-    mSdfShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf" , "shader/shader_vert.glsl","sdf_frag.glsl");
+    mCircleSdfShader = purple::ShaderManager::getInstance()
+        ->loadAssetShader("sdf" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
 }
 
 void Test1App::test1(){
@@ -59,11 +59,14 @@ void Test1App::onTick(){
     purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
         , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
 
-    purple::Engine::getRenderEngine()->renderShader(mSdfShader , rect, 
+    purple::Engine::getRenderEngine()->renderShader(mCircleSdfShader , rect, 
         [this](){
-            mSdfShader.setUniformVec2("uSize" 
+            mCircleSdfShader.setUniformVec2("uSize" 
                 , purple::Engine::ScreenWidth 
                 , purple::Engine::ScreenHeight);
+            
+            mCircleSdfShader.setUniformVec4("uColor" 
+                ,glm::vec4(0.0f , 0.0f , 1.0f , 1.0f));
         }
     );
 }
