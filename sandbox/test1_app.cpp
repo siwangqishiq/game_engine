@@ -10,7 +10,56 @@ void Test1App::onInit(){
     image = purple::BuildImageByAsset(std::string("t2.jpg"));
 
     mCircleSdfShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
+        ->loadAssetShader("sdf_circle" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
+
+    mSegSdfShader = purple::ShaderManager::getInstance()
+        ->loadAssetShader("sdf_line" , "shader/shader_vert.glsl","segment_sdf_frag.glsl");
+}
+
+
+
+void Test1App::onTick(){
+    test_segment();
+}
+
+void Test1App::test_segment(){
+    purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
+        , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
+
+    purple::Engine::getRenderEngine()->renderShader(mSegSdfShader , rect, 
+        [this](){
+            mSegSdfShader.setUniformVec2("uSize" 
+                , purple::Engine::ScreenWidth 
+                , purple::Engine::ScreenHeight);
+
+            mSegSdfShader.setUniformVec4("uColor" 
+                ,glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+            
+            mSegSdfShader.setUniformVec2("uP1" , glm::vec2(100.0f , 100.0f));
+            mSegSdfShader.setUniformVec2("uP2" , glm::vec2(200.0f , 500.0f));
+        }
+    );
+}
+
+
+void Test1App::onDispose(){
+
+}
+
+void Test1App::test_circle(){
+    purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
+        , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
+
+    purple::Engine::getRenderEngine()->renderShader(mCircleSdfShader , rect, 
+        [this](){
+            mCircleSdfShader.setUniformVec2("uSize" 
+                , purple::Engine::ScreenWidth 
+                , purple::Engine::ScreenHeight);
+            
+            mCircleSdfShader.setUniformVec4("uColor" 
+                ,glm::vec4(0.0f , 0.0f , 1.0f , 1.0f));
+        }
+    );
 }
 
 void Test1App::test1(){
@@ -53,25 +102,5 @@ void Test1App::test1(){
     batch->begin();
     batch->renderRect(rect , rectPaint);
     batch->end();
-}
-
-void Test1App::onTick(){
-    purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
-        , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
-
-    purple::Engine::getRenderEngine()->renderShader(mCircleSdfShader , rect, 
-        [this](){
-            mCircleSdfShader.setUniformVec2("uSize" 
-                , purple::Engine::ScreenWidth 
-                , purple::Engine::ScreenHeight);
-            
-            mCircleSdfShader.setUniformVec4("uColor" 
-                ,glm::vec4(0.0f , 0.0f , 1.0f , 1.0f));
-        }
-    );
-}
-
-void Test1App::onDispose(){
-
 }
 

@@ -14,6 +14,10 @@ private:
     std::shared_ptr<purple::TextureImage> image = nullptr;
 
     purple::Shader mCircleSdfShader;
+    purple::Shader mSegSdfShader;
     
     void test1();
+
+    void test_circle();
+    void test_segment();
 };
