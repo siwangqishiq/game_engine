@@ -7,7 +7,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl")
+    set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl -lX11")
     set (CMAKE_CXX_FLAGS -pthread)
 endif()
 
@@ -25,7 +25,8 @@ if (WIN32)
 elseif (APPLE)
     message(STATUS "Using APPLE library")
 elseif (UNIX)
-    message(STATUS "Using UNIX library")
+    message(STATUS "Using Linux library")
+    link_directories(lib/linux)
 endif()
 
 link_libraries(glfw3)
