@@ -13,17 +13,7 @@ const float AA_SIZE = 4.0f; //Anti Alitas
 float sdSegment(vec2 q , vec2 p1 , vec2 p2){
     vec2 p1_p2 = p2 - p1;
     vec2 p1_q = q - p1;
-    float r = dot(p1_q , p1_p2) / dot(p1_p2 , p1_p2);
-    vec2 d = r * p1_p2 - p1_q;
-    float mid_len = length(d);
-    float p1_q_len = length(p1_q);
-    float p2_q_len = distance(p2 , q);
-    float stepV1 = step(0.0f, r);
-    float stepV2 = step(1.0f, r);
-
-    return p1_q_len * (1.0f - stepV1) +
-                mid_len * stepV1 * (1.0f - stepV2) + 
-                p2_q_len * stepV2;
+    return length(clamp(dot(p1_q , p1_p2) / dot(p1_p2 , p1_p2) , 0.0f , 1.0f) * p1_p2 - p1_q );
 }
 
 void main(){
