@@ -11,6 +11,10 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set (CMAKE_CXX_FLAGS -pthread)
 endif()
 
+if(APPLE)
+    message(STATUS "This macos ")
+endif()
+
 include_directories(purple/include)
 include_directories(vender/glfw/include)
 
@@ -24,6 +28,7 @@ if (WIN32)
     link_directories(lib/win64)
 elseif (APPLE)
     message(STATUS "Using APPLE library")
+    link_directories(lib/mac)
 elseif (UNIX)
     message(STATUS "Using Linux library")
     link_directories(lib/linux)

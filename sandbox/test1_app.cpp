@@ -14,12 +14,39 @@ void Test1App::onInit(){
 
     mSegSdfShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_line" , "shader/shader_vert.glsl","segment_sdf_frag.glsl");
+
+    mRectShader = purple::ShaderManager::getInstance()
+        ->loadAssetShader("sdf_rect" , "shader/shader_vert.glsl","rect_sdf_frag.glsl");
 }
 
 
 
 void Test1App::onTick(){
-    test_segment();
+    // test_circle();
+    // test_segment();
+    test_rect();
+}
+
+void Test1App::test_rect(){
+    purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
+        , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
+    
+    purple::Engine::getRenderEngine()->renderShader(mRectShader , rect, 
+        [this , rect](){
+            mRectShader.setUniformVec2("uSize" 
+                , purple::Engine::ScreenWidth 
+                , purple::Engine::ScreenHeight);
+
+            mRectShader.setUniformVec4("uColor" 
+                ,glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+
+            mRectShader.setUniformVec2("uRectSize" , purple::Engine::ScreenWidth / 2.0f , 
+                purple::Engine::ScreenHeight / 2.0f);
+            mRectShader.setUniformVec2("uRectPos" 
+                , rect.width / 2.0f
+                , rect.height / 2.0f);
+        }
+    );
 }
 
 void Test1App::test_segment(){
