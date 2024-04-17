@@ -16,10 +16,13 @@ private:
     purple::Shader mCircleSdfShader;
     purple::Shader mSegSdfShader;
     purple::Shader mRectShader;
+    purple::Shader mUnionShader;
     
     void test1();
 
     void test_circle();
     void test_segment();
     void test_rect();
+
+    void test_boolops();
 };
