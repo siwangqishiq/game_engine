@@ -2,6 +2,7 @@
 
 #include "glm/vec4.hpp"
 #include <cmath>
+#include <string>
 
 namespace purple{
 
@@ -170,6 +171,22 @@ namespace purple{
         return x >= rect.left && x <= rect.getRight()
              && y <= rect.top && y >= rect.getBottom();
     }
+
+
+    //字符默认高度
+    const float CHAR_DEFAULT_HEIGHT = 64.0f;
+    const float SPACE_WIDTH = 16.0f;
+
+    //字符信息
+    struct CharInfo{
+        std::wstring value; 
+        float width;
+        float height;
+        float bearingX;
+        float bearingY;
+        float textureCoords[5];
+        unsigned int textureId;
+    };
 }
 
 

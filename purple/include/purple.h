@@ -9,7 +9,6 @@
 #include "widget/timer.h"
 #include "render/texture.h"
 #include "render/sprite.h"
-#include "render/common.h"
 #include "json.h"
 
 

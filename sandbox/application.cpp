@@ -22,6 +22,13 @@ void Application::init(){
         // std::cout << "ime:" << codepoint << std::endl;
     });
 
+    glfwSetKeyCallback(window , [](GLFWwindow* windows_,int key,int scancode,int action,int mods){
+        // purple::Log::w("Application" , "key = %d" , key);
+        if(glfwGetKey(windows_, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(windows_, true);
+        }
+    });
+
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
         // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(windows_));
         purple::Engine::resize(w , h);

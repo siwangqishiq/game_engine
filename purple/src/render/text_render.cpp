@@ -1,0 +1,38 @@
+
+#include "render/text_render.h"
+#include "render/render.h"
+#include "resource/asset_manager.h"
+
+#define STB_TRUETYPE_IMPLEMENTATION 
+#include "render/stb_truetype.h"
+
+namespace purple{
+    void TextRender::renderText(std::wstring &text , 
+        float left , float bottom , TextPaint &paint){
+        
+    }
+
+   
+    int TextRender::loadFontRes(std::string fontName, std::string fontFileAssetPath){
+        int fontFileSize = 0;
+        fontData_ = AssetManager::getInstance()->readFileAsBinRaw(fontFileAssetPath , fontFileSize);
+        if(fontFileSize <= 0){
+            Log::e(TAG , "Not found font file %s" , fontFileAssetPath.c_str());
+            return -1;
+        }
+        Log::i(TAG , "%s file size : %d" , fontFileAssetPath.c_str() , fontFileSize);
+        
+        int ret = 0;
+        ret = initFont();
+
+        return ret; 
+    }
+
+    int TextRender::initFont(){
+        int errCode = stbtt_InitFont(&fontInfo_ , fontData_ , 0);
+        fontScale_ = stbtt_ScaleForPixelHeight(&fontInfo_ , FONT_DEFAULT_SIZE);
+        Log::i(TAG , "fontScale =  %f" , fontScale_);
+        return errCode;
+    }
+}
+

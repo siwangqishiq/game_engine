@@ -17,7 +17,8 @@ float smax(float a,float b,float k){
 }
 
 float diff(float a , float b){
-    return -min(a , -b);
+    // return min(a , -b);
+    return max(b , -a);
 }
 
 float sdiff(float a , float b , float k){

@@ -122,7 +122,7 @@ namespace purple{
     }
 
     void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , 
-            Rect &limitRect, 
+                Rect &limitRect, 
                 Rect *wrapContentRect,
                 TextPaint &paint){
         if(text.empty()){
