@@ -37,5 +37,7 @@ private:
     int screenHeight = 600;
 
     std::shared_ptr<IApp> mAppInstance = nullptr;
+
+    int fps = 0;
 };
 

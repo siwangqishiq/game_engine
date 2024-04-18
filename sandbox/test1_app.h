@@ -13,9 +13,12 @@ public:
 private:
     std::shared_ptr<purple::TextureImage> image = nullptr;
 
+    float mTime = 0.0f;
+
     purple::Shader mCircleSdfShader;
     purple::Shader mSegSdfShader;
     purple::Shader mRectShader;
+    purple::Shader mTriangleShader;
     purple::Shader mUnionShader;
     
     void test1();
@@ -23,6 +26,7 @@ private:
     void test_circle();
     void test_segment();
     void test_rect();
+    void test_triangle();
 
     void test_boolops();
 };

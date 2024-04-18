@@ -51,6 +51,11 @@ void Application::init(){
 }
 
 void Application::onCreate(){
+    purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
+        purple::Log::w("fps" , "fps : %d" , fps);
+        fps = 0;
+    } , 1000L);
+    
     mAppInstance = std::make_shared<Test1App>();
 }
 
@@ -63,6 +68,8 @@ void Application::tick(){
     if(mAppInstance != nullptr){
         mAppInstance->onTick();
     }
+
+    fps++;
 }
 
 void Application::runLoop(){

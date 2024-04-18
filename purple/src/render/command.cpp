@@ -5,7 +5,6 @@
 #include "json.h"
 #include "render/common.h"
 #include "purple.h"
-// #include "application.hpp"
 
 namespace purple{
     TextPaint TextRenderCommand::defaultTextPaint;

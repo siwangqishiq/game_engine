@@ -3,10 +3,6 @@
 #include "purple.h"
 
 void Test1App::onInit(){
-    purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
-        purple::Log::w("timer" , "ticker : %lld" , purple::currentTimeMillis());
-    } , 1000L);
-
     image = purple::BuildImageByAsset(std::string("t2.jpg"));
 
     mCircleSdfShader = purple::ShaderManager::getInstance()
@@ -20,6 +16,9 @@ void Test1App::onInit(){
 
     mUnionShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("union_rect" , "shader/shader_vert.glsl","union_sdf_frag.glsl");
+
+    mTriangleShader = purple::ShaderManager::getInstance()
+        ->loadAssetShader("sdf_triangle" , "shader/shader_vert.glsl" ,"triangle_sdf_frag.glsl");
 }
 
 
@@ -28,7 +27,10 @@ void Test1App::onTick(){
     // test_circle();
     // test_segment();
     // test_rect();
-    test_boolops();
+    test_triangle();
+    // test_boolops();
+
+    mTime += 0.02f;
 }
 
 void Test1App::test_boolops(){
@@ -65,6 +67,32 @@ void Test1App::test_rect(){
             mRectShader.setUniformVec2("uRectPos" 
                 , rect.width / 2.0f
                 , rect.height / 2.0f);
+        }
+    );
+}
+
+void Test1App::test_triangle(){
+    purple::Rect rect(0.0f , purple::Engine::ScreenHeight 
+        , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
+
+    purple::Engine::getRenderEngine()->renderShader(mTriangleShader , rect, 
+        [this](){
+            mTriangleShader.setUniformVec2("uSize" 
+                , purple::Engine::ScreenWidth 
+                , purple::Engine::ScreenHeight);
+
+            mTriangleShader.setUniformVec4("uColor" 
+                ,glm::vec4(0.5f + 0.5f * glm::sin(mTime) , 0.0f , 0.0f , 1.0f));
+
+            glm::vec2 center(purple::Engine::ScreenWidth / 2.0f , purple::Engine::ScreenHeight / 2.0f );
+            float delta = purple::Engine::ScreenHeight / 4.0f;
+            glm::vec2 p1 = center + glm::vec2(0.0f , delta);
+            glm::vec2 p2 = center + glm::vec2(-delta , -delta);
+            glm::vec2 p3 = center + glm::vec2(delta , -delta);
+
+            mTriangleShader.setUniformVec2("uP1" , p1);
+            mTriangleShader.setUniformVec2("uP2" , p2);
+            mTriangleShader.setUniformVec2("uP3" , p3);
         }
     );
 }
