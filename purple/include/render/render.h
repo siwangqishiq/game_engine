@@ -116,12 +116,14 @@ namespace purple{
         }
 
         //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
-        void renderTextWithRect(std::wstring &text , Rect &showRect , 
+        void renderTextWithRect(std::wstring &text , 
+                Rect &showRect , 
                 TextPaint &paint , 
                 Rect *wrapContentRect);//
         
         //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
-        void renderTextWithRect(std::wstring &&text , Rect &showRect , 
+        void renderTextWithRect(std::wstring &&text , 
+                Rect &showRect , 
                 TextPaint &paint , 
                 Rect *wrapContentRect){
             renderTextWithRect(text , showRect , paint ,wrapContentRect);
@@ -154,6 +156,10 @@ namespace purple{
 
         std::shared_ptr<SpriteBatch> getSpriteBatch();
 
+        std::shared_ptr<TextRender> getTextRender(){
+            return getTextRenderByName(DEFAULT_TEXT_RENDER_NAME);
+        }
+
         float getAndChangeDepthValue();
         
         void resetDepth();
@@ -167,10 +173,6 @@ namespace purple{
         void loadShapeShader();
 
         void resetNormalMat(float w , float h);
-
-        std::shared_ptr<TextRender> getTextRenderByName(){
-            return getTextRenderByName(DEFAULT_TEXT_RENDER_NAME);
-        }
 
         std::shared_ptr<TextRender> getTextRenderByName(std::string name);
 

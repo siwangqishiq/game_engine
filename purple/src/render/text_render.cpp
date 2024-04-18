@@ -7,12 +7,20 @@
 #include "render/stb_truetype.h"
 
 namespace purple{
-    void TextRender::renderText(std::wstring &text , 
-        float left , float bottom , TextPaint &paint){
-        
+    void TextRender::renderText(std::wstring text , 
+            float left , 
+            float bottom , 
+            TextPaint &paint){
+        //todo render text
     }
 
-   
+    void TextRender::renderText(const wchar_t *text, 
+            float left, 
+            float bottom, 
+            TextPaint &paint){
+        renderText(std::wstring(text) , left , bottom , paint);
+    }
+
     int TextRender::loadFontRes(std::string fontName, std::string fontFileAssetPath){
         int fontFileSize = 0;
         fontData_ = AssetManager::getInstance()->readFileAsBinRaw(fontFileAssetPath , fontFileSize);

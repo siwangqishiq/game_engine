@@ -13,6 +13,14 @@ const float AA_SIZE = 4.0f; //Anti Alitas
 
 const float eps = 0.01f;
 
+// float opRound(vec2 p,float r){ 
+//   return sdShape(p) - r;
+// }
+
+// float opOnion(vec2 p,float r ){
+//   return abs(sdShape(p)) - r;
+// }
+
 bool isFloatEqual(float v1 , float v2){
     return abs(v1 - v2) < eps;
 }
@@ -53,9 +61,18 @@ float sdTriangle(vec2 p ,vec2 p1 , vec2 p2 , vec2 p3){
     return min(min(d1 , d2) , min(d2 , d3));
 }
 
+float sdTriangleRound(vec2 p ,vec2 p1 , vec2 p2 , vec2 p3, float r){
+  return sdTriangle(p , p1 , p2 , p3) - r;
+}
+
+float sdTriangleOnion(vec2 p ,vec2 p1 , vec2 p2 , vec2 p3, float r){
+    return abs(sdTriangle(p , p1 , p2 , p3)) - r;
+}
+
 void main(){
     vec2 pos = gl_FragCoord.xy;
     float alphaValue = sdTriangle(pos , uP1 , uP2 , uP3);
+    // float alphaValue = sdTriangleOnion(pos , uP1 , uP2 , uP3 , 100.0f);
     // FragColor = vec4(uColor.rgb , uColor.a * alphaValue);
     alphaValue = (1.0f - smoothstep(0.0f - AA_SIZE, 0.0f + AA_SIZE , alphaValue));
     FragColor = vec4(uColor.rgb , uColor.a * alphaValue);

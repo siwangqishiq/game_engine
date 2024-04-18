@@ -2,6 +2,7 @@
 #include "purple.h"
 
 #include "test1_app.h"
+#include "test_render_text.h"
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -56,7 +57,9 @@ void Application::onCreate(){
         fps = 0;
     } , 1000L);
     
-    mAppInstance = std::make_shared<Test1App>();
+    // mAppInstance = std::make_shared<Test1App>();
+    
+    mAppInstance = std::make_shared<TestTextRender>();
 }
 
 void Application::tick(){

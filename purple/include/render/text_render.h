@@ -27,7 +27,11 @@ namespace purple{
         
         int loadFontRes(std::string fontName , std::string fontFileAssetPath);
 
-        void renderText(std::wstring &text , 
+        void renderText(const wchar_t *text, 
+            float left , float bottom, 
+            TextPaint &paint);
+        
+        void renderText(std::wstring text , 
             float left , float bottom, 
             TextPaint &paint);
     private:

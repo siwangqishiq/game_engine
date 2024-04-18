@@ -13,7 +13,7 @@ void Test1App::onInit(){
 
     mRectShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_rect" , "shader/shader_vert.glsl","rect_sdf_frag.glsl");
-
+    
     mUnionShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("union_rect" , "shader/shader_vert.glsl","union_sdf_frag.glsl");
 
@@ -26,8 +26,8 @@ void Test1App::onInit(){
 void Test1App::onTick(){
     // test_circle();
     // test_segment();
-    // test_rect();
-    test_triangle();
+    test_rect();
+    // test_triangle();
     // test_boolops();
 
     mTime += 0.02f;
@@ -61,6 +61,9 @@ void Test1App::test_rect(){
 
             mRectShader.setUniformVec4("uColor" 
                 ,glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+            float A = rect.height / 8.0f;
+            mRectShader.setUniformFloat("uRoundRadius" , 
+                A + A * glm::sin(mTime));
 
             mRectShader.setUniformVec2("uRectSize" , purple::Engine::ScreenWidth / 2.0f , 
                 purple::Engine::ScreenHeight / 2.0f);

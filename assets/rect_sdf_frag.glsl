@@ -4,6 +4,7 @@ uniform vec2 uSize;
 uniform vec4 uColor;
 uniform vec2 uRectPos;
 uniform vec2 uRectSize;
+uniform float uRoundRadius;
 
 out vec4 FragColor;
 
@@ -24,9 +25,19 @@ float sdRect(vec2 p , vec2 rectSize){
     return distanceInside + distanceOutside;
 }
 
+// float sdTriangleRound(vec2 p ,vec2 rectSize, float r){
+//   return sdRect(p , rectSize) - r;
+// }
+
+float sdRoundedRect(vec2 p , vec2 rectSize , float r){
+    return sdRect(p + vec2(sign(p.x) * r , sign(p.y) * r) , rectSize) - r;
+}
+
 void main(){
     vec2 pos = gl_FragCoord.xy;
-    float alphaValue = sdRect(pos - uRectPos.xy , uRectSize);
+    // float alphaValue = sdRect(pos - uRectPos.xy , uRectSize);
+    float alphaValue = sdRoundedRect(pos - uRectPos.xy , uRectSize , uRoundRadius);
+    // float alphaValue = sdRoundedBox(pos - uRectPos.xy , uRectSize , vec4(uRoundRadius));
     alphaValue = (1.0f - smoothstep(0.0f - AA_SIZE, 0.0f + AA_SIZE , alphaValue));
     FragColor = vec4(uColor.rgb , uColor.a * alphaValue);
 }
