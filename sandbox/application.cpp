@@ -57,9 +57,9 @@ void Application::onCreate(){
         fps = 0;
     } , 1000L);
     
-    // mAppInstance = std::make_shared<Test1App>();
+    mAppInstance = std::make_shared<Test1App>();
     
-    mAppInstance = std::make_shared<TestTextRender>();
+    // mAppInstance = std::make_shared<TestTextRender>();
 }
 
 void Application::tick(){
@@ -79,10 +79,9 @@ void Application::runLoop(){
     purple::Log::i(TAG , "Application runLoop");
     
     while(!glfwWindowShouldClose(window)) {
-        tick();
-
-        glfwSwapBuffers(window);
         glfwPollEvents();
+        tick();
+        glfwSwapBuffers(window);
         glfwSwapInterval(1);//锁定固定帧率
     }//end while
 
