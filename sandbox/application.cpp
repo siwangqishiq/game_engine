@@ -57,9 +57,8 @@ void Application::onCreate(){
         fps = 0;
     } , 1000L);
     
-    mAppInstance = std::make_shared<Test1App>();
-    
-    // mAppInstance = std::make_shared<TestTextRender>();
+    // mAppInstance = std::make_shared<Test1App>();
+    mAppInstance = std::make_shared<TestTextRender>();
 }
 
 void Application::tick(){

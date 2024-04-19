@@ -24,10 +24,6 @@ namespace purple{
             paint_ = paint;
         }
 
-        TextPaint paint_;
-
-        Rect limitRect_;
-
         void putVertexDataToBuf(std::vector<float> &buf, int index, 
                                 float x ,float y,float depth,
                                 std::shared_ptr<CharInfo> charInfo ,
@@ -37,17 +33,19 @@ namespace purple{
                                 float x ,float y);
 
         virtual void buildGlCommands(std::vector<float> &buf);
-    private:
-        
-        glm::vec4 textColor_;
 
+        TextPaint paint_;
+        Rect limitRect_;
+    protected:
+        unsigned int allocatorVRamForText(int textLength);
 
         //每个顶点包含的属性长度 
         //位置 postion 3 + 纹理坐标 uvw 3
         const int attrCount_ = 3 + 3; 
-        
         unsigned int fontTextureId_ = -1;
-
+        
+    private:
+        glm::vec4 textColor_;
 
         void fillTextVertData(std::wstring &text , float left , float bottom , 
                 TextPaint &paint);
@@ -58,7 +56,6 @@ namespace purple{
 
         float calTextStyleItalicOffset(std::shared_ptr<CharInfo> charInfo , TextPaint &paint);
 
-        unsigned int allocatorVRamForText(int textLength);
 
         Rect createEmptyWrapRect(Rect &limitRect , TextPaint &paint);
     };

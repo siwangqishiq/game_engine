@@ -19,10 +19,10 @@ void TestTextRender::testTextRender(){
 
     purple::TextPaint textPaint;
     textPaint.textColor = glm::vec4(0.0f , 0.0f , 0.0f ,1.0f);
-    textPaint.setTextSize(64.0f);
+    textPaint.setTextSize(128.0f);
     // purple::Engine::getRenderEngine()->renderText(L"你好 世界!" , 
     //     left , top , textPaint);
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
-    textRender->renderText(L"你好 世界!" , left , top , textPaint);
+    textRender->renderText(L"你好-世界!" , left , top , textPaint);
 }
 

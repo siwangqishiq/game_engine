@@ -120,7 +120,7 @@ namespace purple{
             texHeight, textureFiles.size(),
             0, format, GL_UNSIGNED_BYTE , nullptr);
         // Log::i("debug" , "3333load texture before %d" , glGetError());
-
+        
         for(int i = 0 ; i < textureFiles.size() ;i++){
             std::unique_ptr<uint8_t> pTexData = nullptr;
             int format = TEXTURE_FILE_CHANNEL_UNKNOW;
@@ -130,8 +130,10 @@ namespace purple{
                 needFlip , format, 
                 texWidth , texHeight);
             
-            glTexSubImage3D(GL_TEXTURE_2D_ARRAY , 0 , 0 , 0, i, texWidth,
-                texHeight , 1 , format, GL_UNSIGNED_BYTE, pTexData.get());
+            glTexSubImage3D(GL_TEXTURE_2D_ARRAY , 0 , 
+                0 , 0, i, 
+                texWidth, texHeight , 1 , 
+                format, GL_UNSIGNED_BYTE, pTexData.get());
         }//end for i
         glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
@@ -260,6 +262,69 @@ namespace purple{
             textureInfo->height);
         
         return textureInfo;
+    }
+
+    std::shared_ptr<TextureInfo> TextureManager::createEmptyTexture2dArray(
+            std::string texName, 
+            int width , int height , int depth, int format){
+        
+        unsigned int tId = -1;
+        glGenTextures(1 , &tId);
+        if(tId <= 0 ){
+            return nullptr;
+        }
+
+        glBindTexture(GL_TEXTURE_2D_ARRAY , tId);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
+
+        glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, format ,
+            width , height , depth , 0 , format , GL_UNSIGNED_BYTE , nullptr);
+        glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
+        
+        auto textureInfo = std::make_shared<TextureInfo>();
+        textureInfo->name = texName;
+        textureInfo->textureId = tId;
+        textureInfo->width = width;
+        textureInfo->height = height;
+        textureInfo->depth = depth;
+        textureInfo->format = format;
+        
+        //add pool
+        textureBank_[textureInfo->name] = textureInfo;
+        
+        Log::i(TAG , 
+            "load texture2d array id : %d , width : %d , height : %d depth : %d" , 
+            textureInfo->textureId,
+            textureInfo->width,
+            textureInfo->height,
+            textureInfo->depth);
+        
+        return textureInfo;
+    }
+
+    int TextureManager::updateTexture2dArrayData(std::shared_ptr<TextureInfo> textureInfo,
+        int offsetX , 
+        int offsetY , 
+        int offsetZ , 
+        int w , 
+        int h ,
+        int depthSize ,
+        uint8_t *subData){
+        
+        if(textureInfo == nullptr){
+            return -1;
+        }
+
+        glBindTexture(GL_TEXTURE_2D_ARRAY , textureInfo->textureId);
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY , 0, 
+            offsetX , offsetY , offsetZ , 
+            w , h , depthSize , textureInfo->format,
+            GL_UNSIGNED_BYTE , subData);
+        glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
+        return 0;
     }
 
     std::string TextureManager::allTextureInfos(){

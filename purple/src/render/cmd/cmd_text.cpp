@@ -1,7 +1,7 @@
 #include "render/cmd/cmd_text.h"
 
 namespace purple{
-     float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){
+    float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){
         auto textRenderHelper = engine_->textRenderHelper_;
         float maxHeight = 0.0f;
         for(int i = 0 ; i < text.length() ;i++){
@@ -257,7 +257,7 @@ namespace purple{
         //打开混合模式 文字有透明度
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
-
+        
         auto shader = engine_->textRenderHelper_->textRenderShader_;
         shader.useShader();
         shader.setUniformMat3("transMat" , engine_->normalMatrix_);

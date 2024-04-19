@@ -273,6 +273,9 @@ namespace purple{
 
     Shader ShaderManager::loadAssetShader(std::string shaderName , 
                 std::string vertexPath , std::string frgPath){
+        if(shaderMap.find(shaderName) != shaderMap.end()){ //found shader by shader name direct return
+            return shaderMap[shaderName];
+        }
         return loadShader(shaderName , readShaderSrc(vertexPath) , readShaderSrc(frgPath));
     }
 }

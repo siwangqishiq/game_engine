@@ -176,9 +176,6 @@ namespace purple{
              && y <= rect.top && y >= rect.getBottom();
     }
 
-
-    //字符默认高度
-    const float CHAR_DEFAULT_HEIGHT = 64.0f;
     const float SPACE_WIDTH = 16.0f;
 
     //字符信息

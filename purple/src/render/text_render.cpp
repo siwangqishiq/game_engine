@@ -3,6 +3,11 @@
 #include "render/render.h"
 #include "resource/asset_manager.h"
 
+#include "render/cmd/cmd_text.h"
+#include "render/cmd/cmd_text_sdf.h"
+#include "render/texture.h"
+#include "glheader.h"
+
 #define STB_TRUETYPE_IMPLEMENTATION 
 #include "render/stb_truetype.h"
 
@@ -14,8 +19,18 @@ namespace purple{
         //todo render text
         // Log::i(TAG , "start render text");
 
-        buildTextRenderVertexData(text , left , bottom , paint);
-        submitRenderCommand();
+        // buildTextRenderVertexData(text , left , bottom , paint);
+        // submitRenderCommand();
+
+        SdfTextRenderCommand cmd(renderEngine_ , this);
+        cmd.putParams(text , left , bottom , paint);
+        cmd.runCommands();
+    }
+
+    int TextRender::createFontTextureRes(){
+        fontTextureInfo_ = TextureManager::getInstance()->createEmptyTexture2dArray(fontName_,
+            texWidth_ , texHeight_ , texDepth_ , GL_R);
+        return fontTextureInfo_->textureId;
     }
 
     void TextRender::buildTextRenderVertexData(std::wstring &text , 
@@ -26,12 +41,47 @@ namespace purple{
         float depth = renderEngine_->getAndChangeDepthValue();
         const float fontHeight = textPaint.getTextFontHeight();
         for(wchar_t ch : text){
-            
         }//end for each
     }
 
+    std::shared_ptr<CharInfo> TextRender::findCharInfo(wchar_t &ch , int index){
+        if(charInfoMap_.find(ch) != charInfoMap_.end()){
+            return charInfoMap_[ch];
+        }
+
+        std::shared_ptr<CharInfo> result = std::make_shared<CharInfo>();
+
+        int width = 0;
+        int height = 0;
+        int offX = 0;
+        int offY = 0;
+        unsigned char* sdfBitmap = stbtt_GetCodepointSDF(
+            &fontInfo_, fontScale_, 
+            ch , 0 , 128, -1.0f,
+            &width, &height , &offX, &offY);
+        if(sdfBitmap == nullptr){
+            Log::e(TAG ,"sdf data is null index = %d!" , index);
+        }else{
+            stbtt_FreeSDF(sdfBitmap , nullptr);
+            sdfBitmap = nullptr;
+        }
+
+        Log::e(TAG , "char width = %d , height = %d , offx = %d , offy = %d" 
+            , width , height , offX , offY);
+
+        result->value = ch;
+        result->width = width;
+        result->height = height;
+        result->bearingX = offX;
+        result->bearingY = -offY;
+        result->textureId = fontTextureInfo_->textureId;
+
+        //add cache
+        charInfoMap_[ch] = result;
+        return result;
+    }
+
     void TextRender::submitRenderCommand(){
-        
     }
 
     void TextRender::renderText(const wchar_t *text, 
@@ -49,15 +99,17 @@ namespace purple{
             return -1;
         }
         Log::i(TAG , "%s file size : %d" , fontFileAssetPath.c_str() , fontFileSize);
+        fontName_ = fontName;
         
         int ret = 0;
         ret = initFont();
-
+        ret = createFontTextureRes();
         return ret; 
     }
 
     int TextRender::initFont(){
         int errCode = stbtt_InitFont(&fontInfo_ , fontData_ , 0);
+        // fontScale_ = stbtt_ScaleForPixelHeight(&fontInfo_ , static_cast<int>(FONT_DEFAULT_SIZE));
         fontScale_ = stbtt_ScaleForPixelHeight(&fontInfo_ , FONT_DEFAULT_SIZE);
         Log::i(TAG , "fontScale =  %f" , fontScale_);
         return errCode;
