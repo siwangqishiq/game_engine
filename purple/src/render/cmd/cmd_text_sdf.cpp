@@ -1,4 +1,5 @@
 #include "render/cmd/cmd_text_sdf.h"
+#include "render/texture.h"
 
 namespace purple{
     std::shared_ptr<CharInfo> SdfTextRenderCommand::findCharInfo(wchar_t &ch , int index){
@@ -27,15 +28,14 @@ namespace purple{
             std::shared_ptr<CharInfo> charInfoPtr = findCharInfo(text[i] , i);
             putVertexDataToBuf(buf , i , x , y ,depth, charInfoPtr , paint);
             x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
-
-            fontTextureId_ = charInfoPtr->textureId;
+            // x += (charInfoPtr->width) * paint.textSizeScale;
         }//end for i
 
         buildGlCommands(buf);                 
     }
 
     void SdfTextRenderCommand::runCommands(){
-        if(fontTextureId_ <= 0){
+        if(textRender_->getFontTextureInfo()->textureId <= 0){
             return;
         }
         
@@ -53,9 +53,9 @@ namespace purple{
         
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
+        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , vertCountPerChar_ * sizeof(float) , 
             reinterpret_cast<void *>(vboOffset_));
-        glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
+        glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , vertCountPerChar_ * sizeof(float) , 
             reinterpret_cast<void *>(vboOffset_ + 3 * sizeof(float)));
         glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
 

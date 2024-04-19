@@ -10,7 +10,10 @@ namespace purple{
                 internalFormat = GL_R8;
                 break;
             case GL_RGB:
-                internalFormat = GL_RGB;
+                internalFormat = GL_RGB8;
+                break;
+            case GL_RGBA:
+                internalFormat = GL_RGBA8;
                 break;
         }//end switch
         return internalFormat;
@@ -280,7 +283,8 @@ namespace purple{
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
 
-        glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, format ,
+        glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, 
+            convertChanelToInternalFormat(format),
             width , height , depth , 0 , format , GL_UNSIGNED_BYTE , nullptr);
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         

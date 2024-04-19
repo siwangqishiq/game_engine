@@ -19,9 +19,6 @@ namespace purple{
         //todo render text
         // Log::i(TAG , "start render text");
 
-        // buildTextRenderVertexData(text , left , bottom , paint);
-        // submitRenderCommand();
-
         SdfTextRenderCommand cmd(renderEngine_ , this);
         cmd.putParams(text , left , bottom , paint);
         cmd.runCommands();
@@ -29,19 +26,8 @@ namespace purple{
 
     int TextRender::createFontTextureRes(){
         fontTextureInfo_ = TextureManager::getInstance()->createEmptyTexture2dArray(fontName_,
-            texWidth_ , texHeight_ , texDepth_ , GL_R);
+            texWidth_ , texHeight_ , texDepth_ , GL_RED);
         return fontTextureInfo_->textureId;
-    }
-
-    void TextRender::buildTextRenderVertexData(std::wstring &text , 
-                float left , 
-                float bottom , 
-                TextPaint &textPaint){
-        //vertex data pos (x , y ,depth) , textureCoords [uvw] 
-        float depth = renderEngine_->getAndChangeDepthValue();
-        const float fontHeight = textPaint.getTextFontHeight();
-        for(wchar_t ch : text){
-        }//end for each
     }
 
     std::shared_ptr<CharInfo> TextRender::findCharInfo(wchar_t &ch , int index){
@@ -81,9 +67,6 @@ namespace purple{
         return result;
     }
 
-    void TextRender::submitRenderCommand(){
-    }
-
     void TextRender::renderText(const wchar_t *text, 
             float left, 
             float bottom, 
@@ -101,10 +84,13 @@ namespace purple{
         Log::i(TAG , "%s file size : %d" , fontFileAssetPath.c_str() , fontFileSize);
         fontName_ = fontName;
         
-        int ret = 0;
-        ret = initFont();
-        ret = createFontTextureRes();
-        return ret; 
+        int errCode = -1;
+        errCode = initFont();
+        if(errCode < 0){
+            return errCode;
+        }
+        errCode = createFontTextureRes();
+        return errCode; 
     }
 
     int TextRender::initFont(){

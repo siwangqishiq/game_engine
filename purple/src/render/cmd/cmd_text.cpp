@@ -240,9 +240,9 @@ namespace purple{
             buf.size() * sizeof(float) , buf.data());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
+        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , vertCountPerChar_ * sizeof(float) , 
             reinterpret_cast<void *>(vboOffset_));
-        glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
+        glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , vertCountPerChar_ * sizeof(float) , 
             reinterpret_cast<void *>(vboOffset_ + 3 * sizeof(float)));
         glBindBuffer(GL_ARRAY_BUFFER , 0);
         glBindVertexArray(0);

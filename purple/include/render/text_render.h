@@ -52,6 +52,11 @@ namespace purple{
         float getFonScale(){
             return fontScale_;
         }
+
+        std::shared_ptr<TextureInfo> getFontTextureInfo(){
+            return fontTextureInfo_;
+        }
+
     private:
 
         RenderEngine *renderEngine_;
@@ -63,13 +68,6 @@ namespace purple{
 
         int initFont();
 
-        void buildTextRenderVertexData(std::wstring &text , 
-                float left , 
-                float top , 
-                TextPaint &paint);
-        
-        void submitRenderCommand();
-
         //create 3D texture
         int createFontTextureRes();
 
@@ -78,6 +76,13 @@ namespace purple{
         std::shared_ptr<TextureInfo> fontTextureInfo_;
 
         std::string fontName_;
+
+        int offsetX_ = 0;
+        int offsetY_ = 0;
+        int offsetZ_ = 0;
+
+        int fontWidth_ = FONT_DEFAULT_SIZE;
+        int fontHeight_ = FONT_DEFAULT_SIZE;
     };
 } // namespace  
 
