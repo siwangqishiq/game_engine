@@ -1,6 +1,5 @@
 #include "render/render.h"
 #include "log.h"
-#include "render/command.h"
 #include "render/vram.h"
 #include "render/texture.h"
 #include "resource/asset_manager.h"
@@ -11,6 +10,18 @@
 #include "purple.h"
 #include "render/render.h"
 #include "render/text_render.h"
+
+#include "render/cmd/command.h"
+#include "render/cmd/cmd_arc.h"
+#include "render/cmd/cmd_custom_shader.h"
+#include "render/cmd/cmd_custom_texture_shader.h"
+#include "render/cmd/cmd_lines_smooth.h"
+#include "render/cmd/cmd_lines.h"
+#include "render/cmd/cmd_rect.h"
+#include "render/cmd/cmd_shape.h"
+#include "render/cmd/cmd_text.h"
+#include "render/cmd/cmd_triangles.h"
+
 
 namespace purple{
     std::unordered_map<wchar_t , wchar_t> SymbolMap;

@@ -16,9 +16,9 @@
 #include "glm/matrix.hpp"
 #include "render/shader.h"
 #include <unordered_map>
-#include "render/common.h"
 #include "log.h"
 #include <functional>
+#include "render/common.h"
 
 namespace purple{
     class RenderCommand;

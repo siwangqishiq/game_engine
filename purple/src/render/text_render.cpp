@@ -12,6 +12,26 @@ namespace purple{
             float bottom , 
             TextPaint &paint){
         //todo render text
+        // Log::i(TAG , "start render text");
+
+        buildTextRenderVertexData(text , left , bottom , paint);
+        submitRenderCommand();
+    }
+
+    void TextRender::buildTextRenderVertexData(std::wstring &text , 
+                float left , 
+                float bottom , 
+                TextPaint &textPaint){
+        //vertex data pos (x , y ,depth) , textureCoords [uvw] 
+        float depth = renderEngine_->getAndChangeDepthValue();
+        const float fontHeight = textPaint.getTextFontHeight();
+        for(wchar_t ch : text){
+            
+        }//end for each
+    }
+
+    void TextRender::submitRenderCommand(){
+        
     }
 
     void TextRender::renderText(const wchar_t *text, 

@@ -158,6 +158,10 @@ namespace purple{
         inline void setTextSize(float size){
             textSizeScale = (size / FONT_DEFAULT_SIZE);
         }
+        
+        float getTextFontHeight(){
+            return textSizeScale * FONT_DEFAULT_SIZE;
+        }
     };
 
     //形状绘制 配置参数

@@ -28,12 +28,12 @@ namespace purple{
         int loadFontRes(std::string fontName , std::string fontFileAssetPath);
 
         void renderText(const wchar_t *text, 
-            float left , float bottom, 
-            TextPaint &paint);
+            float left , float baseLine, 
+            TextPaint &textPaint);
         
         void renderText(std::wstring text , 
-            float left , float bottom, 
-            TextPaint &paint);
+            float left , float baseLine, 
+            TextPaint &textPaint);
     private:
 
         RenderEngine *renderEngine_;
@@ -44,6 +44,13 @@ namespace purple{
         float fontScale_ = 1.0f;
 
         int initFont();
+
+        void buildTextRenderVertexData(std::wstring &text , 
+                float left , 
+                float top , 
+                TextPaint &paint);
+        
+        void submitRenderCommand();
     };
 } // namespace  
 
