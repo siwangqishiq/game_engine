@@ -167,8 +167,8 @@ namespace purple{
         float charRealHeight = charInfoPtr->height * sizeScale;
 
         float italicOffset = calTextStyleItalicOffset(charInfoPtr , paint_);
-        // Logi("text_render" , "x y %f %f charRealWidth %f , charRealHeight %f" ,
-        //     x, y ,charRealWidth,charRealHeight);
+        // Log::i("text_render" , "originw : %f  originh: %f , charRealWidth %f , charRealHeight %f  scale: %f" ,
+        //     charInfoPtr->width, charInfoPtr->height ,charRealWidth,charRealHeight , paint_.textSizeScale);
 
         float texLeft = charInfoPtr->textureCoords[0];
         float texTop = charInfoPtr->textureCoords[1];

@@ -41,12 +41,18 @@ namespace purple{
         int height = 0;
         int offX = 0;
         int offY = 0;
+
+        if(ch == L' '){
+            width = SPACE_WIDTH;
+        }
+
         unsigned char* sdfBitmap = stbtt_GetCodepointSDF(
             &fontInfo_, fontScale_, 
             ch , 0 , 128, -1.0f,
             &width, &height , &offX, &offY);
         if(sdfBitmap == nullptr){
             Log::e(TAG ,"sdf data is null index = %d!" , index);
+            
         }else{
             stbtt_FreeSDF(sdfBitmap , nullptr);
             sdfBitmap = nullptr;
