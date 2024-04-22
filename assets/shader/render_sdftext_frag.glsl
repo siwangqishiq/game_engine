@@ -9,6 +9,6 @@ uniform sampler2DArray sdfTexture;
 
 void main(){
     vec3 color = vec3(0.0f ,0.0f , 0.0f);
-    float fontAlpha = texture(sdfTexture , vec3(vUvw.x , vUvw.y , vUvw.z)).r;
-    outColor = vec4(color, 1.0f * (fontAlpha));
+    float fontAlpha = texture(sdfTexture , vUvw.xyz).r;
+    outColor = vec4(color, fontAlpha);
 }

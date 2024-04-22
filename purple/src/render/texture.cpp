@@ -7,7 +7,7 @@ namespace purple{
         GLint  internalFormat = GL_RGBA;
         switch (format) {
             case GL_RED:
-                internalFormat = GL_R8;
+                internalFormat = GL_RED;
                 break;
             case GL_RGB:
                 internalFormat = GL_RGB8;
@@ -114,7 +114,7 @@ namespace purple{
             texWidth , texHeight);
         
         glBindTexture(GL_TEXTURE_2D_ARRAY , textureId);
-        // glPixelStorei(GL_UNPACK_ALIGNMENT , 4);
+        glPixelStorei(GL_UNPACK_ALIGNMENT , 1);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
@@ -174,11 +174,11 @@ namespace purple{
         }
 
         glBindTexture(GL_TEXTURE_2D , tId);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(GL_TEXTURE_2D, 0, 
             convertChanelToInternalFormat(format),
             width, 
@@ -281,6 +281,7 @@ namespace purple{
         }
 
         glBindTexture(GL_TEXTURE_2D_ARRAY , tId);
+        glPixelStorei(GL_UNPACK_ALIGNMENT , 1);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
@@ -291,6 +292,8 @@ namespace purple{
             convertChanelToInternalFormat(format),
             width , height , depth , 0 , format , GL_UNSIGNED_BYTE , 
             nullptr);
+
+        // glTexStorage3D(GL_TEXTURE_2D_ARRAY, 0 , convertChanelToInternalFormat(format), width , height,depth);
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         
         auto textureInfo = std::make_shared<TextureInfo>();
@@ -333,6 +336,8 @@ namespace purple{
             offsetX , offsetY , offsetZ , 
             w , h , depthSize , textureInfo->format,
             GL_UNSIGNED_BYTE , subData);
+        // glTextureSubImage3D(textureInfo->textureId , 0 , offsetX, offsetY , offsetZ,
+        //     w , h , depthSize , textureInfo->format , GL_UNSIGNED_BYTE , subData);
         // std::cout << "glERROR --> " << glGetError() << std::endl;
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         return 0;

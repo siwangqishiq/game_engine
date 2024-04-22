@@ -22,13 +22,13 @@ void TestTextRender::testTextRender(){
     float fontHeight = 200.0f;
     textPaint.setTextSize(fontHeight);
 
-    std::wstring str = L"世界";
+    std::wstring str = L"你好世界 HelloWorld!";
 
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
     textRender->renderText(str , left , top , textPaint);
 
-    // purple::Engine::getRenderEngine()->renderText(str , 
-    //     left , top , textPaint);
+    purple::Engine::getRenderEngine()->renderText(str , 
+        left , top + 300.0f , textPaint);
     
     // auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
     // batch->begin();

@@ -108,8 +108,10 @@ namespace purple{
     std::vector<float> TextRender::addBitmapToTextures(unsigned char *bitmap, 
             int width , 
             int height){
-        Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d",
-            this->offsetX_ , this->offsetY_ , offsetZ_);
+        updateNextOffset();//update offset data
+
+        Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
+            this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
         // fontTextureInfo_
         TextureManager::getInstance()->updateTexture2dArrayData(
             fontTextureInfo_ , 
@@ -118,14 +120,13 @@ namespace purple{
             offsetZ_ , 
             width , height , 1 , bitmap);
         
-        std::vector<float> texCoords{5};
+        std::vector<float> texCoords(5);
         texCoords[0] = static_cast<float>(offsetX_) / static_cast<float>(texWidth_);
         texCoords[1] = static_cast<float>(offsetY_) / static_cast<float>(texHeight_);
         texCoords[2] = static_cast<float>(offsetX_ + width) / static_cast<float>(texWidth_);
         texCoords[3] = static_cast<float>(offsetY_ + height) / static_cast<float>(texHeight_);
         texCoords[4] = static_cast<float>(offsetZ_);
 
-        updateNextOffset();//update offset data
         return texCoords;
     }
 

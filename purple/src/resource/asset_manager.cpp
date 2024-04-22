@@ -123,7 +123,7 @@ namespace purple{
         Log::i("asset" , "read file path %s" , filePath.c_str());
         
         stbi_set_flip_vertically_on_load(needFlip);
-
+        
         uint8_t *data = stbi_load(filePath.c_str(),
                             &fileConfig.width , 
                             &fileConfig.height , &fileConfig.channel , 0);

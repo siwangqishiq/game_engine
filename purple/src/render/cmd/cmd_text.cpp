@@ -176,6 +176,8 @@ namespace purple{
         float texBottom = charInfoPtr->textureCoords[3];
         float texW = charInfoPtr->textureCoords[4];
 
+        // Log::i("text_render" , "l t r b %f %f %f %f" , texLeft , texTop , texRight , texBottom);
+
         //eg: 一 need a offset in y ax
         float offsetX = 0.0f;
         float offsetY = (charInfoPtr->bearingY - charInfoPtr->height) * sizeScale;
