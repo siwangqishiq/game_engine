@@ -64,6 +64,10 @@ namespace purple{
     //    viewHeight_ = appContext_->viewHeight_;
         resetNormalMat(purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
         glViewport(0 , 0 , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
+        
+        //打开混合模式 文字有透明度
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void RenderEngine::init(){

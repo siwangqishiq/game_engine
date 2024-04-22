@@ -30,7 +30,7 @@ namespace purple{
             x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
             // x += (charInfoPtr->width) * paint.textSizeScale;
         }//end for i
-
+        
         buildGlCommands(buf);                 
     }
 
@@ -42,14 +42,14 @@ namespace purple{
         Shader shader = fetchSdfTextShader();
         shader.useShader();
         shader.setUniformMat3("transMat" , engine_->normalMatrix_);
-        shader.setUniformVec4("textColor" , paint_.textColor);
+        // shader.setUniformVec4("textColor" , paint_.textColor);
         
         glBindVertexArray(vao_);
         glBindBuffer(GL_ARRAY_BUFFER , vbo_);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D_ARRAY, fontTextureId_);
-        shader.setUniformInt("fontTexture" , 0);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, textRender_->getFontTextureInfo()->textureId);
+        shader.setUniformInt("sdfTexture" , 0);
         
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);

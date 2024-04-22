@@ -232,7 +232,6 @@ namespace purple{
 
     void ShaderManager::clear() {
         Log::i(TAG_SHADER , "shader manager clear");
-
         for(auto pair : shaderMap){
             Shader shader = pair.second;
             glDeleteShader(shader.programId);

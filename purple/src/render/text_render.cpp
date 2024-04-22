@@ -25,7 +25,8 @@ namespace purple{
     }
 
     int TextRender::createFontTextureRes(){
-        fontTextureInfo_ = TextureManager::getInstance()->createEmptyTexture2dArray(fontName_,
+        fontTextureInfo_ = 
+        TextureManager::getInstance()->createEmptyTexture2dArray(fontName_,
             texWidth_ , texHeight_ , texDepth_ , GL_RED);
         return fontTextureInfo_->textureId;
     }
@@ -50,10 +51,12 @@ namespace purple{
             &fontInfo_, fontScale_, 
             ch , 0 , 128, -1.0f,
             &width, &height , &offX, &offY);
-        if(sdfBitmap == nullptr){
+        if(sdfBitmap == nullptr || width <= 0 || height <= 0){
             Log::e(TAG ,"sdf data is null index = %d!" , index);
-            
-        }else{
+        }
+        
+        std::vector<float> coords = addBitmapToTextures(sdfBitmap , width, height);
+        if(sdfBitmap != nullptr){
             stbtt_FreeSDF(sdfBitmap , nullptr);
             sdfBitmap = nullptr;
         }
@@ -67,10 +70,63 @@ namespace purple{
         result->bearingX = offX;
         result->bearingY = -offY;
         result->textureId = fontTextureInfo_->textureId;
+        putCoords(*result , coords);
 
         //add cache
         charInfoMap_[ch] = result;
         return result;
+    }
+
+    void TextRender::updateNextOffset(){
+        if(offsetX_ + fontWidth_ > texWidth_){
+            if(offsetY_ + fontHeight_ > texHeight_){
+                if(offsetZ_ + 1 > texDepth_){
+                    offsetZ_ = 1;//第0页 考虑必然是常用字符 不做替换 从第二页开始
+                }
+                offsetY_ = 0;
+            }else{
+                offsetY_ += fontHeight_;
+            }
+            offsetX_ = 0;
+        }else{
+            offsetX_ += fontWidth_;
+        }
+    }
+
+    //设置纹理坐标信息
+    void TextRender::putCoords(CharInfo &info , std::vector<float> &coords) const{
+        if(coords.empty()){
+            return;
+        }
+
+        for(int i = 0 ; i < 5 ; i++){
+            info.textureCoords[i] = coords[i];
+            Log::i(TAG , "textureCoords[%d] = %f" , i , info.textureCoords[i]);
+        }//end for i
+    }
+
+    std::vector<float> TextRender::addBitmapToTextures(unsigned char *bitmap, 
+            int width , 
+            int height){
+        Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d",
+            this->offsetX_ , this->offsetY_ , offsetZ_);
+        // fontTextureInfo_
+        TextureManager::getInstance()->updateTexture2dArrayData(
+            fontTextureInfo_ , 
+            offsetX_ , 
+            offsetY_ ,
+            offsetZ_ , 
+            width , height , 1 , bitmap);
+        
+        std::vector<float> texCoords{5};
+        texCoords[0] = static_cast<float>(offsetX_) / static_cast<float>(texWidth_);
+        texCoords[1] = static_cast<float>(offsetY_) / static_cast<float>(texHeight_);
+        texCoords[2] = static_cast<float>(offsetX_ + width) / static_cast<float>(texWidth_);
+        texCoords[3] = static_cast<float>(offsetY_ + height) / static_cast<float>(texHeight_);
+        texCoords[4] = static_cast<float>(offsetZ_);
+
+        updateNextOffset();//update offset data
+        return texCoords;
     }
 
     void TextRender::renderText(const wchar_t *text, 

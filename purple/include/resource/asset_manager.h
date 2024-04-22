@@ -82,6 +82,11 @@ namespace purple{
                         std::istreambuf_iterator<char>());
             return toWideString(str);
         }
+
+    public:
+        std::string cacheRootDir(){
+            return "purplecache/";
+        }
     };
 
 }

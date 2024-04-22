@@ -13,7 +13,7 @@ namespace purple{
 
         SdfTextRenderCommand(RenderEngine *engine , TextRender *tRender) 
             : TextRenderCommand(engine) , textRender_(tRender){}
-
+        
         virtual void putParams(
             std::wstring &text ,
             float left , 

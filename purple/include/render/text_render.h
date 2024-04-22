@@ -6,6 +6,7 @@
 #include "render/stb_truetype.h"
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace purple{
     class RenderEngine;
@@ -71,8 +72,15 @@ namespace purple{
         //create 3D texture
         int createFontTextureRes();
 
-        std::unordered_map<wchar_t , std::shared_ptr<CharInfo>> charInfoMap_;
+        std::vector<float> addBitmapToTextures(unsigned char *bitmap , 
+            int width , int height);
 
+        void updateNextOffset();
+
+        void putCoords(CharInfo &info , std::vector<float> &coords) const;
+
+        std::unordered_map<wchar_t , std::shared_ptr<CharInfo>> charInfoMap_;
+        
         std::shared_ptr<TextureInfo> fontTextureInfo_;
 
         std::string fontName_;

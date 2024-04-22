@@ -44,10 +44,13 @@ namespace purple{
         for(auto pair : textureBank_){
             auto texInfoPtr= pair.second;
             Log::i("texture_manager" , "texture del %s" , (texInfoPtr->name).c_str());
-
+            
             if(texInfoPtr != nullptr){
-                glDeleteTextures(1 , &(texInfoPtr->textureId));
-                
+                if(texInfoPtr->type != TEXTURE_2D){
+                    glDeleteTextures(1 , &(texInfoPtr->textureId));
+                }
+
+                std::cout <<"glERROR--->" << glGetError() << std::endl;
                 //visual texture delete
                 if(texInfoPtr->category == TextureCategory::VIRTUAL_TEX){
                     if(texInfoPtr->renderBufferId != 0){
@@ -282,10 +285,12 @@ namespace purple{
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_R , GL_CLAMP_TO_EDGE);
 
         glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, 
             convertChanelToInternalFormat(format),
-            width , height , depth , 0 , format , GL_UNSIGNED_BYTE , nullptr);
+            width , height , depth , 0 , format , GL_UNSIGNED_BYTE , 
+            nullptr);
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         
         auto textureInfo = std::make_shared<TextureInfo>();
@@ -295,6 +300,7 @@ namespace purple{
         textureInfo->height = height;
         textureInfo->depth = depth;
         textureInfo->format = format;
+        textureInfo->type = TextureType::TEXTURE_2D_ARRAY;
         
         //add pool
         textureBank_[textureInfo->name] = textureInfo;
@@ -327,6 +333,7 @@ namespace purple{
             offsetX , offsetY , offsetZ , 
             w , h , depthSize , textureInfo->format,
             GL_UNSIGNED_BYTE , subData);
+        // std::cout << "glERROR --> " << glGetError() << std::endl;
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         return 0;
     }

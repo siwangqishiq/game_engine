@@ -19,23 +19,23 @@ void TestTextRender::testTextRender(){
 
     purple::TextPaint textPaint;
     textPaint.textColor = glm::vec4(1.0f , 0.0f , 0.0f ,1.0f);
-    float fontHeight = 100.0f;
+    float fontHeight = 200.0f;
     textPaint.setTextSize(fontHeight);
 
-    std::wstring str = L"你好 世界!HelloWorld";
+    std::wstring str = L"世界";
 
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
     textRender->renderText(str , left , top , textPaint);
 
-    purple::Engine::getRenderEngine()->renderText(str , 
-        left , top , textPaint);
+    // purple::Engine::getRenderEngine()->renderText(str , 
+    //     left , top , textPaint);
     
-    auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
-    batch->begin();
-    purple::Paint rectPaint;
-    rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.4f);
-    purple::Rect rect(left , top + fontHeight , 400.0f , fontHeight);
-    batch->renderRect(rect , rectPaint);
-    batch->end();
+    // auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
+    // batch->begin();
+    // purple::Paint rectPaint;
+    // rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.4f);
+    // purple::Rect rect(left , top + fontHeight , 400.0f , fontHeight);
+    // batch->renderRect(rect , rectPaint);
+    // batch->end();
 }
 
