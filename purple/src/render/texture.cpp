@@ -282,18 +282,28 @@ namespace purple{
 
         glBindTexture(GL_TEXTURE_2D_ARRAY , tId);
         glPixelStorei(GL_UNPACK_ALIGNMENT , 1);
-        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_R , GL_CLAMP_TO_EDGE);
-
+        
+        // std::cout << "glTexImage3D ->" << std::endl;
+        uint8_t *data = new uint8_t[width * height *depth];
+        for(int i = 0 ; i < width * height *depth;i++){
+            data[i] = 255;
+        }
         glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, 
             convertChanelToInternalFormat(format),
-            width , height , depth , 0 , format , GL_UNSIGNED_BYTE , 
-            nullptr);
+            width , height , depth , 
+            0 , format , GL_UNSIGNED_BYTE , 
+            data);
+        delete[] data;
 
-        // glTexStorage3D(GL_TEXTURE_2D_ARRAY, 0 , convertChanelToInternalFormat(format), width , height,depth);
+        // std::cout << "glTexImage3D222 ->" << std::endl;
+        // glTextureStorage3D(tId, 0 , 
+        //     convertChanelToInternalFormat(format), 
+        //     width,height ,depth);
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         
         auto textureInfo = std::make_shared<TextureInfo>();
@@ -339,6 +349,7 @@ namespace purple{
         // glTextureSubImage3D(textureInfo->textureId , 0 , offsetX, offsetY , offsetZ,
         //     w , h , depthSize , textureInfo->format , GL_UNSIGNED_BYTE , subData);
         // std::cout << "glERROR --> " << glGetError() << std::endl;
+        glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
         glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
         return 0;
     }

@@ -107,10 +107,16 @@ namespace purple{
         void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
 
         //绘制文字
-        void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
+        void renderText(
+            std::wstring &text , 
+            float left , 
+            float bottom , 
+            TextPaint &paint
+        );
 
         //绘制文字
-        void renderText(const wchar_t *text , float left , float bottom , TextPaint &paint){
+        void renderText(const wchar_t *text , 
+            float left , float bottom , TextPaint &paint){
             auto str = std::wstring(text);
             renderText(str, left , bottom , paint);
         }

@@ -14,4 +14,13 @@ private:
     float mTime = 0.0f;
     
     void testTextRender();
+
+    void testTextRenderWithRect();
+
+    void testTextRenderLargeContent();
+
+    std::wstring novelContent_;
+
+    unsigned int readCount_ = 0;
+    unsigned int readOffset_ = 0;
 };

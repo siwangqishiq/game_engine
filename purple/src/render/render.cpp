@@ -491,7 +491,7 @@ namespace purple{
 
         float translateX = limitRect.left - outRect.left;
         float translateY = -maxBaselineY;
-
+        
         switch(paint.textGravity){
             case TopLeft:
                 break;

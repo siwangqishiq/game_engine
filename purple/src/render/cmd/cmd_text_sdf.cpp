@@ -42,7 +42,8 @@ namespace purple{
         Shader shader = fetchSdfTextShader();
         shader.useShader();
         shader.setUniformMat3("transMat" , engine_->normalMatrix_);
-        // shader.setUniformVec4("textColor" , paint_.textColor);
+        shader.setUniformVec4("uTextColor" , paint_.textColor);
+        shader.setUniformFloat("uFontSize" , paint_.getTextFontHeight());
         
         glBindVertexArray(vao_);
         glBindBuffer(GL_ARRAY_BUFFER , vbo_);
@@ -70,5 +71,32 @@ namespace purple{
         return ShaderManager::getInstance()->loadAssetShader(SAHDER_NAME_SDF_TEXT, 
                     "shader/render_sdftext_vert.glsl", 
                     "shader/render_sdftext_frag.glsl");
+    }
+
+
+    void SdfTextRenderCommand::putTextParamsByRectLimit(
+                    std::wstring &text , 
+                    Rect &limitRect, 
+                    Rect *wrapContentRect,
+                    TextPaint &paint){
+        if(text.empty()){
+            if(wrapContentRect != nullptr){ //empty input to fill out rect
+                *wrapContentRect = createEmptyWrapRect(limitRect , paint);
+            }
+            return;
+        }
+
+        allocatorVRamForText(text.length());
+
+        paint_ = paint;
+
+        // Logi("debug" , "vertexCount = %d , attrCound = %d" , vertexCount_ , attrCount_);
+        std::vector<float> buf(vertexCount_ * attrCount_);
+        Rect outRect;
+        textRender_->layoutText(text , *this, outRect, buf);
+        if(wrapContentRect != nullptr){
+            *wrapContentRect = outRect;
+        }
+        buildGlCommands(buf);
     }
 }

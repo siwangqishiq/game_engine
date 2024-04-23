@@ -12,15 +12,25 @@
 #include "render/stb_truetype.h"
 
 namespace purple{
+    void TextRender::renderTextWithRect(
+            std::wstring text , 
+            Rect &showRect ,
+            TextPaint &textPaint , 
+            Rect *wrapContentRect
+        )
+    {
+        SdfTextRenderCommand cmd(renderEngine_ , this);
+        cmd.limitRect_ = showRect;
+        cmd.putTextParamsByRectLimit(text , showRect ,wrapContentRect , textPaint);
+        cmd.runCommands();
+    }
+
     void TextRender::renderText(std::wstring text , 
             float left , 
-            float bottom , 
+            float baseline , 
             TextPaint &paint){
-        //todo render text
-        // Log::i(TAG , "start render text");
-
         SdfTextRenderCommand cmd(renderEngine_ , this);
-        cmd.putParams(text , left , bottom , paint);
+        cmd.putParams(text , left , baseline , paint);
         cmd.runCommands();
     }
 
@@ -49,7 +59,7 @@ namespace purple{
 
         unsigned char* sdfBitmap = stbtt_GetCodepointSDF(
             &fontInfo_, fontScale_, 
-            ch , 0 , 128, -1.0f,
+            ch , 0, 128, -128/5.0f,
             &width, &height , &offX, &offY);
         if(sdfBitmap == nullptr || width <= 0 || height <= 0){
             Log::e(TAG ,"sdf data is null index = %d!" , index);
@@ -61,8 +71,8 @@ namespace purple{
             sdfBitmap = nullptr;
         }
 
-        Log::e(TAG , "char width = %d , height = %d , offx = %d , offy = %d" 
-            , width , height , offX , offY);
+        // Log::e(TAG , "char width = %d , height = %d , offx = %d , offy = %d" 
+        //     , width , height , offX , offY);
 
         result->value = ch;
         result->width = width;
@@ -78,10 +88,12 @@ namespace purple{
     }
 
     void TextRender::updateNextOffset(){
-        if(offsetX_ + fontWidth_ > texWidth_){
-            if(offsetY_ + fontHeight_ > texHeight_){
+        if(offsetX_ + fontWidth_ >= texWidth_){
+            if(offsetY_ + fontHeight_ >= texHeight_){
                 if(offsetZ_ + 1 > texDepth_){
                     offsetZ_ = 1;//第0页 考虑必然是常用字符 不做替换 从第二页开始
+                }else{
+                    offsetZ_ += 1;
                 }
                 offsetY_ = 0;
             }else{
@@ -91,6 +103,9 @@ namespace purple{
         }else{
             offsetX_ += fontWidth_;
         }
+
+        // Log::i(TAG , "updateNextOffset offsetX : %d , offsetY:%d , offsetZ : %d",
+        //     offsetX_ , offsetY_ , offsetZ_);
     }
 
     //设置纹理坐标信息
@@ -101,7 +116,7 @@ namespace purple{
 
         for(int i = 0 ; i < 5 ; i++){
             info.textureCoords[i] = coords[i];
-            Log::i(TAG , "textureCoords[%d] = %f" , i , info.textureCoords[i]);
+            // Log::i(TAG , "textureCoords[%d] = %f" , i , info.textureCoords[i]);
         }//end for i
     }
 
@@ -110,8 +125,8 @@ namespace purple{
             int height){
         updateNextOffset();//update offset data
 
-        Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
-            this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
+        // Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
+        //     this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
         // fontTextureInfo_
         TextureManager::getInstance()->updateTexture2dArrayData(
             fontTextureInfo_ , 
@@ -132,9 +147,9 @@ namespace purple{
 
     void TextRender::renderText(const wchar_t *text, 
             float left, 
-            float bottom, 
+            float baseline, 
             TextPaint &paint){
-        renderText(std::wstring(text) , left , bottom , paint);
+        renderText(std::wstring(text) , left , baseline , paint);
     }
 
     int TextRender::loadFontRes(std::string fontName, std::string fontFileAssetPath){
@@ -158,10 +173,127 @@ namespace purple{
 
     int TextRender::initFont(){
         int errCode = stbtt_InitFont(&fontInfo_ , fontData_ , 0);
-        // fontScale_ = stbtt_ScaleForPixelHeight(&fontInfo_ , static_cast<int>(FONT_DEFAULT_SIZE));
         fontScale_ = stbtt_ScaleForPixelHeight(&fontInfo_ , FONT_DEFAULT_SIZE);
         Log::i(TAG , "fontScale =  %f" , fontScale_);
         return errCode;
+    }
+
+    void TextRender::layoutText(std::wstring &content, 
+                SdfTextRenderCommand &renderCmd,
+                Rect &outRect,
+                std::vector<float> &buf){
+        TextPaint paint = renderCmd.paint_;
+        Rect limitRect = renderCmd.limitRect_;
+        
+        outRect.left = limitRect.left;
+        outRect.top = limitRect.top;
+        outRect.width = 0.0f;
+        outRect.height =(FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+
+        float maxBaselineY = 0.0f;
+        float lineWidth = 0.0f;
+        bool isFirstLine = true;
+
+        float x = limitRect.left;
+        float y = limitRect.top;
+        float depthValue = renderCmd.engine_->getAndChangeDepthValue();
+
+        int index = 0;
+        int realRenderCharCount = 0;
+        const int size = content.length();
+
+        while(index < size){
+            wchar_t ch = content[index];
+            auto charInfoPtr = findCharInfo(ch , index);
+            if(isFirstLine){
+                float bearingY = charInfoPtr->bearingY * paint.textSizeScale;
+                if(maxBaselineY <= bearingY){
+                    maxBaselineY = bearingY;
+                }
+            }
+
+            float charRealWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
+
+            if(x + charRealWidth <= limitRect.getRight() && ch != L'\n'){
+                renderCmd.putVertexDataToBuf(buf , index , x , y ,depthValue,
+                    charInfoPtr , paint);
+                
+                x += charRealWidth;
+                lineWidth += charRealWidth;
+                if(outRect.width < lineWidth){
+                    outRect.width = lineWidth;
+                }
+                index++;
+                realRenderCharCount = index;
+            }else{// change a new line
+                isFirstLine = false;
+
+                x = limitRect.left;
+                y -= (FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+                if(y - maxBaselineY < limitRect.getBottom()){
+                    break;
+                }
+
+                outRect.height += (FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+                lineWidth = 0.0f;
+                
+                if(ch == L'\n'){
+                    index++;
+                }
+            }
+        }//end while
+
+        float translateX = limitRect.left - outRect.left;
+        float translateY = -maxBaselineY;
+        
+        switch(paint.textGravity){
+            case TopLeft:
+                break;
+            case TopCenter:
+                translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+                outRect.left += translateX;
+                break;
+            case TopRight:
+                translateX += (limitRect.width - outRect.width);
+                outRect.left += translateX;
+                break;
+            case BottomLeft:
+                translateY -= (limitRect.height - outRect.height);
+                outRect.top += translateY + maxBaselineY;
+                break;
+            case BottomCenter:
+                translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+                outRect.left += translateX;
+                translateY -= (limitRect.height - outRect.height);
+                outRect.top += translateY + maxBaselineY;
+                break;
+            case BottomRight:
+                translateX += (limitRect.width - outRect.width);
+                outRect.left += translateX;
+                translateY -= (limitRect.height - outRect.height);
+                outRect.top += translateY + maxBaselineY;
+                break;
+            case CenterLeft:
+                translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+                outRect.top += translateY + maxBaselineY;
+                break;
+            case CenterRight:
+                translateX += (limitRect.width - outRect.width);
+                outRect.left += translateX;
+                translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+                outRect.top += translateY + maxBaselineY;
+                break;
+            case Center:
+                translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+                outRect.left += translateX;
+                translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+                outRect.top += translateY + maxBaselineY;
+                break;
+        }//end switch
+
+        for(int i = 0 ; i < realRenderCharCount ;i++){
+            renderCmd.updateVertexPositionData(buf , i , translateX , translateY);
+        }//end for i
     }
 }
 

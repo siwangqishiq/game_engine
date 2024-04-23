@@ -11,6 +11,7 @@
 namespace purple{
     class RenderEngine;
     class TextureInfo;
+    class SdfTextRenderCommand;
     
     class TextRender{
     public:
@@ -37,12 +38,19 @@ namespace purple{
         int loadFontRes(std::string fontName , std::string fontFileAssetPath);
 
         void renderText(const wchar_t *text, 
-            float left , float baseLine, 
+            float left , 
+            float baseline, 
             TextPaint &textPaint);
         
         void renderText(std::wstring text , 
-            float left , float baseLine, 
+            float left , float baseline, 
             TextPaint &textPaint);
+        
+        void renderTextWithRect(
+            std::wstring text , 
+            Rect &showRect ,
+            TextPaint &textPaint ,
+            Rect *wrapContentRect);
 
         std::shared_ptr<CharInfo> findCharInfo(wchar_t &ch , int index);
 
@@ -58,6 +66,10 @@ namespace purple{
             return fontTextureInfo_;
         }
 
+        void layoutText(std::wstring &content, 
+                            SdfTextRenderCommand &renderCmd,
+                            Rect &outRect,
+                            std::vector<float> &buf);
     private:
 
         RenderEngine *renderEngine_;

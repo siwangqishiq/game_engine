@@ -150,7 +150,7 @@ namespace purple{
     //文本绘制 配置
     struct TextPaint{
         float textSizeScale = 1.0f;
-        float gapSize = 2.0f;
+        float gapSize = 0.0f;
         glm::vec4 textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
         TextStyle textStyle = normal;
         TextGravity textGravity = TopLeft;
