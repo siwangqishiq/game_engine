@@ -12,6 +12,11 @@ namespace purple{
     class RenderEngine;
     class TextureInfo;
     class SdfTextRenderCommand;
+
+    struct TextRenderOutInfo{
+        Rect outRect;
+        int renderTextSize;
+    };
     
     class TextRender{
     public:
@@ -50,7 +55,7 @@ namespace purple{
             std::wstring text , 
             Rect &showRect ,
             TextPaint &textPaint ,
-            Rect *wrapContentRect);
+            TextRenderOutInfo *outInfo);
 
         std::shared_ptr<CharInfo> findCharInfo(wchar_t &ch , int index);
 
@@ -68,7 +73,7 @@ namespace purple{
 
         void layoutText(std::wstring &content, 
                             SdfTextRenderCommand &renderCmd,
-                            Rect &outRect,
+                            TextRenderOutInfo &outRect,
                             std::vector<float> &buf);
     private:
 

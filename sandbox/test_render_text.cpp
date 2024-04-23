@@ -7,10 +7,6 @@ void TestTextRender::onInit(){
 
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *){
         readCount_++;
-        if(readCount_ >= 200){
-            readOffset_ += readCount_;
-            readCount_ = 0;
-        }
     } ,  100);
 }
 
@@ -40,8 +36,8 @@ void TestTextRender::testTextRenderWithRect(){
     // textRender->renderTextWithRect(str , showRect , textPaint , nullptr);
     textPaint.textGravity = purple::TextGravity::BottomLeft;
 
-    purple::Rect wrapRect;
-    textRender->renderTextWithRect(str , showRect , textPaint , &wrapRect);
+    purple::TextRenderOutInfo info;
+    textRender->renderTextWithRect(str , showRect , textPaint , &info);
 
     auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
     batch->begin();
@@ -60,8 +56,21 @@ void TestTextRender::testTextRenderLargeContent(){
 
     purple::Rect showRect(0.0f , purple::Engine::ScreenHeight 
         , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
-    std::wstring str(novelContent_.begin() + readOffset_ , novelContent_.begin() + readOffset_ + readCount_);
-    textRender->renderTextWithRect(str , showRect , textPaint , nullptr);
+    std::wstring str(novelContent_.begin() + readOffset_ , 
+        novelContent_.begin() + readOffset_ + readCount_);
+
+    purple::TextRenderOutInfo info;
+    textRender->renderTextWithRect(str , showRect , textPaint , &info);
+    
+    // purple::Log::i("outInfo" , "render text count : %d" , info.renderTextSize);
+    // if(renderCharCount_ == info.renderTextSize){
+    //     renderCharCount_ = 0;
+    //     readOffset_ += readCount_;
+    //     readCount_ = 0;
+    // }
+    // renderCharCount_ = info.renderTextSize;
+    
+    // purple::Engine::getRenderEngine()->renderTextWithRect(str , showRect , textPaint , nullptr);
 }
 
 void TestTextRender::testTextRender(){

@@ -16,12 +16,12 @@ namespace purple{
             std::wstring text , 
             Rect &showRect ,
             TextPaint &textPaint , 
-            Rect *wrapContentRect
+            TextRenderOutInfo *outInfo
         )
     {
         SdfTextRenderCommand cmd(renderEngine_ , this);
         cmd.limitRect_ = showRect;
-        cmd.putTextParamsByRectLimit(text , showRect ,wrapContentRect , textPaint);
+        cmd.putTextParamsByRectLimit(text , showRect ,outInfo, textPaint);
         cmd.runCommands();
     }
 
@@ -180,11 +180,12 @@ namespace purple{
 
     void TextRender::layoutText(std::wstring &content, 
                 SdfTextRenderCommand &renderCmd,
-                Rect &outRect,
+                TextRenderOutInfo &outInfo,
                 std::vector<float> &buf){
         TextPaint paint = renderCmd.paint_;
         Rect limitRect = renderCmd.limitRect_;
         
+        Rect &outRect = outInfo.outRect;
         outRect.left = limitRect.left;
         outRect.top = limitRect.top;
         outRect.width = 0.0f;
@@ -242,6 +243,8 @@ namespace purple{
                 }
             }
         }//end while
+
+        outInfo.renderTextSize = index;
 
         float translateX = limitRect.left - outRect.left;
         float translateY = -maxBaselineY;

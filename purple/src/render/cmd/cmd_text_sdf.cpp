@@ -77,11 +77,12 @@ namespace purple{
     void SdfTextRenderCommand::putTextParamsByRectLimit(
                     std::wstring &text , 
                     Rect &limitRect, 
-                    Rect *wrapContentRect,
+                    TextRenderOutInfo *outInfo,
                     TextPaint &paint){
         if(text.empty()){
-            if(wrapContentRect != nullptr){ //empty input to fill out rect
-                *wrapContentRect = createEmptyWrapRect(limitRect , paint);
+            if(outInfo != nullptr){ //empty input to fill out rect
+                outInfo->outRect = createEmptyWrapRect(limitRect , paint);
+                outInfo->renderTextSize = 0;
             }
             return;
         }
@@ -92,10 +93,10 @@ namespace purple{
 
         // Logi("debug" , "vertexCount = %d , attrCound = %d" , vertexCount_ , attrCount_);
         std::vector<float> buf(vertexCount_ * attrCount_);
-        Rect outRect;
-        textRender_->layoutText(text , *this, outRect, buf);
-        if(wrapContentRect != nullptr){
-            *wrapContentRect = outRect;
+        TextRenderOutInfo innerOutInfo;
+        textRender_->layoutText(text , *this, innerOutInfo, buf);
+        if(outInfo != nullptr){
+            *outInfo = innerOutInfo;
         }
         buildGlCommands(buf);
     }

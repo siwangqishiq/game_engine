@@ -27,7 +27,7 @@ namespace purple{
         virtual void putTextParamsByRectLimit(
                             std::wstring &text , 
                             Rect &limitRect, 
-                            Rect *wrapContentRect,
+                            TextRenderOutInfo *outInfo,
                             TextPaint &paint
                         );
 

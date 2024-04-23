@@ -23,4 +23,6 @@ private:
 
     unsigned int readCount_ = 0;
     unsigned int readOffset_ = 0;
+
+    int renderCharCount_ = -1;
 };
