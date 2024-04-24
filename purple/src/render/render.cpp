@@ -21,7 +21,6 @@
 #include "render/cmd/cmd_shape.h"
 #include "render/cmd/cmd_text.h"
 #include "render/cmd/cmd_triangles.h"
-#include "render.h"
 
 
 namespace purple{
@@ -408,6 +407,30 @@ namespace purple{
 
     void RenderEngine::resetDepth(){
         depthValue = 1.0f;
+    }
+
+    //绘制文字
+    void RenderEngine::renderTextV2(
+        const wchar_t *text , 
+        float left , 
+        float bottom , 
+        TextPaint &paint) {
+        auto textRender = getTextRenderByName(paint.fontName);
+        if(textRender != nullptr){
+            auto str = std::wstring(text);
+            textRender->renderText(str , left , bottom , paint);
+        }
+    }
+
+    void RenderEngine::renderTextV2(
+            std::wstring &text , 
+            float left , 
+            float bottom , 
+            TextPaint &paint){
+        auto textRender = getTextRenderByName(paint.fontName);
+        if(textRender != nullptr){
+            textRender->renderText(text , left , bottom , paint);
+        }
     }
 
     void RenderEngine::renderTextWithRectV2(std::wstring &text, 

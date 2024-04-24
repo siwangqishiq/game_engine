@@ -14,9 +14,9 @@ void TestTextRender::onInit(){
 }
 
 void TestTextRender::onTick(){
-    // testTextRender();
+    testTextRender();
     // testTextRenderWithRect();
-    testTextRenderLargeContent();
+    // testTextRenderLargeContent();
 }
 
 void TestTextRender::onDispose(){
@@ -53,8 +53,9 @@ void TestTextRender::testTextRenderWithRect(){
 void TestTextRender::testTextRenderLargeContent(){
     purple::TextPaint textPaint;
     textPaint.textColor = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
-    textPaint.setTextSize(purple::Engine::ScreenHeight / 10.0f);
+    textPaint.setTextSize(purple::Engine::ScreenHeight / 60.0f);
     textPaint.textGravity = purple::TextGravity::TopLeft;
+    textPaint.fontName = "youyuan";
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
 
     purple::Rect showRect(0.0f , purple::Engine::ScreenHeight 
@@ -63,43 +64,35 @@ void TestTextRender::testTextRenderLargeContent(){
         novelContent_.begin() + readOffset_ + readCount_);
 
     purple::TextRenderOutInfo info;
-    textRender->renderTextWithRect(str , showRect , textPaint , &info);
-    
-    // purple::Log::i("outInfo" , "render text count : %d" , info.renderTextSize);
-    // if(renderCharCount_ == info.renderTextSize){
-    //     renderCharCount_ = 0;
-    //     readOffset_ += readCount_;
-    //     readCount_ = 0;
-    // }
-    // renderCharCount_ = info.renderTextSize;
-    
-    // purple::Engine::getRenderEngine()->renderTextWithRect(str , showRect , textPaint , nullptr);
+    // textRender->renderTextWithRect(str , showRect , textPaint , &info);
+    purple::Engine::getRenderEngine()->renderTextWithRectV2(str , showRect , textPaint , nullptr);
 }
 
 void TestTextRender::testTextRender(){
-    float left = purple::Engine::ScreenWidth / 4.0f;
+    // float left = purple::Engine::ScreenWidth / 4.0f;
     float top = purple::Engine::ScreenHeight / 2.0f;
 
     purple::TextPaint textPaint;
-    textPaint.textColor = glm::vec4(0.0f , 1.0f , 0.0f ,0.4f);
+    textPaint.textColor = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
     float fontHeight = 100.0f;
     textPaint.setTextSize(fontHeight);
 
-    std::wstring str = L"一二三四五六七八九十";
+    std::wstring str = L"一二三四五六七八九十 你好世界123 Hello";
 
-    auto textRender = purple::Engine::getRenderEngine()->getTextRender();
-    textRender->renderText(str , 100.0f , top , textPaint);
+    purple::Engine::getRenderEngine()->renderTextV2(str , 100.0f , top , textPaint);
 
-    // textPaint.setTextSize(170.0f);
-    purple::Engine::getRenderEngine()->renderText(str , 
+    textPaint.setTextSize(170.0f);
+    textPaint.textColor = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
+    textPaint.fontName = "youyuan";
+    purple::Engine::getRenderEngine()->renderTextV2(str , 
         100.0f , top + 300.0f , textPaint);
     
-    auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
-    batch->begin();
-    purple::Paint rectPaint;
-    rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.4f);
-    purple::Rect rect(left , top + fontHeight , 400.0f , fontHeight);
-    batch->renderRect(rect , rectPaint);
-    batch->end();
+    // auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
+    // batch->begin();
+    // purple::Paint rectPaint;
+    // rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.4f);
+    // purple::Rect rect(left , top + fontHeight , 400.0f , fontHeight);
+    // batch->renderRect(rect , rectPaint);
+    // batch->end();
 }
 

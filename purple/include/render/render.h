@@ -180,14 +180,14 @@ namespace purple{
             const wchar_t *text , 
             float left , 
             float bottom , 
-            TextPaint &paint)
-        {
-            auto textRender = getTextRenderByName(paint.fontName);
-            if(textRender != nullptr){
-                auto str = std::wstring(text);
-                textRender->renderText(str , left , bottom , paint)
-            }
-        }
+            TextPaint &paint);
+        
+        //rende text new sdf algorithm
+        void renderTextV2(
+            std::wstring &text , 
+            float left , 
+            float bottom , 
+            TextPaint &paint);
 
         //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
         void renderTextWithRectV2(std::wstring &text , 
@@ -207,8 +207,8 @@ namespace purple{
                 Rect &showRect , 
                 TextPaint &paint ,
                 TextRenderOutInfo *outInfo){
-            auto textcopy = text;
-            renderTextWithRectV2(text , showRect , paint ,outInfo);
+            std::wstring textcopy = text;
+            renderTextWithRectV2(textcopy , showRect , paint ,outInfo);
         }
 
         std::shared_ptr<VRamManager> vramManager_;
