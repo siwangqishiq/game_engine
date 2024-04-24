@@ -5,12 +5,12 @@
 #include "resource/asset_manager.h"
 #include "json.h"
 #include "glheader.h"
+#include "purple.h"
+
 #include "render/render_batch.h"
 #include "render/vram.h"
-#include "purple.h"
 #include "render/render.h"
 #include "render/text_render.h"
-
 #include "render/cmd/command.h"
 #include "render/cmd/cmd_arc.h"
 #include "render/cmd/cmd_custom_shader.h"
@@ -21,6 +21,7 @@
 #include "render/cmd/cmd_shape.h"
 #include "render/cmd/cmd_text.h"
 #include "render/cmd/cmd_triangles.h"
+#include "render.h"
 
 
 namespace purple{
@@ -148,7 +149,7 @@ namespace purple{
 
     bool RenderEngine::loadTextRender(std::string assetFontFile){
         std::shared_ptr<TextRender> defaultTextRender = std::make_shared<TextRender>(this);
-        int ret = defaultTextRender->loadFontRes(DEFAULT_TEXT_RENDER_NAME,assetFontFile);
+        int ret = defaultTextRender->loadFontRes(DEFAULT_TEXT_RENDER_NAME,assetFontFile , true);
         if(ret){
             textRenderMap_[DEFAULT_TEXT_RENDER_NAME] = defaultTextRender;
             return true;
@@ -157,8 +158,7 @@ namespace purple{
     }
 
 
-    void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd)
-    {
+    void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd) {
         renderCommandList_.push_back(cmd);
     }
 
@@ -410,14 +410,23 @@ namespace purple{
         depthValue = 1.0f;
     }
 
+    void RenderEngine::renderTextWithRectV2(std::wstring &text, 
+            Rect &showRect, 
+            TextPaint &paint, 
+            TextRenderOutInfo *outInfo) {
+        auto textRender = getTextRenderByName(paint.fontName);
+        if(textRender != nullptr){
+            textRender->renderTextWithRect(text , showRect , paint , outInfo);
+        }
+    } 
     /**
-    * @brief  text layout calculate
-    * 
-    * @param content 
-    * @param renderCmd 
-    * @param outRect 
-    * @param buf 
-    */
+     * @brief  text layout calculate
+     *
+     * @param content
+     * @param renderCmd
+     * @param outRect
+     * @param buf
+     */
     void TextRenderHelper::layoutText(std::wstring &content, 
             TextRenderCommand *renderCmd,
             Rect &outRect,
@@ -780,6 +789,31 @@ namespace purple{
 
         glBindFramebuffer(GL_FRAMEBUFFER , 0);
         onScreenResize();
+    }
+
+    /**
+     * @brief  载入字体 
+     * 
+     * @param fontName  字体名称  与TextPaint 中的名称对应
+     * @param fontPath  字体文件路径 
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool RenderEngine::loadTextFontRes(std::string fontName, std::string fontPath) {
+        std::shared_ptr<TextRender> result = textRenderMap_[fontName];
+        if(result != nullptr){
+            return true;
+        }
+
+        std::shared_ptr<TextRender> theNewTextRender = std::make_shared<TextRender>(this);
+        int ret = theNewTextRender->loadFontRes(fontName, fontPath , false);
+        if(ret >= 0){
+            textRenderMap_[fontName] = theNewTextRender;
+            return true;
+        }
+        Log::i(TAG , "load font file %s failed code: %d" , fontPath.c_str() , ret);
+        return false;
     }
 }
 

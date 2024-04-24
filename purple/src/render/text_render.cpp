@@ -152,9 +152,14 @@ namespace purple{
         renderText(std::wstring(text) , left , baseline , paint);
     }
 
-    int TextRender::loadFontRes(std::string fontName, std::string fontFileAssetPath){
+    int TextRender::loadFontRes(std::string fontName, std::string fontFileAssetPath , bool isAssetRes){
         int fontFileSize = 0;
-        fontData_ = AssetManager::getInstance()->readFileAsBinRaw(fontFileAssetPath , fontFileSize);
+        if(isAssetRes){
+            fontData_ = AssetManager::getInstance()->readAssetFileAsBinRaw(fontFileAssetPath , fontFileSize);
+        }else{
+            fontData_ = AssetManager::getInstance()->readFileAsBinRaw(fontFileAssetPath , fontFileSize);
+        }
+        
         if(fontFileSize <= 0){
             Log::e(TAG , "Not found font file %s" , fontFileAssetPath.c_str());
             return -1;

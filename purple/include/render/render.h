@@ -32,6 +32,7 @@ namespace purple{
     class SpriteBatch;
     class TextureInfo;
     class TextRender;
+    class TextRenderOutInfo;
 
     class RenderEngine{
     public:
@@ -166,9 +167,49 @@ namespace purple{
             return getTextRenderByName(DEFAULT_TEXT_RENDER_NAME);
         }
 
+        //载入字体
+        bool loadTextFontRes(std::string fontName, std::string fontPath);
+
         float getAndChangeDepthValue();
         
         void resetDepth();
+
+
+        //绘制文字
+        void renderTextV2(
+            const wchar_t *text , 
+            float left , 
+            float bottom , 
+            TextPaint &paint)
+        {
+            auto textRender = getTextRenderByName(paint.fontName);
+            if(textRender != nullptr){
+                auto str = std::wstring(text);
+                textRender->renderText(str , left , bottom , paint)
+            }
+        }
+
+        //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
+        void renderTextWithRectV2(std::wstring &text , 
+                Rect &showRect , 
+                TextPaint &paint , 
+                TextRenderOutInfo *outInfo);//
+        
+        //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
+        void renderTextWithRectV2(std::wstring &&text , 
+                Rect &showRect , 
+                TextPaint &paint , 
+                TextRenderOutInfo *outInfo){
+            renderTextWithRectV2(text , showRect , paint ,outInfo);
+        }
+        
+        void renderTextWithRectV2(const wchar_t *text , 
+                Rect &showRect , 
+                TextPaint &paint ,
+                TextRenderOutInfo *outInfo){
+            auto textcopy = text;
+            renderTextWithRectV2(text , showRect , paint ,outInfo);
+        }
 
         std::shared_ptr<VRamManager> vramManager_;
     private:

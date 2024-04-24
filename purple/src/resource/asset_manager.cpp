@@ -26,9 +26,8 @@ namespace purple{
     }
 
     unsigned char* AssetManager::readFileAsBinRaw(std::string path , int &length){
-        std::string filePath = assetRootDir() + path;
+        std::string filePath = path;
         Log::i("asset" , "read file path %s" , filePath.c_str());
-
         try{
             std::ifstream binFile(filePath, std::ios::binary);
             // Logi("asset" , "readBinaryFile is good? %d" , binFile.good);
@@ -39,12 +38,9 @@ namespace purple{
             }
 
             binFile.seekg(0 , std::ios::end);
-            
             length = binFile.tellg();
             binFile.seekg(0 , std::ios::beg);
-
             Log::i("asset" , "readFileAsBin size %d" , length);
-
             unsigned char *pData = new unsigned char[length];
             binFile.read((char *)pData , length);
             binFile.close();
@@ -53,6 +49,11 @@ namespace purple{
             Log::e("error" , "readBinaryFile code %s" , e.what());
         }
         return nullptr;
+    }
+
+    unsigned char* AssetManager::readAssetFileAsBinRaw(std::string path , int &length){
+        std::string filePath = assetRootDir() + path;
+        return readFileAsBinRaw(filePath , length);
     }
 
     std::unique_ptr<uint8_t[]> AssetManager::readFileAsBin(std::string path , int &length){
@@ -117,7 +118,7 @@ namespace purple{
         return -1;
     }
 
-    std::unique_ptr<uint8_t> AssetManager::readTextureFile(std::string path ,
+    std::unique_ptr<uint8_t> AssetManager::readAssetTextureFile(std::string path ,
             TextureFileConfig &fileConfig , bool needFlip){
         std::string filePath = assetRootDir() + path;
         Log::i("asset" , "read file path %s" , filePath.c_str());

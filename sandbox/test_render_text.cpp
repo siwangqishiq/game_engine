@@ -8,6 +8,9 @@ void TestTextRender::onInit(){
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *){
         readCount_++;
     } ,  100);
+
+    bool loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("youyuan" , "D:\\font\\youyuan.ttf");
+    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 }
 
 void TestTextRender::onTick(){

@@ -73,8 +73,8 @@ namespace purple{
             bool needFlip, int &format,int &width , int &height){
         TextureFileConfig fileConfig;
         std::unique_ptr<uint8_t> data = AssetManager::getInstance()
-            ->readTextureFile(path ,fileConfig,needFlip);
-
+            ->readAssetTextureFile(path ,fileConfig,needFlip);
+        
         format = GL_RGBA;
         if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGB){
             format = GL_RGB;

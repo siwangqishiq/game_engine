@@ -70,7 +70,7 @@ void Application::tick(){
     if(mAppInstance != nullptr){
         mAppInstance->onTick();
     }
-
+    
     fps++;
 }
 

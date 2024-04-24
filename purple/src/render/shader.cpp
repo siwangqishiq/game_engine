@@ -266,7 +266,7 @@ namespace purple{
         "#version 330 core\n";
         #endif
         
-        auto shaderBodySrc = AssetManager::getInstance()->readTextFileAsString(shaderPath);
+        auto shaderBodySrc = AssetManager::getInstance()->readAssetTextFileAsString(shaderPath);
         return shadrHeadSrc + shaderBodySrc;
     }
 

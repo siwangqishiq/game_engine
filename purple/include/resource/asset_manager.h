@@ -31,14 +31,14 @@ namespace purple{
     class AssetManager{
     public:
         static std::shared_ptr<AssetManager> getInstance();
-
+        
         static std::shared_ptr<AssetManager> instance_;
 
         // read text file
         virtual std::wstring readTextFile(std::string path);
 
         // read png file 
-        virtual std::unique_ptr<uint8_t> readTextureFile(std::string path ,
+        virtual std::unique_ptr<uint8_t> readAssetTextureFile(std::string path ,
                     TextureFileConfig &fileConfig , bool needFlip = false);
         
         virtual int readBinaryFile(std::string path , std::vector<char> &dataVec);
@@ -46,9 +46,11 @@ namespace purple{
         //二进制方式读取文件 
         virtual std::unique_ptr<uint8_t[]> readFileAsBin(std::string path , int &length);
         
+        virtual unsigned char* readAssetFileAsBinRaw(std::string path , int &length);
+
         virtual unsigned char* readFileAsBinRaw(std::string path , int &length);
 
-        inline std::string readTextFileAsString(std::string path){
+        inline std::string readAssetTextFileAsString(std::string path){
             return toByteString(readTextFile(path));
         }
 

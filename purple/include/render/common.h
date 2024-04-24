@@ -154,6 +154,7 @@ namespace purple{
         glm::vec4 textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
         TextStyle textStyle = normal;
         TextGravity textGravity = TopLeft;
+        std::string fontName;
 
         inline void setTextSize(float size){
             textSizeScale = (size / FONT_DEFAULT_SIZE);

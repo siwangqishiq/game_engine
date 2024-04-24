@@ -22,7 +22,7 @@ namespace purple{
     public:
         const std::string TAG = "TextRender";
 
-        const int CHARS_MAX_COUNT_PER_COLUM = 8;
+        const int CHARS_MAX_COUNT_PER_COLUM = 16;
 
         const int texWidth_ = CHARS_MAX_COUNT_PER_COLUM * FONT_DEFAULT_SIZE;
         const int texHeight_ = CHARS_MAX_COUNT_PER_COLUM * FONT_DEFAULT_SIZE;
@@ -40,7 +40,9 @@ namespace purple{
             Log::i(TAG , "TextRender deconstructed");
         };
         
-        int loadFontRes(std::string fontName , std::string fontFileAssetPath);
+        int loadFontRes(std::string fontName , 
+                        std::string fontFileAssetPath , 
+                        bool isAssetRes = false);
 
         void renderText(const wchar_t *text, 
             float left , 
