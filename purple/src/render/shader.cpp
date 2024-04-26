@@ -328,10 +328,13 @@ namespace purple{
         Log::i(TAG_SHADER , "shader manager clear");
         for(auto pair : shaderMap){
             Shader shader = pair.second;
-            if(glIsShader(shader.programId)){
-                glDeleteShader(shader.programId);
+            if(glIsProgram(shader.programId)){
+               glDeleteProgram(shader.programId);
+            }else{
+                Log::e(TAG_SHADER ,"%d is not a shader" , shader.programId);
             }
         }
+        // std::cout << "shader clear glGetError -> "<< glGetError() << std::endl;
 
         Log::i(TAG_SHADER ,"shader map size %d" , shaderMap.size());
         shaderMap.clear();
