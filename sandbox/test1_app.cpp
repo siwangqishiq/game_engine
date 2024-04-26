@@ -3,7 +3,7 @@
 #include "purple.h"
 
 void Test1App::onInit(){
-    // image = purple::BuildImageByAsset(std::string("t2.jpg"));
+    image = purple::BuildImageByAsset(std::string("t2.jpg"));
     
     mCircleSdfShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_circle" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
@@ -26,9 +26,10 @@ void Test1App::onInit(){
 void Test1App::onTick(){
     // test_circle();
     // test_segment();
-    test_rect();
+    // test_rect();
     // test_triangle();
     // test_boolops();
+    test1();
 
     mTime += 0.02f;
 }
@@ -165,7 +166,7 @@ void Test1App::test1(){
     outputRect.height = purple::Engine::ScreenHeight;
     p4.textGravity = purple::TopRight;
 
-    purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , p4 , nullptr);
+    purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , p4 , nullptr);
 
     purple::Rect rect;
     rect.left = 0.0f;

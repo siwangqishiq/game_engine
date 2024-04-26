@@ -174,7 +174,7 @@ namespace purple{
         }
 
         glBindTexture(GL_TEXTURE_2D , tId);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
@@ -187,7 +187,7 @@ namespace purple{
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glBindTexture(GL_TEXTURE_2D , 0);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+        // glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         
         auto textureInfo = std::make_shared<TextureInfo>();
         textureInfo->name = texName;
