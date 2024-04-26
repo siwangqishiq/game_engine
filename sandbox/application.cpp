@@ -49,6 +49,10 @@ void Application::init(){
     if(mAppInstance != nullptr){
         mAppInstance->onInit();
     }
+
+    if(mAppInstance2 != nullptr){
+        mAppInstance2->onInit();
+    }
 }
 
 void Application::onCreate(){
@@ -59,6 +63,7 @@ void Application::onCreate(){
     
     // mAppInstance = std::make_shared<Test1App>();
     mAppInstance = std::make_shared<TestTextRender>();
+    mAppInstance2 = std::make_shared<Test1App>();
 }
 
 void Application::tick(){
@@ -69,6 +74,10 @@ void Application::tick(){
 
     if(mAppInstance != nullptr){
         mAppInstance->onTick();
+    }
+
+    if(mAppInstance2 != nullptr){
+        mAppInstance2->onTick();
     }
     
     fps++;

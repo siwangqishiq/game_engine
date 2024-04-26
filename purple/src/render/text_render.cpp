@@ -125,8 +125,8 @@ namespace purple{
             int height){
         updateNextOffset();//update offset data
 
-        Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
-            this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
+        // Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
+        //     this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
         // fontTextureInfo_
         TextureManager::getInstance()->updateTexture2dArrayData(
             fontTextureInfo_ , 

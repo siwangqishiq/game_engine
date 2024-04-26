@@ -3,8 +3,8 @@
 #include "purple.h"
 
 void Test1App::onInit(){
-    image = purple::BuildImageByAsset(std::string("t2.jpg"));
-
+    // image = purple::BuildImageByAsset(std::string("t2.jpg"));
+    
     mCircleSdfShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_circle" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
 

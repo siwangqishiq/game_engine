@@ -2,6 +2,8 @@
 #include "resource/asset_manager.h"
 #include "log.h"
 
+#include <direct.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -47,6 +49,7 @@ namespace purple{
             return pData;
         }catch(std::exception &e){
             Log::e("error" , "readBinaryFile code %s" , e.what());
+            length = -1;
         }
         return nullptr;
     }
@@ -131,6 +134,31 @@ namespace purple{
         fileConfig.dataSize = fileConfig.width * fileConfig.height * fileConfig.channel;
         Log::i("asset" , "read file size : %d , %d , %d" , fileConfig.width , fileConfig.height , fileConfig.channel);
         return std::unique_ptr<uint8_t>(data);
+    }
+
+    long AssetManager::writeFileWithBin(std::string &path , long size , uint8_t *data){
+        std::fstream file;
+        try{
+            std::streampos fsize = 0;
+            file.open(path , std::ios::out | std::ios::binary);
+            fsize = file.tellg();
+            file.write(reinterpret_cast<const char*>(data) , size);
+            long ret = file.tellg() - fsize;
+            file.close();
+            return ret;
+        }catch(std::exception &e){
+            if(file.is_open()){
+                file.close();
+            }
+            return -1;
+        }
+        return 0;
+    }
+
+    std::string AssetManager::ensureCacheDir() const{
+        const std::string dir = cacheRootDir();
+        mkdir(dir.c_str());
+        return dir;
     }
 }
 

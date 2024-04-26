@@ -48,6 +48,8 @@ namespace purple{
         
         virtual unsigned char* readAssetFileAsBinRaw(std::string path , int &length);
 
+        virtual long writeFileWithBin(std::string &path , long size , uint8_t *data);
+
         virtual unsigned char* readFileAsBinRaw(std::string path , int &length);
 
         inline std::string readAssetTextFileAsString(std::string path){
@@ -86,9 +88,11 @@ namespace purple{
         }
 
     public:
-        std::string cacheRootDir(){
-            return "purplecache/";
+        std::string cacheRootDir() const{
+            return "cache/";
         }
+
+        std::string ensureCacheDir() const;
     };
 
 }

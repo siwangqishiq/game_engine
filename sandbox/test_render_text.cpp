@@ -11,12 +11,15 @@ void TestTextRender::onInit(){
 
     bool loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("youyuan" , "D:\\font\\youyuan.ttf");
     purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
+
+    loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("shouxie" , "D:\\font\\shouxie.ttf");
+    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 }
 
 void TestTextRender::onTick(){
-    testTextRender();
+    // testTextRender();
     // testTextRenderWithRect();
-    // testTextRenderLargeContent();
+    testTextRenderLargeContent();
 }
 
 void TestTextRender::onDispose(){
@@ -53,16 +56,16 @@ void TestTextRender::testTextRenderWithRect(){
 void TestTextRender::testTextRenderLargeContent(){
     purple::TextPaint textPaint;
     textPaint.textColor = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
-    textPaint.setTextSize(purple::Engine::ScreenHeight / 60.0f);
+    textPaint.setTextSize(purple::Engine::ScreenHeight / 10.0f);
     textPaint.textGravity = purple::TextGravity::TopLeft;
     textPaint.fontName = "youyuan";
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
-
+    
     purple::Rect showRect(0.0f , purple::Engine::ScreenHeight 
         , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
     std::wstring str(novelContent_.begin() + readOffset_ , 
         novelContent_.begin() + readOffset_ + readCount_);
-
+    
     purple::TextRenderOutInfo info;
     // textRender->renderTextWithRect(str , showRect , textPaint , &info);
     purple::Engine::getRenderEngine()->renderTextWithRectV2(str , showRect , textPaint , nullptr);
