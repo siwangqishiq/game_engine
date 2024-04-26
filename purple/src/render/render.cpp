@@ -47,11 +47,10 @@ namespace purple{
         if(shapeBatch_ != nullptr){
             shapeBatch_->dispose();
         }
-
         // VRamManager::getInstance()->clear();
         vramManager_->clear();
-        ShaderManager::getInstance()->clear();
         TextureManager::getInstance()->clear();
+        ShaderManager::getInstance()->clear();
     }
 
     void RenderEngine::clearRenderCommands(){
@@ -68,6 +67,8 @@ namespace purple{
         //打开混合模式 文字有透明度
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+
+        std::cout <<"onScreenResize after glERROR--->" << glGetError() <<" " << std::endl;
     }
 
     void RenderEngine::init(){

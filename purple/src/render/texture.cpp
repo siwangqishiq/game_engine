@@ -50,7 +50,6 @@ namespace purple{
                     glDeleteTextures(1 , &(texInfoPtr->textureId));
                 }
 
-                std::cout <<"glERROR--->" << glGetError() << std::endl;
                 //visual texture delete
                 if(texInfoPtr->category == TextureCategory::VIRTUAL_TEX){
                     if(texInfoPtr->renderBufferId != 0){

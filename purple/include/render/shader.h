@@ -18,8 +18,6 @@ namespace purple{
 
     const std::string SUFFIX_BINARY_FILE = ".bin";
 
-    const bool USE_SHADER_CACHE = true;
-
     // //读取asset 文本文件
     // std::string ReadAssetTextFile(std::string filename);
 

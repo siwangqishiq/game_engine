@@ -42,9 +42,7 @@ void Application::init(){
     }
 
     glfwMakeContextCurrent(window);
-    
     purple::Engine::init(screenWidth , screenHeight);
-
     onCreate();
     if(mAppInstance != nullptr){
         mAppInstance->onInit();

@@ -8,6 +8,7 @@
 #include "log.h"
 #include "resource/asset_manager.h"
 #include <direct.h>
+#include "purple.h"
 
 namespace purple{
     std::string ReadAssetTextFile(std::string filename) {
@@ -109,7 +110,7 @@ namespace purple{
 
     Shader Shader::buildGPUProgramFromBinaryFile(std::string shaderName){
         Shader shader;
-        if(!USE_SHADER_CACHE){
+        if(isDebug){
             return shader;
         }
 
@@ -327,7 +328,9 @@ namespace purple{
         Log::i(TAG_SHADER , "shader manager clear");
         for(auto pair : shaderMap){
             Shader shader = pair.second;
-            glDeleteShader(shader.programId);
+            if(glIsShader(shader.programId)){
+                glDeleteShader(shader.programId);
+            }
         }
 
         Log::i(TAG_SHADER ,"shader map size %d" , shaderMap.size());

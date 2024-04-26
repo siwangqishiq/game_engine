@@ -14,6 +14,8 @@
 
 namespace purple{
     
+    const bool isDebug = true;
+
     class RenderEngine;
     class Engine{
     public:
