@@ -44,13 +44,9 @@ void Application::init(){
     glfwMakeContextCurrent(window);
     purple::Engine::init(screenWidth , screenHeight);
     onCreate();
-    if(mAppInstance != nullptr){
-        mAppInstance->onInit();
-    }
-
-    if(mAppInstance2 != nullptr){
-        mAppInstance2->onInit();
-    }
+    for(auto &app : appInstanceList){
+        app->onInit();
+    }//end for each
 }
 
 void Application::onCreate(){
@@ -59,9 +55,8 @@ void Application::onCreate(){
         fps = 0;
     } , 1000L);
     
-    // mAppInstance = std::make_shared<Test1App>();
-    mAppInstance = std::make_shared<TestTextRender>();
-    mAppInstance2 = std::make_shared<Test1App>();
+    appInstanceList.push_back(std::make_shared<Test1App>());
+    appInstanceList.push_back(std::make_shared<TestTextRender>());
 }
 
 void Application::tick(){
@@ -70,15 +65,9 @@ void Application::tick(){
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    
-    if(mAppInstance2 != nullptr){
-        mAppInstance2->onTick();
-    }
-
-    if(mAppInstance != nullptr){
-        mAppInstance->onTick();
-    }
-
+    for(auto &app : appInstanceList){
+        app->onTick();
+    }//end for each
     
     fps++;
 }
@@ -93,9 +82,10 @@ void Application::runLoop(){
         glfwSwapInterval(1);//锁定固定帧率
     }//end while
 
-    if(mAppInstance != nullptr){
-        mAppInstance->onDispose();
-    }
+    for(auto &app : appInstanceList){
+        app->onDispose();
+    }//end for each
+
     purple::Engine::dispose();
     glfwTerminate();
 }

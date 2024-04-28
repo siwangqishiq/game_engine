@@ -113,12 +113,20 @@ namespace purple{
             return shader;
         }
 
-        GLint programBinaryFormats = 0;
+        GLint programBinaryFormats = GL_NONE;
         glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &programBinaryFormats);
         if(programBinaryFormats <= GL_NONE) {
             Log::e("Shader" , "GL_NUM_PROGRAM_BINARY_FORMATS = %d" , programBinaryFormats);
             return shader;
         }
+
+        GLint binaryFormat = GL_NONE;
+        glGetIntegerv(GL_PROGRAM_BINARY_FORMATS , &binaryFormat);
+        if(binaryFormat <= GL_NONE){
+            Log::e("Shader" , "GL_PROGRAM_BINARY_FORMATS = %d" , binaryFormat);
+            return shader;
+        }
+        Log::w("Shader" , "Shader Program binary format : %d" , binaryFormat); 
 
         std::string cacheDir = ShaderManager::ensureShaderCacheDir();
         std::string binFile = cacheDir + shaderName + SUFFIX_BINARY_FILE;
@@ -133,7 +141,7 @@ namespace purple{
         auto dataBuf = AssetManager::getInstance()->readFileAsBinRaw(binFile.c_str() , fileLength);
         if(dataBuf != nullptr && fileLength > 0){
             GLuint program = glCreateProgram();
-            glProgramBinary(program , 1, dataBuf , fileLength);
+            glProgramBinary(program , binaryFormat, dataBuf , fileLength);
 
             GLint linkResult;
             glGetProgramiv(program, GL_LINK_STATUS, &linkResult);
@@ -309,11 +317,13 @@ namespace purple{
         if(size <= 0){
             return;
         }
-
+        
         std::string cacheFilePath = shaderCacheDir + shaderName + SUFFIX_BINARY_FILE;
         long writeSize = AssetManager::getInstance()->writeFileWithBin(cacheFilePath , 
                                 size , buf.data());
-        Log::w("cache_shader" , "cachefile %s writeSize : %ld" ,cacheFilePath.c_str(), writeSize);
+        Log::w("cache_shader" , "cachefile %s writeSize : %ld" 
+                    ,cacheFilePath.c_str() 
+                    ,writeSize);
     }
 
     std::string ShaderManager::ensureShaderCacheDir(){
