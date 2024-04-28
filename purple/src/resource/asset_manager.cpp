@@ -2,10 +2,16 @@
 #include "resource/asset_manager.h"
 #include "log.h"
 
-#include <direct.h>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#ifdef _WIN32
+#include <direct.h>
+#else
+#include <sys/stat.h>
+#endif
+
+// #include <filesystem>
 
 namespace purple{
 
@@ -156,9 +162,20 @@ namespace purple{
     }
 
     std::string AssetManager::ensureCacheDir() const{
-        const std::string dir = cacheRootDir();
-        mkdir(dir.c_str());
+        std::string dir = cacheRootDir();
+        makedir(dir);
         return dir;
+    }
+
+    void AssetManager::makedir(std::string dir) const{
+        #ifdef _WIN32
+        mkdir(dir.c_str());
+        #else
+        int err = mkdir(dir.c_str() , 0x777);
+        if(err != 0){
+            perror("mkdir");
+        }
+        #endif
     }
 }
 

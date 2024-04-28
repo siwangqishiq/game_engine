@@ -7,7 +7,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "log.h"
 #include "resource/asset_manager.h"
-#include <direct.h>
 #include "purple.h"
 
 namespace purple{
@@ -320,7 +319,7 @@ namespace purple{
     std::string ShaderManager::ensureShaderCacheDir(){
         std::string cacheDir = AssetManager::getInstance()->ensureCacheDir();
         std::string shaderCacheDir = cacheDir + SHADER_CACHE_DIR;
-        mkdir(shaderCacheDir.c_str());
+        AssetManager::getInstance()->makedir(shaderCacheDir);
         return shaderCacheDir;
     }
 

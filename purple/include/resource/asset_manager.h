@@ -93,6 +93,8 @@ namespace purple{
         }
 
         std::string ensureCacheDir() const;
+
+        void makedir(std::string dir) const;
     };
 
 }
