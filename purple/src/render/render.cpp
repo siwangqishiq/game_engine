@@ -237,7 +237,11 @@ namespace purple{
         
         std::string fontFoldName = "font1/";
 
-        std::wstring charConfigStr = AssetManager::getInstance()->readTextFile("text/"+ fontFoldName +"char_config.json");
+        std::wstring charConfigStr = AssetManager::getInstance()->readAssetTextFile("text/"+ fontFoldName +"char_config.json");
+
+        if(charConfigStr.empty()){
+            return;
+        }
         
         JsonParser parser;
         auto configJson = parser.parseJsonObject(charConfigStr);

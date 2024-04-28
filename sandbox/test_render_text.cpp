@@ -3,7 +3,7 @@
 #include "resource/asset_manager.h"
 
 void TestTextRender::onInit(){
-    novelContent_ = purple::AssetManager::getInstance()->readTextFile("santi3.txt");
+    novelContent_ = purple::AssetManager::getInstance()->readAssetTextFile("santi3.txt");
 
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *){
         readCount_++;

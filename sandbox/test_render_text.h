@@ -1,10 +1,9 @@
 #pragma once
 
-#include "common.h"
 #include <memory>
 #include "purple.h"
 
-class TestTextRender : public IApp{
+class TestTextRender : public purple::IApp{
 public:
     virtual void onInit() override;
     virtual void onTick() override;

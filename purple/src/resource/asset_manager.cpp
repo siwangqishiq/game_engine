@@ -27,9 +27,9 @@ namespace purple{
         return instance_;
     }
 
-    std::wstring AssetManager::readTextFile(std::string path){
+    std::wstring AssetManager::readAssetTextFile(std::string path){
         std::string filePath = assetRootDir() + path;
-        Log::i("asset" , "read file path %s" , filePath.c_str());
+        Log::i("asset" , "read asset file path %s" , filePath.c_str());
         return readFileAsWstring(filePath.c_str());
     }
 
@@ -177,5 +177,52 @@ namespace purple{
         }
         #endif
     }
+
+    #ifdef __ANDROID__
+
+    AAssetManager *AndroidAssetManager::AndroidAssetManagerInstance = nullptr;
+
+    std::wstring AndroidAssetManager::readAssetTextFile(std::string path){
+         std::string filePath = path;
+        AAsset *file = AAssetManager_open(AndroidAssetManagerInstance , filePath.c_str(), AASSET_MODE_BUFFER);
+        if(file == nullptr){
+            Log::i("asset","open asset file : %s failed" , filePath.c_str());
+            return L"";
+        }
+
+        Log::i("asset" , "get asset file");
+        size_t fileSize = AAsset_getLength(file);
+
+        auto fileContentBuf = std::unique_ptr<char []>(new char[fileSize + 1]);
+        // char *fileContentBuf = new char[fileSize + 1];
+        AAsset_read(file , fileContentBuf.get() , fileSize);
+        fileContentBuf[fileSize] = '\0';
+        AAsset_close(file);
+    
+        Log::i("asset_manager","file content = %s" , fileContentBuf.get());
+        std::wstring contentStr = toWideString(std::string(fileContentBuf.get()));
+        return contentStr;
+    }
+
+    std::unique_ptr<uint8_t> 
+        AndroidAssetManager::readAssetTextureFile(
+            std::string path,
+            TextureFileConfig &fileConfig,
+            bool needFlip){
+        return nullptr;
+    }
+    
+    unsigned char* AndroidAssetManager::readAssetFileAsBinRaw(
+                        std::string path ,
+                        int &length){
+        auto assetFile  = AAssetManager_open(AndroidAssetManagerInstance , path.c_str() , AASSET_MODE_STREAMING);
+        size_t fileSize = AAsset_getLength(assetFile);
+        unsigned char *contentBuf = new unsigned char[fileSize];
+        AAsset_read(assetFile, contentBuf , fileSize);
+        AAsset_close(assetFile);
+        return contentBuf;
+    }
+
+    #endif
 }
 

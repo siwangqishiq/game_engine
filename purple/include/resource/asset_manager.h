@@ -35,11 +35,13 @@ namespace purple{
         static std::shared_ptr<AssetManager> instance_;
 
         // read text file
-        virtual std::wstring readTextFile(std::string path);
+        virtual std::wstring readAssetTextFile(std::string path);
 
         // read png file 
-        virtual std::unique_ptr<uint8_t> readAssetTextureFile(std::string path ,
-                    TextureFileConfig &fileConfig , bool needFlip = false);
+        virtual std::unique_ptr<uint8_t> readAssetTextureFile(
+                        std::string path ,
+                        TextureFileConfig &fileConfig ,
+                        bool needFlip = false);
         
         virtual int readBinaryFile(std::string path , std::vector<char> &dataVec);
 
@@ -53,7 +55,7 @@ namespace purple{
         virtual unsigned char* readFileAsBinRaw(std::string path , int &length);
 
         inline std::string readAssetTextFileAsString(std::string path){
-            return toByteString(readTextFile(path));
+            return toByteString(readAssetTextFile(path));
         }
 
         AssetManager(){
@@ -88,7 +90,7 @@ namespace purple{
         }
 
     public:
-        std::string cacheRootDir() const{
+        virtual std::string cacheRootDir() const{
             return "cache/";
         }
 
@@ -97,5 +99,26 @@ namespace purple{
         void makedir(std::string dir) const;
     };
 
+    #ifdef __ANDROID__
+    #include <android/bitmap.h>
+    #include <android/imagedecoder.h>
+    #include <android/asset_manager.h>
+    #include <android/asset_manager_jni.h>
+
+    class AndroidAssetManager : public AssetManager{
+    public:
+        static AAssetManager *AndroidAssetManagerInstance;
+
+        virtual std::wstring readAssetTextFile(std::string path) override;
+
+        virtual std::unique_ptr<uint8_t> readAssetTextureFile(std::string path ,
+                                                         TextureFileConfig &fileConfig ,
+                                                         bool needFlip = false) override;
+        //二进制方式读取文件
+        virtual unsigned char* readAssetFileAsBinRaw(std::string path ,
+                                                        int &length) override;
+    };
+
+    #endif
 }
 

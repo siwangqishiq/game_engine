@@ -5,7 +5,6 @@
 #include "GLFW/glfw3.h"
 #include <memory>
 #include "purple.h"
-#include "common.h"
 
 class Application{
 public:
@@ -35,8 +34,8 @@ private:
     GLFWwindow* window = nullptr;
     int screenWidth = 800;
     int screenHeight = 600;
-    
-    std::vector<std::shared_ptr<IApp>> appInstanceList;
+
+    std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
     int fps = 0;
 };
 
