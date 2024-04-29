@@ -4,9 +4,9 @@
 - ~~字体渲染采用SDF技术  完成抗锯齿效果~~
 - ~~字体渲染支持多种字体文件格式~~
 - ~~新的基于SDF的渲染API~~
-- Shader二进制产物cache 
+- ~~Shader二进制产物cache~~ 
+- ~~Android平台的支持~~
 - 实现常用SDF函数
-- Android平台的支持
 - 基于SDF的新绘图api接口
 - path路径绘制功能
 - 新的View体系

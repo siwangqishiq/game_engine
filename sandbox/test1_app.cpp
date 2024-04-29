@@ -24,12 +24,12 @@ void Test1App::onInit(){
 
 
 void Test1App::onTick(){
+       test1();
 //     test_circle();
 //     test_segment();
-//     test_rect();
+//    test_rect();
     // test_triangle();
-    // test_boolops();
-    test1();
+//    test_boolops();
 
     mTime += 0.02f;
 }

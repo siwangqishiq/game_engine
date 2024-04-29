@@ -55,10 +55,10 @@ void TestTextRender::testTextRenderWithRect(){
 
 void TestTextRender::testTextRenderLargeContent(){
     purple::TextPaint textPaint;
-    textPaint.textColor = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+    textPaint.textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
     textPaint.setTextSize(purple::Engine::ScreenHeight / 10.0f);
     textPaint.textGravity = purple::TextGravity::TopLeft;
-    textPaint.fontName = "youyuan";
+    // textPaint.fontName = "youyuan";
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
     
     purple::Rect showRect(0.0f , purple::Engine::ScreenHeight 
