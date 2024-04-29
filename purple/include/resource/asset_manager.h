@@ -9,6 +9,7 @@
 #include <string>
 #include <memory>
 #include "log.h"
+#include "glheader.h"
 #include <fstream>
 #include <streambuf>
 #include <codecvt>
@@ -24,9 +25,12 @@ namespace purple{
     struct TextureFileConfig{
         int width = 0;
         int height = 0;
-        long dataSize = 0;
+        int dataSize = 0;
         int channel = TEXTURE_FILE_CHANNEL_UNKNOW;
+        int format = 0;
     };
+
+    void ConvertChannelToGLConfig(TextureFileConfig &textureFileConfig);
 
     class AssetManager{
     public:
@@ -117,6 +121,8 @@ namespace purple{
         //二进制方式读取文件
         virtual unsigned char* readAssetFileAsBinRaw(std::string path ,
                                                         int &length) override;
+    private:
+        std::unique_ptr<uint8_t> readAssetTextureFileByStbi(std::string path ,TextureFileConfig &fileConfig , bool needFlip);
     };
 
     #endif

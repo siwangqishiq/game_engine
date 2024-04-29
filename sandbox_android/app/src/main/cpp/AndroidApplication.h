@@ -7,8 +7,7 @@
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 
-class IApp;
-
+#include "purple.h"
 
 class AndroidApplication{
 public:
@@ -20,10 +19,10 @@ public:
 
 
 private:
-    std::vector<std::shared_ptr<IApp>> appInstanceList;
+    std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
 
     int width = 1280;
     int height = 800;
 
-
+    int fps = 0;
 };

@@ -7,7 +7,7 @@ namespace purple{
         GLint  internalFormat = GL_RGBA;
         switch (format) {
             case GL_RED:
-                internalFormat = GL_RED;
+                internalFormat = GL_R8;
                 break;
             case GL_RGB:
                 internalFormat = GL_RGB8;
@@ -73,18 +73,7 @@ namespace purple{
         TextureFileConfig fileConfig;
         std::unique_ptr<uint8_t> data = AssetManager::getInstance()
             ->readAssetTextureFile(path ,fileConfig,needFlip);
-        
-        format = GL_RGBA;
-        if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGB){
-            format = GL_RGB;
-        }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_ARGB){
-            format = GL_RGBA;
-        }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGBA){
-            format = GL_RGBA;
-        }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_R){
-            format = GL_RED;
-        }
-
+        format = fileConfig.format;
         width = fileConfig.width;
         height = fileConfig.height;
 
@@ -108,23 +97,34 @@ namespace purple{
         int format = GL_RGBA;
         int texWidth = 0;
         int texHeight = 0;
-        std::unique_ptr<uint8_t> data = readTextureFile(firstFilePath , 
-            needFlip , format, 
-            texWidth , texHeight);
-        
+//        std::unique_ptr<uint8_t> data = readTextureFile(firstFilePath ,
+//            needFlip , format,
+//            texWidth , texHeight);
+        TextureFileConfig texFileConfig;
+        std::unique_ptr<uint8_t> data = AssetManager::getInstance()
+                ->readAssetTextureFile(firstFilePath , texFileConfig , needFlip);
+
+        format = texFileConfig.format;
+        texWidth = texFileConfig.width;
+        texHeight = texFileConfig.height;
+
         glBindTexture(GL_TEXTURE_2D_ARRAY , textureId);
         glPixelStorei(GL_UNPACK_ALIGNMENT , 1);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_R , GL_CLAMP_TO_EDGE);
 
+        // Log::i("android_read_asset" , "load texture before %d" , glGetError());
+        // Log::i("android_read_asset" , "format %d , texWidth %d , texHeight %d  textureFilessze %d"
+                // , format , texWidth , texHeight , textureFiles.size());
         glTexImage3D(GL_TEXTURE_2D_ARRAY, 0,
-                    convertChanelToInternalFormat(format),
+                     convertChanelToInternalFormat(format),
                     texWidth,
             texHeight, textureFiles.size(),
             0, format, GL_UNSIGNED_BYTE , nullptr);
-        // Log::i("debug" , "3333load texture before %d" , glGetError());
+         // Log::i("android_read_asset" , "load texture after %d" , glGetError());
         
         for(int i = 0 ; i < textureFiles.size() ;i++){
             std::unique_ptr<uint8_t> pTexData = nullptr;
@@ -134,7 +134,8 @@ namespace purple{
             pTexData = readTextureFile(textureFiles[i] , 
                 needFlip , format, 
                 texWidth , texHeight);
-            
+            Log::i("android_read_asset","read file %s , width %d  height %d  format: %d"
+                   ,textureFiles[i].c_str(), texWidth , texHeight , format);
             glTexSubImage3D(GL_TEXTURE_2D_ARRAY , 0 , 
                 0 , 0, i, 
                 texWidth, texHeight , 1 , 

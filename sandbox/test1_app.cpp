@@ -24,9 +24,9 @@ void Test1App::onInit(){
 
 
 void Test1App::onTick(){
-    // test_circle();
-    // test_segment();
-    // test_rect();
+//     test_circle();
+//     test_segment();
+//     test_rect();
     // test_triangle();
     // test_boolops();
     test1();
@@ -142,6 +142,7 @@ void Test1App::test_circle(){
 }
 
 void Test1App::test1(){
+//    purple::Log::i("Test1App","tick!!!");
     purple::Rect imgDstRect;
     imgDstRect.left = 0.0f;
     imgDstRect.top = purple::Engine::ScreenHeight;
@@ -166,7 +167,7 @@ void Test1App::test1(){
     outputRect.height = purple::Engine::ScreenHeight;
     p4.textGravity = purple::TopRight;
 
-    purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , p4 , nullptr);
+    purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , p4 , nullptr);
 
     purple::Rect rect;
     rect.left = 0.0f;
@@ -176,10 +177,10 @@ void Test1App::test1(){
 
     purple::Paint rectPaint;
     rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.2f); 
-
     auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
     batch->begin();
     batch->renderRect(rect , rectPaint);
+    batch->renderCircle(purple::Engine::ScreenWidth / 2.0f , purple::Engine::ScreenHeight / 2.0f , rect.height / 2.0f , rectPaint);
     batch->end();
 }
 
