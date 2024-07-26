@@ -19,9 +19,10 @@ void Test1App::onInit(){
 
     mTriangleShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_triangle" , "shader/shader_vert.glsl" ,"triangle_sdf_frag.glsl");
-    
+
     //play music
     purple::AudioManager::getInstance()->loadAudio("jiangtiandao.mp3","music" , true);
+    // purple::AudioManager::getInstance()->loadAudio("/E:/assets/music/S.H.E/bosimao.mp3","music" , true);
     purple::AudioManager::getInstance()->playAudio("music");
 }
 
