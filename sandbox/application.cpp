@@ -4,6 +4,8 @@
 #include "test1_app.h"
 #include "test_render_text.h"
 
+int Application::fps = 0;
+
 void Application::init(){
     purple::Log::i(TAG , "Application init");
     glfwInit();
@@ -51,6 +53,7 @@ void Application::init(){
 
 void Application::onCreate(){
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
+        fpsStr = std::to_wstring(fps);
         purple::Log::w("fps" , "fps : %d" , fps);
         fps = 0;
     } , 1000L);
@@ -70,6 +73,23 @@ void Application::tick(){
     }//end for each
     
     fps++;
+    showDebugInfo();
+}
+
+void Application::showDebugInfo(){
+    purple::TextPaint paint;
+    paint.setTextSize(purple::Engine::ScreenHeight / 15.0f);
+    paint.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
+    // std::wstring fpsStr = std::to_wstring(fps);
+    purple::Rect outputRect;
+    outputRect.left = 0.0f;
+    outputRect.top = purple::Engine::ScreenHeight;
+    outputRect.width = purple::Engine::ScreenWidth;
+    outputRect.height = purple::Engine::ScreenHeight;
+    paint.textGravity = purple::TopRight;
+
+    purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , paint, nullptr);
+    // purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , paint, nullptr);
 }
 
 void Application::runLoop(){

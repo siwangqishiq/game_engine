@@ -19,6 +19,9 @@ public:
     
     //on app close
     void dispose();
+
+    //show debug info
+    void showDebugInfo();
     
     //run this app
     int execute(){
@@ -30,12 +33,14 @@ public:
 
     void tick();
 
+    static int fps;
 private:
     GLFWwindow* window = nullptr;
     int screenWidth = 800;
     int screenHeight = 600;
     
     std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
-    int fps = 0;
+
+    std::wstring fpsStr = L"";
 };
 

@@ -19,6 +19,10 @@ void Test1App::onInit(){
 
     mTriangleShader = purple::ShaderManager::getInstance()
         ->loadAssetShader("sdf_triangle" , "shader/shader_vert.glsl" ,"triangle_sdf_frag.glsl");
+    
+    //play music
+    purple::AudioManager::getInstance()->loadAudio("jiangtiandao.mp3","music" , true);
+    purple::AudioManager::getInstance()->playAudio("music");
 }
 
 
@@ -27,10 +31,9 @@ void Test1App::onTick(){
        test1();
 //     test_circle();
 //     test_segment();
-//    test_rect();
+//      test_rect();
     // test_triangle();
 //    test_boolops();
-
     mTime += 0.02f;
 }
 
@@ -154,33 +157,18 @@ void Test1App::test1(){
     spriteBatch->renderImage(*image , src , imgDstRect);
     spriteBatch->end();
 
-    purple::TextPaint p4;
-    p4.setTextSize(purple::Engine::ScreenHeight / 20.0f);
-    p4.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
-    std::wstring name = L"你好世界 HelloWorld";
-    std::wstring fpsStr = name;
+    // purple::Rect rect;
+    // rect.left = 0.0f;
+    // rect.top = purple::Engine::ScreenHeight;
+    // rect.width = purple::Engine::ScreenWidth / 2.0f;
+    // rect.height = purple::Engine::ScreenHeight / 2.0f;
 
-    purple::Rect outputRect;
-    outputRect.left = 0.0f;
-    outputRect.top = purple::Engine::ScreenHeight - 16.0f;
-    outputRect.width = purple::Engine::ScreenWidth - 16.0f;
-    outputRect.height = purple::Engine::ScreenHeight;
-    p4.textGravity = purple::TopRight;
-
-    purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , p4 , nullptr);
-
-    purple::Rect rect;
-    rect.left = 0.0f;
-    rect.top = purple::Engine::ScreenHeight;
-    rect.width = purple::Engine::ScreenWidth / 2.0f;
-    rect.height = purple::Engine::ScreenHeight / 2.0f;
-
-    purple::Paint rectPaint;
-    rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.2f); 
-    auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
-    batch->begin();
-    batch->renderRect(rect , rectPaint);
-    batch->renderCircle(purple::Engine::ScreenWidth / 2.0f , purple::Engine::ScreenHeight / 2.0f , rect.height / 2.0f , rectPaint);
-    batch->end();
+    // purple::Paint rectPaint;
+    // rectPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 0.2f); 
+    // auto batch = purple::Engine::getRenderEngine()->getShapeBatch();
+    // batch->begin();
+    // batch->renderRect(rect , rectPaint);
+    // batch->renderCircle(purple::Engine::ScreenWidth / 2.0f , purple::Engine::ScreenHeight / 2.0f , rect.height / 2.0f , rectPaint);
+    // batch->end();
 }
 
