@@ -14,6 +14,9 @@ void TestTextRender::onInit(){
 
     loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("shouxie" , "D:\\font\\shouxie.ttf");
     purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
+
+    loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("child" , "D:\\font\\child_font.ttf");
+    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 }
 
 void TestTextRender::onTick(){
@@ -59,6 +62,7 @@ void TestTextRender::testTextRenderLargeContent(){
     textPaint.setTextSize(purple::Engine::ScreenHeight / 10.0f);
     textPaint.textGravity = purple::TextGravity::TopLeft;
     // textPaint.fontName = "youyuan";
+    textPaint.fontName = "child";
     auto textRender = purple::Engine::getRenderEngine()->getTextRender();
     
     purple::Rect showRect(0.0f , purple::Engine::ScreenHeight 
