@@ -57,8 +57,11 @@ void TestTextRender::testTextRenderWithRect(){
 }
 
 void TestTextRender::testTextRenderLargeContent(){
+    // glScissor(100,200,300,300);
+    // glEnable(GL_SCISSOR_TEST);
+
     purple::TextPaint textPaint;
-    textPaint.textColor = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+    textPaint.textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
     textPaint.setTextSize(purple::Engine::ScreenHeight / 10.0f);
     textPaint.textGravity = purple::TextGravity::TopLeft;
     // textPaint.fontName = "youyuan";
@@ -72,6 +75,8 @@ void TestTextRender::testTextRenderLargeContent(){
     
     purple::TextRenderOutInfo info;
     purple::Engine::getRenderEngine()->renderTextWithRect(str , showRect , textPaint , nullptr);
+
+    // glDisable(GL_SCISSOR_TEST);
 }
 
 void TestTextRender::testTextRender(){

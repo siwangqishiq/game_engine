@@ -157,7 +157,7 @@ void Test1App::test1(){
     auto src = image->getRect();
     spriteBatch->renderImage(*image , src , imgDstRect);
     spriteBatch->end();
-
+    
     // purple::Rect rect;
     // rect.left = 0.0f;
     // rect.top = purple::Engine::ScreenHeight;
