@@ -5,14 +5,17 @@
 #include "AndroidApplication.h"
 #include "test1_app.h"
 #include "test_render_text.h"
+#include "test_ui.h"
+
 #include <vector>
 
 void AndroidApplication::init(){
     purple::Engine::init(width , height);
 
-    appInstanceList.push_back(std::make_shared<Test1App>());
-    appInstanceList.push_back(std::make_shared<TestTextRender>());
-
+    // appInstanceList.push_back(std::make_shared<Test1App>());
+    // appInstanceList.push_back(std::make_shared<TestTextRender>());
+    appInstanceList.push_back(std::make_shared<UiTest>());
+    
     for(std::shared_ptr<purple::IApp> &app : appInstanceList){
         app->onInit();
     }

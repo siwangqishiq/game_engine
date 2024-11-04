@@ -36,6 +36,6 @@ namespace purple{
         TextRender *textRender_;
 
         Shader fetchSdfTextShader();
-    };
+    };//end class
 }
 

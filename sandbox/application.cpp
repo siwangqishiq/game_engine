@@ -3,6 +3,7 @@
 
 #include "test1_app.h"
 #include "test_render_text.h"
+#include "test_ui.h"
 
 int Application::fps = 0;
 
@@ -58,8 +59,10 @@ void Application::onCreate(){
         fps = 0;
     } , 1000L);
     
-    appInstanceList.push_back(std::make_shared<Test1App>());
-    appInstanceList.push_back(std::make_shared<TestTextRender>());
+    // appInstanceList.push_back(std::make_shared<Test1App>());
+    // appInstanceList.push_back(std::make_shared<TestTextRender>());
+
+    appInstanceList.push_back(std::make_shared<TestUi>());
 }
 
 void Application::tick(){
