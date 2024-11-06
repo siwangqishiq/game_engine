@@ -20,6 +20,8 @@ void TestUi::onTick(){
     if(this->ui != nullptr){
         this->ui->renderUi();
     }
+
+    
 }
 
 void TestUi::onDispose(){

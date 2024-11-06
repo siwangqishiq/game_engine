@@ -85,7 +85,7 @@ namespace purple{
         spriteBatch_->init();
 
         clearRenderCommands();
-
+        
         loadTextRenderResource();//text render init
         // Logi(TAG , "render engine init end");
     }

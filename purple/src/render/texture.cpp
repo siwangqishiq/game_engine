@@ -32,8 +32,9 @@ namespace purple{
             return;
         }
         auto texInfoPtr = textureBank_[info.name];
-        // Logi("texture_manager" , "texture del %s" , (texInfoPtr->name).c_str());
+        // 
         if(texInfoPtr != nullptr){
+            Log::i("texture_manager" , "texture del %s" , (texInfoPtr->name).c_str());
             glDeleteTextures(1 , &(texInfoPtr->textureId));
         }
         textureBank_.erase(info.name);

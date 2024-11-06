@@ -16,9 +16,9 @@ namespace purple{
         int width = 0;
         int height = 0;
 
-        glm::vec4 backgroundColor;
+        glm::vec4 backgroundColor_;
 
-        ContainerWidget *parentView = nullptr;
+        ContainerWidget *parentView_ = nullptr;
     public:
         void setWidth(int width);
         void setHeight(int height);
@@ -41,6 +41,7 @@ namespace purple{
 
     std::shared_ptr<ContainerWidget> Container(ChildWidgetBlock block);
     
+    class TextureInfo;
     class UiRoot{
     public:
         UiRoot(int w, int h);
@@ -53,6 +54,6 @@ namespace purple{
     private:
         int rootWidth_;
         int rootHeight_;
-
+        std::shared_ptr<TextureInfo> textureInfo_ = nullptr;
     };//end class
 }
