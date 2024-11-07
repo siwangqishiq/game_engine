@@ -34,7 +34,7 @@ namespace purple{
         #ifdef __ARM_ARCH //for 树梅派
         if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
             Log::e(TAG , "Failed to initialize glad");
-            return -1;
+            return;
         }
         #else
         // glad: load all OpenGL function pointers
@@ -114,9 +114,7 @@ namespace purple{
         }
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
-        #ifndef  __ANDROID__
-        glReadBuffer(GL_BACK_LEFT);
-        #endif
+        glReadBuffer(GL_BACK);
         const int channel = 3;
         const int size = channel * width * height;
         std::vector<uint8_t> pixels(size);
