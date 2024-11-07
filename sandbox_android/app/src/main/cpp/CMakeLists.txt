@@ -24,6 +24,7 @@ add_library( # Sets the name of the library.
         AndroidApplication.cpp
         ${SANDBOX_DIR}/test1_app.cpp
         ${SANDBOX_DIR}/test_render_text.cpp
+        ${SANDBOX_DIR}/test_ui.cpp
         ${PURPLE_SRC_FILES}
         )
 

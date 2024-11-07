@@ -30,8 +30,10 @@ namespace purple{
         ScreenHeight = height;
 
         Log::w(TAG,"init screen size: %d  , %d" , ScreenWidth , ScreenHeight);
+
+        #ifdef ANDROID
         
-        #ifdef __ARM_ARCH //for 树梅派
+        #elifdef __ARM_ARCH //for 树梅派
         if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
             Log::e(TAG , "Failed to initialize glad");
             return;

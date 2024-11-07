@@ -14,7 +14,7 @@ void AndroidApplication::init(){
 
     // appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
-    appInstanceList.push_back(std::make_shared<UiTest>());
+    appInstanceList.push_back(std::make_shared<TestUi>());
     
     for(std::shared_ptr<purple::IApp> &app : appInstanceList){
         app->onInit();
