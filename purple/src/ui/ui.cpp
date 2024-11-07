@@ -51,7 +51,7 @@ namespace purple{
             shapeBatch->end();
 
             purple::TextPaint textPaint;
-            textPaint.textColor = glm::vec4(0.0f, 0.0f , 0.0f , 1.0f);
+            textPaint.textColor = glm::vec4(1.0f, 0.0f , 0.0f , 1.0f);
             textPaint.setTextSize(400.0f);
             purple::Engine::getRenderEngine()->renderText(L"你好世界",0,100,textPaint);
         };

@@ -5,6 +5,11 @@
 #include "test_render_text.h"
 #include "test_ui.h"
 
+#ifndef __ANDROID__
+#define GLFW_INCLUDE_NONE
+#include "GLFW/glfw3.h"
+#endif
+
 int Application::fps = 0;
 
 void Application::init(){
@@ -53,6 +58,20 @@ void Application::init(){
     }
 
     glfwMakeContextCurrent(window);
+
+    #ifndef ANDROID
+        #ifdef __ARM_ARCH //for 树梅派
+        if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+            return;
+        }
+        #else
+        // glad: load all OpenGL function pointers
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            return;
+        }
+        #endif
+    #endif
+
     purple::Engine::init(screenWidth , screenHeight);
     onCreate();
     for(auto &app : appInstanceList){
@@ -76,7 +95,7 @@ void Application::onCreate(){
 void Application::tick(){
     purple::Engine::tick();
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for(auto &app : appInstanceList){
