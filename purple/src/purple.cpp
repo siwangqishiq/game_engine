@@ -31,14 +31,21 @@ namespace purple{
 
         Log::w(TAG,"init screen size: %d  , %d" , ScreenWidth , ScreenHeight);
         
-        #ifndef __ANDROID__
+        #ifdef __ARM_ARCH //for 树梅派
+        if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+            Log::e(TAG , "Failed to initialize glad");
+            return -1;
+        }
+        #else
         // glad: load all OpenGL function pointers
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             Log::e(TAG , "Failed to initialize glad");
             return;
         }
-        Log::w(TAG , "glad initialize success.");
         #endif
+
+        Log::w(TAG , "glad initialize success.");
+
 
         renderEngine_ = std::make_shared<RenderEngine>();
         renderEngine_->init();
