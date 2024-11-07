@@ -31,19 +31,19 @@ namespace purple{
 
         Log::w(TAG,"init screen size: %d  , %d" , ScreenWidth , ScreenHeight);
 
-        #ifdef ANDROID
-        
-        #elifdef __ARM_ARCH //for 树梅派
-        if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
-            Log::e(TAG , "Failed to initialize glad");
-            return;
-        }
-        #else
-        // glad: load all OpenGL function pointers
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-            Log::e(TAG , "Failed to initialize glad");
-            return;
-        }
+        #ifndef ANDROID
+            #ifdef __ARM_ARCH //for 树梅派
+            if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+                Log::e(TAG , "Failed to initialize glad");
+                return;
+            }
+            #else
+            // glad: load all OpenGL function pointers
+            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+                Log::e(TAG , "Failed to initialize glad");
+                return;
+            }
+            #endif
         #endif
 
         Log::w(TAG , "glad initialize success.");
