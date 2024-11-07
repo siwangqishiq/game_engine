@@ -25,7 +25,7 @@ namespace purple{
      void UiRoot::renderUi(){
         // Log::i("ui", "UiRoot begin renderUI...");
         auto renderEngine = purple::Engine::getRenderEngine();
-        auto myImageRenderBlock = [self = this,render = renderEngine](int, int){
+        auto myImageRenderBlock = [self = this,render = renderEngine](int w, int h){
             auto shapeBatch = render->getShapeBatch();
             shapeBatch->begin();
             purple::RectI rect;
@@ -36,6 +36,15 @@ namespace purple{
             
             purple::Paint paint;
             paint.color = glm::vec4(1.0f, 0.0f,0.0f,1.0f);
+
+            purple::RectI bgRect;
+            bgRect.left = 0;
+            bgRect.top = h;
+            bgRect.width = w;
+            bgRect.height = h;
+            paint.color = glm::vec4(1.0f, 0.0f,0.0f,0.5f);
+            shapeBatch->renderRect(bgRect , paint);
+
             shapeBatch->renderRect(rect , paint);
             paint.color = glm::vec4(0.0f, 1.0f,0.0f,1.0f);
             shapeBatch->renderCircle(100,100,60,paint);

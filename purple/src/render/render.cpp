@@ -124,7 +124,7 @@ namespace purple{
     }
 
     void RenderEngine::resetNormalMat(float w , float h){
-        Log::i(TAG , "reset normal matrix %f , %f" , w , h);
+        // Log::i(TAG , "reset normal matrix %f , %f" , w , h);
         normalMatrix_[0][0] = 2.0f / w;
         normalMatrix_[0][1] = 0.0f;
         normalMatrix_[0][2] = 0.0f;
