@@ -7,53 +7,73 @@
 #include "glm/vec4.hpp"
 
 namespace purple{
-    class ContainerWidget;
+    const int LAYOUT_MATCH_PARENT = -1;
+    const int LAYOUT_WRAP_CONTENT = -2;
 
-    class ViewWidget{
-    protected:
+    class Widget;
+    class Container;
+
+    typedef std::shared_ptr<Widget> PWidget;
+    typedef std::shared_ptr<Container> PContainer;
+
+   
+
+
+    class Widget{
+    public:
+        Widget();
+        virtual ~Widget();
+
+        virtual void measure(int parentRequestWidth , int parentRequestHeight);
+        virtual void layout(int l,int t);
+        virtual void render();
+
+        void setParentWidget(Container *parent);
+        void setBackgroundColor(glm::vec4 color);
+
         int left = 0;
         int top = 0;
         int width = 0;
         int height = 0;
+    protected:
+        Container *parent_ = nullptr;
+        glm::vec4 bgColor_;
+    };//end class
 
-        glm::vec4 backgroundColor_;
-
-        ContainerWidget *parentView_ = nullptr;
+    class Container:public Widget{
     public:
-        void setWidth(int width);
-        void setHeight(int height);
+        virtual void addChild(PWidget widget);
+        virtual void removeChild(PWidget widget);
 
-        virtual void onMeasure(int w , int h);
+        virtual void measure(int parentRequestWidth , int parentRequestHeight);
+        virtual void layout(int l,int t);
+        virtual void render();
 
-        virtual void onRender();
+        void renderContainerSelf();
+
+        std::vector<PWidget> getChildrenWidgets();
+    protected:
+        std::vector<PWidget> children_;
     };
 
-    class ContainerWidget : public ViewWidget{
-    public:
-        virtual void onRender() override;
-        virtual void onLayoutChild();
-    private:
-        std::vector<std::shared_ptr<ViewWidget>> children;
-    };
-    
-    typedef std::function<std::shared_ptr<ContainerWidget> (void)> RenderBlock;
-    typedef std::function<void (void)> ChildWidgetBlock;
-
-    std::shared_ptr<ContainerWidget> Container(ChildWidgetBlock block);
+    PWidget FunContainer(std::vector<PWidget> children);
     
     class TextureInfo;
     class UiRoot{
     public:
         UiRoot(int w, int h);
+        
+        void measure();
+        void layout();
+        void render();
+
+        void startRenderUI();
 
         ~UiRoot();
-
-        void renderUi();
-
-        void build(RenderBlock block);
     private:
         int rootWidth_;
         int rootHeight_;
         std::shared_ptr<TextureInfo> textureInfo_ = nullptr;
+        PContainer rootContainer_ = nullptr;
     };//end class
 }
