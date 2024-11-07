@@ -17,7 +17,7 @@ namespace purple{
     }
 
     void UiRoot::measure(){
-        Log::i("widget" , "UiRoot start measure");
+        // Log::i("widget" , "UiRoot start measure");
         if(this->rootContainer_ == nullptr){
             return;
         }
@@ -26,7 +26,7 @@ namespace purple{
     }
     
     void UiRoot::layout(){
-        Log::i("widget" , "UiRoot start layout");
+        // Log::i("widget" , "UiRoot start layout");
         if(this->rootContainer_ == nullptr){
             return;
         }
@@ -35,7 +35,7 @@ namespace purple{
     }
     
     void UiRoot::render(){
-        Log::i("widget" , "UiRoot start render");
+        // Log::i("widget" , "UiRoot start render");
         if(this->rootContainer_ == nullptr){
             return;
         }
@@ -146,6 +146,8 @@ namespace purple{
     }
 
     void Widget::render(){
+        // Log::e("render" , "render %d %d %d %d",this->left , this->top , this->width , this->height);
+
         Rect bgRect(this->left , this->top , this->width , this->height);
         Paint bgPaint;
         bgPaint.color = this->bgColor_;
@@ -159,6 +161,16 @@ namespace purple{
 
     Widget::~Widget(){
         Log::i("widget","widget desstory");
+    }
+
+
+    Container::Container(){
+        this->width = LAYOUT_MATCH_PARENT;
+        this->height = LAYOUT_MATCH_PARENT;
+    }
+
+    Container::~Container(){
+        this->Widget::~Widget();
     }
 
     void Container::addChild(PWidget widget){
@@ -204,6 +216,7 @@ namespace purple{
     }
 
     void Container::renderContainerSelf(){
+        // Log::e("widget" , "renderContainerSelf");
         this->Widget::render();
     }
 

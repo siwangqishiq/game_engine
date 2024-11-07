@@ -29,7 +29,7 @@ namespace purple{
         renderEngine_ = std::make_shared<RenderEngine>();
         renderEngine_->init();
         renderEngine_->onScreenResize();
-
+        
         AudioManager::getInstance()->init();
         
         long endTime = currentTimeMillis();

@@ -35,6 +35,8 @@ namespace purple{
         int top = 0;
         int width = 0;
         int height = 0;
+
+        std::string id;
     protected:
         Container *parent_ = nullptr;
         glm::vec4 bgColor_;
@@ -42,6 +44,9 @@ namespace purple{
 
     class Container:public Widget{
     public:
+        Container();
+        virtual ~Container();
+
         virtual void addChild(PWidget widget);
         virtual void removeChild(PWidget widget);
 
@@ -69,11 +74,13 @@ namespace purple{
 
         void startRenderUI();
 
+        PContainer rootContainer_ = nullptr;
+
         ~UiRoot();
     private:
         int rootWidth_;
         int rootHeight_;
         std::shared_ptr<TextureInfo> textureInfo_ = nullptr;
-        PContainer rootContainer_ = nullptr;
+        
     };//end class
 }
