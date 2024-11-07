@@ -37,7 +37,7 @@ namespace purple{
             purple::Paint paint;
             paint.color = glm::vec4(1.0f, 0.0f,0.0f,1.0f);
 
-            purple::RectI bgRect;
+            purple::Rect bgRect;
             bgRect.left = 0;
             bgRect.top = h;
             bgRect.width = w;
@@ -54,6 +54,10 @@ namespace purple{
             textPaint.textColor = glm::vec4(1.0f, 0.0f , 0.0f , 1.0f);
             textPaint.setTextSize(400.0f);
             purple::Engine::getRenderEngine()->renderText(L"你好世界",0,100,textPaint);
+
+            textPaint.setTextSize(200.0f);
+            purple::Engine::getRenderEngine()->renderTextWithRect(L"你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界"
+                    ,bgRect,textPaint,nullptr);
         };
 
         if(this->textureInfo_ == nullptr){

@@ -14,20 +14,8 @@ aux_source_directory(src/render/cmd     SRC_RENDER_CMD)
 aux_source_directory(src/ui     SRC_RENDER_UI)
 
 # 动态库
-# add_library(${PROJECT_NAME} 
-#                 SHARED 
-#                 ${SRCS}
-#                 ${SRC_AUDIO}
-#                 ${SRC_INPUT}
-#                 ${SRC_RESOURCE}
-#                 ${SRC_WIDGET}
-#                 ${SRC_RENDER}
-#                 ${SRC_RENDER_CMD}
-#                 ${SRC_RENDER_UI})
-
-# 静态库
 add_library(${PROJECT_NAME} 
-                STATIC 
+                SHARED 
                 ${SRCS}
                 ${SRC_AUDIO}
                 ${SRC_INPUT}
@@ -36,6 +24,18 @@ add_library(${PROJECT_NAME}
                 ${SRC_RENDER}
                 ${SRC_RENDER_CMD}
                 ${SRC_RENDER_UI})
+
+# 静态库
+# add_library(${PROJECT_NAME} 
+#                 STATIC 
+#                 ${SRCS}
+#                 ${SRC_AUDIO}
+#                 ${SRC_INPUT}
+#                 ${SRC_RESOURCE}
+#                 ${SRC_WIDGET}
+#                 ${SRC_RENDER}
+#                 ${SRC_RENDER_CMD}
+#                 ${SRC_RENDER_UI})
 
 # target_link_libraries(${PROJECT_NAME} glfw)
 
