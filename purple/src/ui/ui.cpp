@@ -1,6 +1,7 @@
 #include "ui/ui.h"
 #include "log.h"
 #include "purple.h"
+#include "algorithm"
 
 namespace purple{
 
