@@ -1,5 +1,6 @@
 #include "test_ui.h"
 #include "ui/color.h"
+#include "ui/ui_text.h"
 
 
 void TestUi::onInit(){
@@ -34,11 +35,18 @@ void TestUi::onInit(){
     child3->height = 100;
     child3->setBackgroundColor(purple::ConverColorValue(purple::Color::Blue));
 
+    std::shared_ptr<Text> textChild = std::make_shared<Text>(L"你好世界 HelloWorld!",
+        LAYOUT_WRAP_CONTENT, 
+        LAYOUT_WRAP_CONTENT);
+    textChild->left = 0;
+    textChild->top = purple::Engine::ScreenHeight - 300;
+
     PContainer container = std::make_shared<Container>();
     container->setBackgroundColor(purple::ConverColorValue(purple::Color::White));
     container->addChild(child1);
     container->addChild(child2);
     container->addChild(child3);
+    container->addChild(textChild);
     
     this->ui->rootContainer_ = container;
 }

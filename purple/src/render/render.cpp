@@ -434,6 +434,16 @@ namespace purple{
             textRender->renderTextWithRect(text , showRect , paint , outInfo);
         }
     } 
+
+    void RenderEngine::preCalculateTextSize(std::wstring &text, 
+            TextPaint &paint, int maxWidth, Rect &outInfo){
+        auto textRender = getTextRenderByName(paint.fontName);
+        if(textRender != nullptr){
+            textRender->preCalTextRect(text , paint , maxWidth , outInfo);
+        }
+    }
+
+
     /**
      * @brief  text layout calculate
      *

@@ -202,6 +202,10 @@ namespace purple{
                 TextRenderOutInfo *outInfo){
             renderTextWithRectV2(text , showRect , paint ,outInfo);
         }
+
+        //预计算 绘制文字的尺寸
+        void preCalculateTextSize(std::wstring &text, 
+                TextPaint &paint, int maxWidth, Rect &outInfo);
         
         void renderTextWithRectV2(const wchar_t *text , 
                 Rect &showRect , 

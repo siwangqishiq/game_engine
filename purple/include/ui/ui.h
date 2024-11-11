@@ -10,18 +10,21 @@ namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
     const int LAYOUT_WRAP_CONTENT = -2;
 
+
     class Widget;
     class Container;
 
     typedef std::shared_ptr<Widget> PWidget;
     typedef std::shared_ptr<Container> PContainer;
 
-   
-
 
     class Widget{
     public:
-        Widget();
+        Widget(){
+        }
+        
+        Widget(int w,int h);
+
         virtual ~Widget();
 
         virtual void measure(int parentRequestWidth , int parentRequestHeight);
@@ -29,7 +32,7 @@ namespace purple{
         virtual void render();
 
         void setParentWidget(Container *parent);
-        void setBackgroundColor(glm::vec4 color);
+        Widget& setBackgroundColor(glm::vec4 color);
 
         int left = 0;
         int top = 0;
@@ -44,7 +47,9 @@ namespace purple{
 
     class Container:public Widget{
     public:
-        Container();
+        Container():Widget(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT){
+        }
+
         virtual ~Container();
 
         virtual void addChild(PWidget widget);

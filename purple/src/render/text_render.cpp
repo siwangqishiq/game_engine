@@ -25,6 +25,52 @@ namespace purple{
         cmd.runCommands();
     }
 
+    void TextRender::preCalTextRect(std::wstring text, 
+            TextPaint &textPaint ,
+            int maxWidth,
+            Rect &outInfo){
+        if(text.empty()){
+            outInfo.width = 0;
+            outInfo.height = 0;
+            return;
+        }
+        int index = 0;
+        const int size = text.length();
+        bool isFirstLine = true;
+        int x = 0;
+        int y = (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
+        int lineWidth = 0;
+
+        while(index < size){
+            wchar_t ch = text[index];
+            auto charInfoPtr = findCharInfo(ch , index);
+            if(charInfoPtr == nullptr){
+                continue;
+            }
+
+            float charRealWidth = (charInfoPtr->width + textPaint.gapSize) * textPaint.textSizeScale;
+
+            if(x + charRealWidth <= maxWidth && ch != L'\n'){
+                x += charRealWidth;
+                lineWidth += charRealWidth;
+                if(outInfo.width < lineWidth){
+                    outInfo.width = lineWidth;
+                }
+                index++;
+            }else{// change a new line
+                isFirstLine = false;
+                x = 0;
+                y -= (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
+                outInfo.height += (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
+                lineWidth = 0;
+                
+                if(ch == L'\n'){
+                    index++;
+                }
+            }//end if
+        }//end while
+    }
+
     void TextRender::renderText(std::wstring text , 
             float left , 
             float baseline , 
