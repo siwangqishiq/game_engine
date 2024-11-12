@@ -53,14 +53,20 @@ namespace purple{
     //===============================================================================
     //================================================================================
 
-    Widget::Widget(int w, int h){
-        this->width = w;
-        this->height = h;
-        Log::i("widget","widget construct");
-    }
+    // Widget::Widget(int w, int h){
+    //     this->width = w;
+    //     this->height = h;
+    //     Log::i("widget","widget construct");
+    // }
 
     void Widget::setParentWidget(Container *parent){
         this->parent_ = parent;
+    }
+
+    Widget& Widget::setSize(int requestW,int requestH){
+        this->requestWidth_ = requestW;
+        this->requestHeight_ = requestH;
+        return *this;
     }
 
     Widget& Widget::setBackgroundColor(glm::vec4 color){
@@ -69,12 +75,20 @@ namespace purple{
     }
 
     void Widget::measure(int parentRequestWidth , int parentRequestHeight){
-        if(this->width == LAYOUT_MATCH_PARENT){
-            this->width = parentRequestWidth;
+        if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
+            this->width_ = parentRequestWidth;
+        }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
+            
+        }else{
+            this->width_ = this->requestWidth_;
         }
 
-        if(this->height == LAYOUT_MATCH_PARENT){
-            this->height = parentRequestHeight;
+        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
+            this->height_ = parentRequestHeight;
+        }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
+
+        }else{
+            this->height_ = this->requestHeight_;
         }
     }
 
@@ -86,7 +100,7 @@ namespace purple{
     void Widget::render(){
         // Log::e("render" , "render %d %d %d %d",this->left , this->top , this->width , this->height);
 
-        Rect bgRect(this->left , this->top , this->width , this->height);
+        Rect bgRect(this->left , this->top , this->width_ , this->height_);
         Paint bgPaint;
         bgPaint.color = this->bgColor_;
 
@@ -100,11 +114,6 @@ namespace purple{
     Widget::~Widget(){
         Log::i("widget","widget desstory");
     }
-
-
-    // Container::Container() {
-    //     Widget::Widget(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
-    // }
 
     Container::~Container(){
         this->Widget::~Widget();
@@ -130,7 +139,7 @@ namespace purple{
         }
 
         for(auto &child: this->getChildrenWidgets()){
-            child->measure(this->width , this->height);
+            child->measure(this->width_ , this->height_);
         }//end for each
     }
 

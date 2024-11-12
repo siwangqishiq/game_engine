@@ -17,6 +17,9 @@ include_directories(${SANDBOX_DIR})
 
 file(GLOB_RECURSE PURPLE_SRC_FILES ${PURPLE_DIR}/*.cpp)
 
+# 排除特定文件
+list(REMOVE_ITEM ALL_SOURCES ${PURPLE_DIR}/glad.cpp)
+
 add_library( # Sets the name of the library.
         purple
         SHARED

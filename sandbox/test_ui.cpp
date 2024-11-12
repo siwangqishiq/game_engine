@@ -1,6 +1,6 @@
 #include "test_ui.h"
 #include "ui/color.h"
-#include "ui/ui_text.h"
+#include "ui/text.h"
 
 
 void TestUi::onInit(){
@@ -17,35 +17,37 @@ void TestUi::onInit(){
     PWidget child1 = std::make_shared<Widget>();
     child1->left = 0;
     child1->top = purple::Engine::ScreenHeight;
-    child1->width = 200;
-    child1->height = 100;
-    child1->setBackgroundColor(purple::ConverColorValue(purple::Color::Red));
+    child1->setSize(200,100)
+        .setBackgroundColor(purple::ConverColorValue(purple::Color::Red));
 
     PWidget child2 = std::make_shared<Widget>();
     child2->left = 0;
     child2->top = purple::Engine::ScreenHeight - 100;
-    child2->width = 200;
-    child2->height = 100;
-    child2->setBackgroundColor(purple::ConverColorValue(purple::Color::Green));
+    child2->setSize(200,100)
+        .setBackgroundColor(purple::ConverColorValue(purple::Color::Green));
 
     PWidget child3 = std::make_shared<Widget>();
     child3->left = 0;
     child3->top = purple::Engine::ScreenHeight - 200;
-    child3->width = 200;
-    child3->height = 100;
-    child3->setBackgroundColor(purple::ConverColorValue(purple::Color::Blue));
+    child3->setSize(200,100)
+        .setBackgroundColor(purple::ConverColorValue(purple::Color::Blue));
 
-    std::shared_ptr<Text> textChild = std::make_shared<Text>(L"你好世界 HelloWorld!",
-        LAYOUT_WRAP_CONTENT, 
-        LAYOUT_WRAP_CONTENT);
-    textChild->left = 0;
-    textChild->top = purple::Engine::ScreenHeight - 300;
 
     PContainer container = std::make_shared<Container>();
     container->setBackgroundColor(purple::ConverColorValue(purple::Color::White));
     container->addChild(child1);
     container->addChild(child2);
     container->addChild(child3);
+
+    std::shared_ptr<Text> textChild = std::make_shared<Text>(L"Hello World\n你好世界",
+        LAYOUT_WRAP_CONTENT, 
+        LAYOUT_WRAP_CONTENT);
+    textChild->left = 0;
+    textChild->top = purple::Engine::ScreenHeight - 300 - 20;
+    textChild->setBackgroundColor(purple::ConverColorValue(purple::Color::Yellow));
+    textChild->setFontSize(128.0f)
+    .setFontColor(purple::ConverColorValue(purple::Color::Black));
+
     container->addChild(textChild);
     
     this->ui->rootContainer_ = container;

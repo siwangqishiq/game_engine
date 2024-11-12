@@ -21,6 +21,9 @@ namespace purple{
             case Blue:
             result = glm::vec4(0.0f , 0.0f , 1.0f , 1.0f);
             break;
+            case Yellow:
+            result = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
+            break;
         }//end switch
         return result;
     }

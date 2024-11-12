@@ -5,11 +5,11 @@
 #include <functional>
 #include <vector>
 #include "glm/vec4.hpp"
+#include "log.h"
 
 namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
     const int LAYOUT_WRAP_CONTENT = -2;
-
 
     class Widget;
     class Container;
@@ -21,9 +21,12 @@ namespace purple{
     class Widget{
     public:
         Widget(){
+            Log::i("widget","widget construct");
         }
         
-        Widget(int w,int h);
+        Widget(int w,int h):requestWidth_(w),requestHeight_(h){
+            Log::i("widget","widget construct");
+        }
 
         virtual ~Widget();
 
@@ -36,13 +39,20 @@ namespace purple{
 
         int left = 0;
         int top = 0;
-        int width = 0;
-        int height = 0;
 
         std::string id;
+
+        Widget& setSize(int requestW,int requestH);
     protected:
         Container *parent_ = nullptr;
         glm::vec4 bgColor_;
+
+
+        int requestWidth_;
+        int requestHeight_;
+
+        int width_ = 0;
+        int height_ = 0;
     };//end class
 
     class Container:public Widget{

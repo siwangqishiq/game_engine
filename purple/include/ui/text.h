@@ -14,12 +14,11 @@ namespace purple{
 
         Text& setFontColor(glm::vec4 fontColor);
         Text& setFontSize(float fontSize);
-
-        virtual ~Text();
-
+        
         virtual void measure(int parentRequestWidth , int parentRequestHeight);
         virtual void render();
 
+        virtual ~Text();
     private:
         std::wstring content_ = L"";
         TextPaint textPaint_;

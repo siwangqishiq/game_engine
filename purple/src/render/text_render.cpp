@@ -26,49 +26,51 @@ namespace purple{
     }
 
     void TextRender::preCalTextRect(std::wstring text, 
-            TextPaint &textPaint ,
-            int maxWidth,
-            Rect &outInfo){
+            TextPaint &textPaint,int maxWidth,Rect &outInfo){
         if(text.empty()){
             outInfo.width = 0;
             outInfo.height = 0;
             return;
         }
-        int index = 0;
-        const int size = text.length();
-        bool isFirstLine = true;
-        int x = 0;
-        int y = (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
-        int lineWidth = 0;
 
+        const int size = text.length();
+        const int oneLineHeight = (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
+
+        int index = 0;    
+        int x = 0;
+        int y = oneLineHeight;
+        int lineWidth = 0;
+        
         while(index < size){
-            wchar_t ch = text[index];
+            // Log::i("test","size = %d index = %d", size , index);
+            wchar_t ch = text[index++];
+            if(ch == L'\n'){
+                y += oneLineHeight;
+                x = 0;
+                continue;
+            }
+
             auto charInfoPtr = findCharInfo(ch , index);
             if(charInfoPtr == nullptr){
                 continue;
             }
 
-            float charRealWidth = (charInfoPtr->width + textPaint.gapSize) * textPaint.textSizeScale;
-
-            if(x + charRealWidth <= maxWidth && ch != L'\n'){
+            const float charRealWidth = (charInfoPtr->width + textPaint.gapSize) * textPaint.textSizeScale;
+            if(x + charRealWidth <= maxWidth){
                 x += charRealWidth;
-                lineWidth += charRealWidth;
-                if(outInfo.width < lineWidth){
-                    outInfo.width = lineWidth;
+                if(outInfo.width < x){
+                    outInfo.width = x;
                 }
-                index++;
             }else{// change a new line
-                isFirstLine = false;
                 x = 0;
-                y -= (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
-                outInfo.height += (FONT_DEFAULT_SIZE + textPaint.gapSize) * textPaint.textSizeScale;
-                lineWidth = 0;
-                
-                if(ch == L'\n'){
-                    index++;
-                }
+                y += oneLineHeight;
             }//end if
         }//end while
+
+        if(outInfo.width < x){
+            outInfo.width = x;
+        }
+        outInfo.height = y;
     }
 
     void TextRender::renderText(std::wstring text , 
