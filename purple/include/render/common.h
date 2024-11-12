@@ -6,7 +6,8 @@
 
 namespace purple{
 
-    const float FONT_DEFAULT_SIZE = 64.0f;
+    // const float FONT_DEFAULT_SIZE = 64.0f;
+    const float FONT_DEFAULT_SIZE = 32.0f;
     
     //
     struct Point{
