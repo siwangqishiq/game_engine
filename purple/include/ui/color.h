@@ -10,9 +10,12 @@ namespace purple{
         Red,
         Green,
         Blue,
-        Yellow
+        Yellow,
+        Purple
     };
 
     glm::vec4 ConverColorValue(Color color);
+
+    glm::vec4 HexColorToValue(uint8_t r,uint8_t g , uint8_t b , uint8_t a);
 }
 

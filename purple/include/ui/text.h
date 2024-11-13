@@ -17,8 +17,12 @@ namespace purple{
 
         virtual ~Text();
 
+        virtual void setText(std::wstring &content){
+            content_ = content;
+        }
+
         template<typename T>
-        Text& setFontColor(glm::vec4 fontColor){
+        T& setFontColor(glm::vec4 fontColor){
             textPaint_.textColor = fontColor;
             return static_cast<T&>(*this);
         }

@@ -26,6 +26,7 @@ namespace purple{
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
         }
+        // Log::i("ui","Text measue size %d , %d" , width_ , height_);
     }
         
     void Text::render(){
@@ -40,6 +41,8 @@ namespace purple{
         int textHeight = this->height_ - this->paddingTop_ - this->paddingBottom_;
         Rect textRect(textLeft , textTop , textWidth , textHeight);
         render->renderTextWithRect(this->content_,textRect,this->textPaint_ , nullptr);
+
+        // Log::i("ui","Text render size %d , %d pos: %d, %d" , width_ , height_ , left , top);
     }
 
     void Text::preCalculateTextRectSize(Rect &rect,int maxWidth){

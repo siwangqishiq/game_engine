@@ -46,6 +46,13 @@ namespace purple{
         std::string id;
 
         template<typename T>
+        T& setPosition(int l,int t){
+            left = l;
+            top = t;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
         T& setBackgroundColor(glm::vec4 color){
             this->bgColor_ = color;
             return static_cast<T&>(*this);
@@ -68,8 +75,23 @@ namespace purple{
         }
 
         template<typename T>
+        T& setMargin(int mLeft,int mTop,int mRight, int mBottom){
+            this->marginLeft_ = mLeft;
+            this->marginTop_ = mTop;
+            this->marginRight_ = mRight;
+            this->marginBottom_ = mBottom;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
         T& setBackgroundConnerRadius(float radius){
             this->bgConnerRadius_ = radius;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setLayoutWeight(int weight){
+            this->layoutWeight_ = weight;
             return static_cast<T&>(*this);
         }
 
@@ -90,11 +112,21 @@ namespace purple{
         int paddingTop_ = 0;
         int paddingBottom_ = 0;
 
+        int marginLeft_ = 0;
+        int marginTop_ = 0;
+        int marginRight_ = 0;
+        int marginBottom_ = 0;
+
         LayoutGravity layoutGravity_ = LayoutGravity::TopLeft;
+        
+        int layoutWeight_ = 0;
     };//end class
 
     class Container:public Widget{
     public:
+        Container(int w , int h):Widget(w, h){
+        }
+        
         Container():Widget(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT){
         }
 

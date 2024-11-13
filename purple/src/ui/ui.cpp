@@ -83,20 +83,20 @@ namespace purple{
     }
 
     void Widget::measure(int parentRequestWidth , int parentRequestHeight){
-        if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
-            this->width_ = parentRequestWidth;
+        if(requestWidth_ == LAYOUT_MATCH_PARENT){
+            width_ = parentRequestWidth;
         }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            this->width_ = paddingLeft_ + contentWidth() + paddingRight_;
+            width_ = paddingLeft_ + contentWidth() + paddingRight_;
         }else{
-            this->width_ = this->requestWidth_;
+            width_ = requestWidth_;
         }
 
         if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
-            this->height_ = parentRequestHeight;
+            height_ = parentRequestHeight;
         }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
-            this->height_ = paddingTop_ + contentHeight() + paddingBottom_;
+            height_ = paddingTop_ + contentHeight() + paddingBottom_;
         }else{
-            this->height_ = this->requestHeight_;
+            height_ = requestHeight_;
         }
     }
 
