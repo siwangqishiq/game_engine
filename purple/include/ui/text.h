@@ -12,13 +12,22 @@ namespace purple{
 
         Text(std::wstring content,int w,int h):Widget(w, h),content_(content){}
 
-        Text& setFontColor(glm::vec4 fontColor);
-        Text& setFontSize(float fontSize);
-        
         virtual void measure(int parentRequestWidth , int parentRequestHeight);
         virtual void render();
 
         virtual ~Text();
+
+        template<typename T>
+        Text& setFontColor(glm::vec4 fontColor){
+            textPaint_.textColor = fontColor;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setFontSize(float fontSize){
+            textPaint_.setTextSize(fontSize);
+            return static_cast<T&>(*this);
+        }
     private:
         std::wstring content_ = L"";
         TextPaint textPaint_;

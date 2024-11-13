@@ -63,16 +63,16 @@ namespace purple{
         this->parent_ = parent;
     }
 
-    Widget& Widget::setSize(int requestW,int requestH){
-        this->requestWidth_ = requestW;
-        this->requestHeight_ = requestH;
-        return *this;
-    }
+    // Widget& Widget::setSize(int requestW,int requestH){
+    //     this->requestWidth_ = requestW;
+    //     this->requestHeight_ = requestH;
+    //     return *this;
+    // }
 
-    Widget& Widget::setBackgroundColor(glm::vec4 color){
-        this->bgColor_ = color;
-        return *this;
-    }
+    // Widget& Widget::setBackgroundColor(glm::vec4 color){
+    //     this->bgColor_ = color;
+    //     return *this;
+    // }
 
     void Widget::measure(int parentRequestWidth , int parentRequestHeight){
         if(this->requestWidth_ == LAYOUT_MATCH_PARENT){

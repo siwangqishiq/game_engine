@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(app)
 
+set(app "app")
+message("statrt to build ${app} ...")
+
 # for dll import use case 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})

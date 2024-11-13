@@ -35,14 +35,25 @@ namespace purple{
         virtual void render();
 
         void setParentWidget(Container *parent);
-        Widget& setBackgroundColor(glm::vec4 color);
 
         int left = 0;
         int top = 0;
 
         std::string id;
 
-        Widget& setSize(int requestW,int requestH);
+        template<typename T>
+        T& setBackgroundColor(glm::vec4 color){
+            this->bgColor_ = color;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setSize(int requestW,int requestH){
+            this->requestWidth_ = requestW;
+            this->requestHeight_ = requestH;
+            return static_cast<T&>(*this);
+        }
+
     protected:
         Container *parent_ = nullptr;
         glm::vec4 bgColor_;

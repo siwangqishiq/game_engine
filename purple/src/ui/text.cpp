@@ -3,17 +3,7 @@
 #include "purple.h"
 
 namespace purple{
-
-    Text& Text::setFontColor(glm::vec4 fontColor){
-        textPaint_.textColor = fontColor;
-        return *this;
-    }
     
-    Text& Text::setFontSize(float fontSize){
-        textPaint_.setTextSize(fontSize);
-        return *this;
-    }
-
     void Text::measure(int parentRequestWidth , int parentRequestHeight){
         int preCalaulateHeight;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){

@@ -30,5 +30,13 @@ file -> object for render or play
         glfw 桌面窗口创建
         
 
+### 构建命令
+
+    mkdir build  
+    cd build
+    cmake build .. -G"Unix Makefiles"
+    cmake --build .
+    ./app
+
 
 

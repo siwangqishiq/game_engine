@@ -17,24 +17,24 @@ void TestUi::onInit(){
     PWidget child1 = std::make_shared<Widget>();
     child1->left = 0;
     child1->top = purple::Engine::ScreenHeight;
-    child1->setSize(200,100)
-        .setBackgroundColor(purple::ConverColorValue(purple::Color::Red));
+    child1->setSize<Widget>(200,100)
+        .setBackgroundColor<Widget>(purple::ConverColorValue(purple::Color::Red));
 
     PWidget child2 = std::make_shared<Widget>();
     child2->left = 0;
     child2->top = purple::Engine::ScreenHeight - 100;
-    child2->setSize(200,100)
-        .setBackgroundColor(purple::ConverColorValue(purple::Color::Green));
+    child2->setSize<Widget>(200,100)
+        .setBackgroundColor<Widget>(purple::ConverColorValue(purple::Color::Green));
 
     PWidget child3 = std::make_shared<Widget>();
     child3->left = 0;
     child3->top = purple::Engine::ScreenHeight - 200;
-    child3->setSize(200,100)
-        .setBackgroundColor(purple::ConverColorValue(purple::Color::Blue));
+    child3->setSize<Widget>(200,100)
+        .setBackgroundColor<Widget>(purple::ConverColorValue(purple::Color::Blue));
 
 
     PContainer container = std::make_shared<Container>();
-    container->setBackgroundColor(purple::ConverColorValue(purple::Color::White));
+    container->setBackgroundColor<Widget>(purple::ConverColorValue(purple::Color::White));
     container->addChild(child1);
     container->addChild(child2);
     container->addChild(child3);
@@ -44,8 +44,10 @@ void TestUi::onInit(){
         LAYOUT_WRAP_CONTENT);
     textChild->left = 0;
     textChild->top = purple::Engine::ScreenHeight - 300 - 20;
-    textChild->setBackgroundColor(purple::ConverColorValue(purple::Color::Yellow));
-    textChild->setFontColor(purple::ConverColorValue(purple::Color::Black));
+    
+    textChild->setBackgroundColor<Text>(purple::ConverColorValue(purple::Color::Yellow))
+        .setFontColor<Text>(purple::ConverColorValue(purple::Color::Black));
+        
 
     container->addChild(textChild);
     
