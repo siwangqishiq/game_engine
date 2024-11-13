@@ -78,6 +78,8 @@ namespace purple{
         Center
     };
 
+    typedef TextGravity LayoutGravity;
+
     enum FillStyle{
         Filled = 0,
         Stroken = 1

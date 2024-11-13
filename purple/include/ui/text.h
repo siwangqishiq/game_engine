@@ -28,6 +28,12 @@ namespace purple{
             textPaint_.setTextSize(fontSize);
             return static_cast<T&>(*this);
         }
+
+        template<typename T>
+        T& setTextGravity(TextGravity gravity){
+            textPaint_.textGravity = gravity;
+            return static_cast<T&>(*this);
+        }
     private:
         std::wstring content_ = L"";
         TextPaint textPaint_;

@@ -8,6 +8,8 @@
 
 std::shared_ptr<AndroidApplication> app = nullptr;
 
+bool haveGetSize = false;
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved){
     JNIEnv* env = nullptr; //注册时在JNIEnv中实现的，所以必须首先获取它
     if(vm->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) { //从JavaVM获取JNIEnv，一般使用1.4的版本
@@ -21,7 +23,9 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_init(JNIEnv *env, jclass clazz) {
     app = std::make_shared<AndroidApplication>();
-    app->init();
+    if(haveGetSize){
+        app->init();
+    }
 }
 
 extern "C"
@@ -41,6 +45,8 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_resize(JNIEnv *env, jclass clazz, jint width, jint height) {
     app->resize(width , height);
+    haveGetSize = true;
+    app->init();
 }
 
 extern "C"

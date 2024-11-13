@@ -74,11 +74,19 @@ namespace purple{
     //     return *this;
     // }
 
+    int Widget::contentWidth(){
+        return 0;
+    }
+
+    int Widget::contentHeight(){
+        return 0;
+    }
+
     void Widget::measure(int parentRequestWidth , int parentRequestHeight){
         if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
             this->width_ = parentRequestWidth;
         }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            
+            this->width_ = paddingLeft_ + contentWidth() + paddingRight_;
         }else{
             this->width_ = this->requestWidth_;
         }
@@ -86,7 +94,7 @@ namespace purple{
         if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
             this->height_ = parentRequestHeight;
         }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
-
+            this->height_ = paddingTop_ + contentHeight() + paddingBottom_;
         }else{
             this->height_ = this->requestHeight_;
         }
@@ -107,7 +115,8 @@ namespace purple{
         auto render = purple::Engine::getRenderEngine();
         auto shapeBatch = render->getShapeBatch();
         shapeBatch->begin();
-        shapeBatch->renderRect(bgRect, bgPaint);
+        // shapeBatch->renderRect(bgRect, bgPaint);
+        shapeBatch->renderRoundRect(bgRect, bgConnerRadius_ , bgPaint);
         shapeBatch->end();
     }
 

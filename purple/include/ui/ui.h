@@ -6,6 +6,7 @@
 #include <vector>
 #include "glm/vec4.hpp"
 #include "log.h"
+#include "render/common.h"
 
 namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
@@ -34,6 +35,9 @@ namespace purple{
         virtual void layout(int l,int t);
         virtual void render();
 
+        virtual int contentWidth();
+        virtual int contentHeight();
+
         void setParentWidget(Container *parent);
 
         int left = 0;
@@ -54,16 +58,39 @@ namespace purple{
             return static_cast<T&>(*this);
         }
 
+        template<typename T>
+        T& setPadding(int paddingLeft,int paddingTop,int paddingRight, int paddingBottom){
+            this->paddingLeft_ = paddingLeft;
+            this->paddingTop_ = paddingTop;
+            this->paddingRight_ = paddingRight;
+            this->paddingBottom_ = paddingBottom;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setBackgroundConnerRadius(float radius){
+            this->bgConnerRadius_ = radius;
+            return static_cast<T&>(*this);
+        }
+
     protected:
         Container *parent_ = nullptr;
-        glm::vec4 bgColor_;
 
+        glm::vec4 bgColor_;
+        float bgConnerRadius_ = 0.0f;
 
         int requestWidth_;
         int requestHeight_;
 
         int width_ = 0;
         int height_ = 0;
+
+        int paddingLeft_ = 0;
+        int paddingRight_ = 0;
+        int paddingTop_ = 0;
+        int paddingBottom_ = 0;
+
+        LayoutGravity layoutGravity_ = LayoutGravity::TopLeft;
     };//end class
 
     class Container:public Widget{

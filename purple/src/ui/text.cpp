@@ -5,20 +5,26 @@
 namespace purple{
     
     void Text::measure(int parentRequestWidth , int parentRequestHeight){
-        int preCalaulateHeight;
+        int preCalaulateHeight = -1;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
             width_ = parentRequestWidth;
         }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
             Rect outRect;
             preCalculateTextRectSize(outRect, parentRequestWidth);
-            width_ = static_cast<int>(outRect.width);
+            width_ = static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_;
             preCalaulateHeight = static_cast<int>(outRect.height);
         }
 
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
             height_ = parentRequestHeight;
         }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = preCalaulateHeight;
+            if(preCalaulateHeight != -1){//已经在宽度的计算中预先计算出来了
+                height_ = preCalaulateHeight + this->paddingTop_ + this->paddingBottom_;
+            }else{
+                Rect outRect;
+                preCalculateTextRectSize(outRect, parentRequestWidth);
+                height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
+            }
         }
     }
         
@@ -27,7 +33,12 @@ namespace purple{
         
         //render text
         auto render = purple::Engine::getRenderEngine();
-        Rect textRect(this->left , this->top , this->width_ , this->height_);
+
+        int textLeft = paddingLeft_ + this->left;
+        int textTop = this->top - paddingTop_;
+        int textWidth = this->width_ - this->paddingLeft_ - this->paddingRight_;
+        int textHeight = this->height_ - this->paddingTop_ - this->paddingBottom_;
+        Rect textRect(textLeft , textTop , textWidth , textHeight);
         render->renderTextWithRect(this->content_,textRect,this->textPaint_ , nullptr);
     }
 

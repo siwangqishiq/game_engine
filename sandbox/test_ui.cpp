@@ -39,15 +39,18 @@ void TestUi::onInit(){
     container->addChild(child2);
     container->addChild(child3);
 
-    std::shared_ptr<Text> textChild = std::make_shared<Text>(L"HelloWorld你好世界",
-        LAYOUT_WRAP_CONTENT,
+    std::shared_ptr<Text> textChild = std::make_shared<Text>(L"Hello World 你好世界!",
+        LAYOUT_MATCH_PARENT,
         LAYOUT_WRAP_CONTENT);
     textChild->left = 0;
     textChild->top = purple::Engine::ScreenHeight - 300 - 20;
     
-    textChild->setBackgroundColor<Text>(purple::ConverColorValue(purple::Color::Yellow))
-        .setFontColor<Text>(purple::ConverColorValue(purple::Color::Black));
-        
+    textChild->setBackgroundColor<Text>(purple::ConverColorValue(purple::Color::Green))
+        .setFontSize<Text>(50.0f)
+        .setFontColor<Text>(purple::ConverColorValue(purple::Color::Black))
+        .setBackgroundConnerRadius<Text>(16.0f)
+        .setPadding<Text>(10,10,10,10)
+        .setTextGravity<Text>(TextGravity::TopCenter);
 
     container->addChild(textChild);
     
