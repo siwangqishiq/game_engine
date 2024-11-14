@@ -71,6 +71,18 @@ namespace purple{
             return this->layoutGravity_;
         }
 
+        int getLayoutWeight(){
+            return this->layoutWeight_;
+        }
+
+        void setWidth(int width){
+            this->width_ = width;
+        }
+
+        void setHeight(int height){
+            this->height_ = height;
+        }
+
         template<typename T>
         T& setPosition(int l,int t){
             left = l;

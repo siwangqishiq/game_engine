@@ -20,4 +20,6 @@ private:
     void testColoumContainer();
 
     void testColumContainerGravity();
+
+    void testColumContainerWeight();
 };

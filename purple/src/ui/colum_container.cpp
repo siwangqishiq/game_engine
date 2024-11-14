@@ -5,10 +5,19 @@
 
 namespace purple{
 
-    void ColumContainer::measureChildWidgetSize(PWidget childWidget,
+    int ColumContainer::measureChildWidgetSize(PWidget childWidget,
                         int limitWidth, 
-                        int limitHeight){
+                        int limitHeight,
+                        std::vector<PWidget> &hasWeightList){
+        int costH = childWidget->getMarginTop() + childWidget->getMarginBottom();
+
         childWidget->measure(limitWidth , std::numeric_limits<int>::max());
+        if(childWidget->getLayoutWeight() > 0){
+            hasWeightList.emplace_back(childWidget);
+        }else{
+            costH += childWidget->getHeight();
+        }//end if
+        return costH;
     }
 
     void ColumContainer::measure(int parentRequestWidth , int parentRequestHeight){
@@ -16,17 +25,38 @@ namespace purple{
 
         int maxChildWidth = 0;
         int childTotalHeight = 0;
+
+        std::vector<PWidget> weightWeightList;
+
+        int totalCostHeight = 0;
         for(PWidget &child: getChildrenWidgets()){
             //测量子布局
-            measureChildWidgetSize(child,
+            const int costH = measureChildWidgetSize(child,
                 parentRequestWidth - paddingLeft_ - paddingRight_ 
-                    - child->getMarginLeft()- child->getMarginRight(),0);
+                    - child->getMarginLeft()- child->getMarginRight(),0 , weightWeightList);
 
+            totalCostHeight += costH;
             if(maxChildWidth < child->getWidth()){
                 maxChildWidth = child->getWidth();
             }
             childTotalHeight += (child->getHeight() + child->getMarginTop() + child->getMarginBottom());
         }//end for each
+
+        if(!weightWeightList.empty()){
+            
+            const int weightTotalHeight = parentRequestHeight - totalCostHeight;
+            int totalWeight = 0;
+            for(auto &p : weightWeightList){
+                totalWeight += p->getLayoutWeight();
+            }//end for each
+
+            float cubeSize = static_cast<float>(weightTotalHeight) / static_cast<float>(totalWeight);
+            for(auto &p : weightWeightList){
+                p->setHeight(cubeSize * p->getLayoutWeight());
+                // Log::i("test" , "weightWeight %d , left : %d top:%d  width:%d", p->getHeight(),p->left,
+                //     p->top,p->getWidth());
+            }//end for each
+        }
 
 
         //计算自身大小

@@ -19,8 +19,9 @@ namespace purple{
 
         virtual void layout(int l,int t);
 
-        virtual void measureChildWidgetSize(PWidget childWidget,
+        virtual int measureChildWidgetSize(PWidget childWidget,
                         int limitWidth, 
-                        int limitHeight);
+                        int limitHeight,
+                        std::vector<PWidget> &hasWeightList);
     };
 }
