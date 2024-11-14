@@ -65,6 +65,6 @@ namespace purple{
     }
 
     ColumContainer::~ColumContainer(){
-        this->Container::~Container();
+        Log::i("widget","ColumContainer desstory");
     }
 }

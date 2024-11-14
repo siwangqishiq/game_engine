@@ -178,7 +178,7 @@ namespace purple{
         //     this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
         // fontTextureInfo_
 
-        if(bitmap != nullptr){
+        if(bitmap != nullptr && width != 0 && height != 0){
             TextureManager::getInstance()->updateTexture2dArrayData(
                 fontTextureInfo_ , 
                 offsetX_ , 

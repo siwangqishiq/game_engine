@@ -14,8 +14,7 @@ private:
     float mTime = 0.0f;
     
     std::shared_ptr<purple::UiRoot> ui = nullptr;
-
-
+    
     void testContainer();
 
     void testColoumContainer();

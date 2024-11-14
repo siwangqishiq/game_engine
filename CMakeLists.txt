@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(app)
+project(app CXX)
 
 set(app "app")
 message("statrt to build ${app} ...")

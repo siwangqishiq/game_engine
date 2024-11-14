@@ -81,7 +81,7 @@ void TestUi::testColoumContainer(){
         LAYOUT_WRAP_CONTENT,
         LAYOUT_WRAP_CONTENT);
     text3->setBackgroundColor<Text>(ConverColorValue(Color::Blue))
-        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontColor<Text>(ConverColorValue(Color::Purple))
         .setBackgroundConnerRadius<Text>(10.0f)
         .setMargin<Text>(0,10,0,0)
         .setPadding<Text>(20,20,20,20);

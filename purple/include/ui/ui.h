@@ -165,7 +165,7 @@ namespace purple{
 
         void renderContainerSelf();
 
-        std::vector<PWidget> getChildrenWidgets();
+        std::vector<PWidget>& getChildrenWidgets();
     protected:
         std::vector<PWidget> children_;
     };

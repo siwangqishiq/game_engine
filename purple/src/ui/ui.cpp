@@ -125,7 +125,7 @@ namespace purple{
     }
 
     Container::~Container(){
-        this->Widget::~Widget();
+        Log::i("widget","Container desstory");
     }
 
     void Container::addChild(PWidget widget){
@@ -176,7 +176,7 @@ namespace purple{
         this->Widget::render();
     }
 
-    std::vector<PWidget> Container::getChildrenWidgets(){
+    std::vector<PWidget>& Container::getChildrenWidgets(){
         return this->children_;
     }
 
