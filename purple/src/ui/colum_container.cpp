@@ -33,6 +33,6 @@ namespace purple{
     }
 
     ColumContainer::~ColumContainer(){
-        Container::~Container();
+        this->Container::~Container();
     }
 }
