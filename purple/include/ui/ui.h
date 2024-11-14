@@ -67,6 +67,10 @@ namespace purple{
             return marginBottom_;
         }
 
+        LayoutGravity getLayoutGravity(){
+            return this->layoutGravity_;
+        }
+
         template<typename T>
         T& setPosition(int l,int t){
             left = l;
@@ -114,6 +118,12 @@ namespace purple{
         template<typename T>
         T& setLayoutWeight(int weight){
             this->layoutWeight_ = weight;
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setLayoutGravity(LayoutGravity gravity){
+            this->layoutGravity_ = gravity;
             return static_cast<T&>(*this);
         }
 

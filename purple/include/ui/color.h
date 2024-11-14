@@ -11,7 +11,8 @@ namespace purple{
         Green,
         Blue,
         Yellow,
-        Purple
+        Purple,
+        SkyBlue
     };
 
     glm::vec4 ConverColorValue(Color color);

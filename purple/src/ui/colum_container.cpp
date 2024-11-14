@@ -52,16 +52,33 @@ namespace purple{
     void ColumContainer::layout(int l,int t){
         this->Widget::layout(l, t);
 
-        int x = left + paddingLeft_;
+        int x = left;
         int y = top - paddingTop_;
 
         const int childLen = getChildrenWidgets().size();
         for(int i = 0; i < childLen; i++){
-            PWidget& child = getChildrenWidgets()[i];
-            child->layout(x + child->getMarginLeft(), y - child->getMarginTop());
+            PWidget child = getChildrenWidgets()[i];
+            if(child == nullptr){
+                continue;
+            }
+
+            const int childTop = y - child->getMarginTop();
+            auto gravity = child->getLayoutGravity();
+            if(gravity == LayoutGravity::TopCenter
+                || gravity == LayoutGravity::Center
+                || gravity == LayoutGravity::CenterLeft){
+                child->layout(x + (width_ >> 1) - (child->getWidth() >> 1), childTop);
+            }else if(gravity == LayoutGravity::TopRight 
+                || gravity == LayoutGravity::CenterRight
+                || gravity == LayoutGravity::BottomRight){
+                child->layout(x + width_ - child->getWidth() - child->getMarginRight() - paddingRight_
+                    , childTop);
+            }else{
+                child->layout(x + paddingLeft_ + child->getMarginLeft(),childTop);
+            }
+            
             y -= child->getMarginTop() + child->getHeight() + child->getMarginBottom();
         }//end for i
-        // Log::i("ui", "ColumContainer layout child pos: %d , %d" , x, y);
     }
 
     ColumContainer::~ColumContainer(){

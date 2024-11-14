@@ -18,4 +18,6 @@ private:
     void testContainer();
 
     void testColoumContainer();
+
+    void testColumContainerGravity();
 };

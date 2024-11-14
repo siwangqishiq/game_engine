@@ -117,7 +117,7 @@ void Application::showDebugInfo(){
     outputRect.width = purple::Engine::ScreenWidth;
     outputRect.height = purple::Engine::ScreenHeight;
     paint.textGravity = purple::TopRight;
-
+    
     purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , paint, nullptr);
     // purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , paint, nullptr);
 }

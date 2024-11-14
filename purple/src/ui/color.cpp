@@ -36,6 +36,9 @@ namespace purple{
             case Purple:
             result = HexColorToVecValue(238,130,238,255);
             break;
+            case SkyBlue:
+            result = HexColorToVecValue(2,204,255,255);
+            break;
         }//end switch
         return result;
     }

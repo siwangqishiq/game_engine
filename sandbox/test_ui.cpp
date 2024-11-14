@@ -65,7 +65,7 @@ void TestUi::testColoumContainer(){
         .setBackgroundConnerRadius<Text>(10.0f)
         .setFontSize<Text>(80.0f)
         .setPadding<Text>(10,10,10,10)
-        .setMargin<Text>(20,100,20,0);
+        .setMargin<Text>(20,20,20,0);
     container->addChild(text1);
 
     std::shared_ptr<Text> text2 = std::make_shared<Text>(L"HelloWorld",
@@ -90,6 +90,45 @@ void TestUi::testColoumContainer(){
     this->ui->rootContainer_ = container;
 }
 
+void TestUi::testColumContainerGravity(){
+    using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>();
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setPadding<ColumContainer>(20,20,20,20)
+        .setSize<ColumContainer>(400, LAYOUT_MATCH_PARENT)
+        .setBackgroundConnerRadius<ColumContainer>(0.0f);
+
+    auto cube1 = std::make_shared<Widget>(100,100);
+    cube1->setBackgroundColor<Widget>(ConverColorValue(Color::Purple))
+        .setMargin<Widget>(0,10,20,10)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube1);
+
+    auto cube2 = std::make_shared<Widget>(100,100);
+    cube2->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setMargin<Widget>(0,10,0,10)
+        .setLayoutGravity<Widget>(LayoutGravity::TopCenter)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube2);
+
+    auto cube3 = std::make_shared<Widget>(100,100);
+    cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
+        .setMargin<Widget>(20,10,0,10)
+        .setLayoutGravity<Widget>(LayoutGravity::TopRight)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube3);
+
+    auto text1 = std::make_shared<Text>(L"Hello World",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    text1->setBackgroundColor<Text>(ConverColorValue(Color::Yellow))
+        .setFontSize<Text>(64.0f)
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setLayoutGravity<Text>(LayoutGravity::TopCenter);
+    container->addChild(text1);
+    
+    ui->rootContainer_ = container;
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -98,7 +137,8 @@ void TestUi::onInit(){
         purple::Engine::ScreenHeight);
 
     // testContainer();
-    testColoumContainer();
+    // testColoumContainer();
+    testColumContainerGravity();
 }
 
 void TestUi::onTick(){
