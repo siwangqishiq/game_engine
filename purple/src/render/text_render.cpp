@@ -110,7 +110,8 @@ namespace purple{
             ch , 0, 128, -128/5.0f,
             &width, &height , &offX, &offY);
         if(sdfBitmap == nullptr || width <= 0 || height <= 0){
-            Log::e(TAG ,"sdf data is null index = %d!" , index);
+            Log::e(TAG ,"sdf data is null index = %d! width = %d , height = %d" 
+                , index , width, height);
         }
         
         std::vector<float> coords = addBitmapToTextures(sdfBitmap , width, height);
@@ -176,12 +177,16 @@ namespace purple{
         // Log::i(TAG ,"copy sdf data to texture 2d array cur off_x : %d , off_y : %d , off_z : %d w :%d , h : %d",
         //     this->offsetX_ , this->offsetY_ , offsetZ_ , width , height);
         // fontTextureInfo_
-        TextureManager::getInstance()->updateTexture2dArrayData(
-            fontTextureInfo_ , 
-            offsetX_ , 
-            offsetY_ ,
-            offsetZ_ , 
-            width , height , 1 , bitmap);
+
+        if(bitmap != nullptr){
+            TextureManager::getInstance()->updateTexture2dArrayData(
+                fontTextureInfo_ , 
+                offsetX_ , 
+                offsetY_ ,
+                offsetZ_ , 
+                width , height , 1 , bitmap);
+        }
+    
         
         std::vector<float> texCoords(5);
         texCoords[0] = static_cast<float>(offsetX_) / static_cast<float>(texWidth_);
