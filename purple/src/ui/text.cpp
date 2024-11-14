@@ -11,7 +11,8 @@ namespace purple{
         }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
             Rect outRect;
             preCalculateTextRectSize(outRect, parentRequestWidth);
-            width_ = static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_;
+            width_ = std::min(static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
+                        , parentRequestWidth);
             preCalaulateHeight = static_cast<int>(outRect.height);
         }
 
@@ -25,6 +26,7 @@ namespace purple{
                 preCalculateTextRectSize(outRect, parentRequestWidth);
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
+            height_ = std::min(height_,parentRequestHeight);
         }
         // Log::i("ui","Text measue size %d , %d" , width_ , height_);
     }

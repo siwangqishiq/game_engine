@@ -18,5 +18,9 @@ namespace purple{
         virtual void measure(int parentRequestWidth , int parentRequestHeight);
 
         virtual void layout(int l,int t);
+
+        virtual void measureChildWidgetSize(PWidget childWidget,
+                        int limitWidth, 
+                        int limitHeight);
     };
 }

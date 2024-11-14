@@ -52,25 +52,29 @@ void TestUi::testContainer(){
 void TestUi::testColoumContainer(){
     using namespace purple;
 
-    auto container = std::make_shared<Container>();
+    auto container = std::make_shared<ColumContainer>();
     
-    container->setBackgroundColor<Container>(ConverColorValue(Color::Purple))
-        .setBackgroundConnerRadius<Container>(20.0f);
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setBackgroundConnerRadius<ColumContainer>(10.0f);
 
-    std::shared_ptr<Text> text1 = std::make_shared<Text>(L"Hello World 你好世界23333~",
+    std::shared_ptr<Text> text1 = std::make_shared<Text>(L"Hello World 你好世界1234567890~你好世界1234567890~",
         LAYOUT_MATCH_PARENT,
         LAYOUT_WRAP_CONTENT);
     text1->setBackgroundColor<Text>(ConverColorValue(Color::Red))
-        .setPosition<Text>(100,purple::Engine::ScreenHeight)
-        .setFontColor<Text>(ConverColorValue(Color::Blue))
-        .setFontSize<Text>(100.0f);
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundConnerRadius<Text>(10.0f)
+        .setFontSize<Text>(80.0f)
+        .setPadding<Text>(10,10,10,10)
+        .setMargin<Text>(20,100,20,0);
     container->addChild(text1);
 
-    std::shared_ptr<Text> text2 = std::make_shared<Text>(L"Hello World",
+    std::shared_ptr<Text> text2 = std::make_shared<Text>(L"HelloWorld",
         LAYOUT_WRAP_CONTENT,
         LAYOUT_WRAP_CONTENT);
-    text2->setBackgroundColor<Text>(ConverColorValue(Color::Green))
-        .setPosition<Text>(100,purple::Engine::ScreenHeight);
+    text2->setBackgroundColor<Text>(ConverColorValue(Color::Purple))
+        .setBackgroundConnerRadius<Text>(10.0f)
+        .setPadding<Text>(10,10,10,10)
+        .setMargin<Text>(10,10,0,0);
     container->addChild(text2);
 
     std::shared_ptr<Text> text3 = std::make_shared<Text>(L"你好世界\nHello",
@@ -78,7 +82,9 @@ void TestUi::testColoumContainer(){
         LAYOUT_WRAP_CONTENT);
     text3->setBackgroundColor<Text>(ConverColorValue(Color::Blue))
         .setFontColor<Text>(ConverColorValue(Color::Black))
-        .setPosition<Text>(100,purple::Engine::ScreenHeight);
+        .setBackgroundConnerRadius<Text>(10.0f)
+        .setMargin<Text>(0,10,0,0)
+        .setPadding<Text>(20,20,20,20);
     container->addChild(text3);
 
     this->ui->rootContainer_ = container;

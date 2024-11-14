@@ -86,7 +86,7 @@ namespace purple{
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
             width_ = parentRequestWidth;
         }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = paddingLeft_ + contentWidth() + paddingRight_;
+            width_ = std::min(paddingLeft_ + contentWidth() + paddingRight_, parentRequestWidth);
         }else{
             width_ = requestWidth_;
         }
@@ -94,7 +94,7 @@ namespace purple{
         if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
             height_ = parentRequestHeight;
         }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = paddingTop_ + contentHeight() + paddingBottom_;
+            height_ = std::min(paddingTop_ + contentHeight() + paddingBottom_, parentRequestHeight);
         }else{
             height_ = requestHeight_;
         }
@@ -153,6 +153,7 @@ namespace purple{
     }
 
     void Container::layout(int l,int t){
+        // Log::i("widget" , "Container start layout");
         this->Widget::layout(l,t);
         //Container绝对布局 不需要设置子Widget位置
     }

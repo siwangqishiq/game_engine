@@ -43,7 +43,29 @@ namespace purple{
         int left = 0;
         int top = 0;
 
-        std::string id;
+        int getWidth(){
+            return width_;
+        }
+
+        int getHeight(){
+            return height_;
+        }
+
+        int getMarginTop(){
+            return marginTop_;
+        }
+
+        int getMarginLeft(){
+            return marginLeft_;
+        }
+
+        int getMarginRight(){
+            return marginRight_;
+        }
+
+        int getMarginBottom(){
+            return marginBottom_;
+        }
 
         template<typename T>
         T& setPosition(int l,int t){
@@ -97,6 +119,8 @@ namespace purple{
 
     protected:
         Container *parent_ = nullptr;
+
+        std::string id;
 
         glm::vec4 bgColor_;
         float bgConnerRadius_ = 0.0f;
