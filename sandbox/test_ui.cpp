@@ -134,13 +134,12 @@ void TestUi::testColumContainerWeight(){
 
     auto container = std::make_shared<ColumContainer>();
     container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
-        .setPadding<ColumContainer>(20,20,20,20)
-        .setSize<ColumContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT)
+        .setSize<ColumContainer>(LAYOUT_MATCH_PARENT, 600)
         .setBackgroundConnerRadius<ColumContainer>(0.0f);
 
     auto cube1 = std::make_shared<Widget>(100,100);
     cube1->setBackgroundColor<Widget>(ConverColorValue(Color::Purple))
-        .setMargin<Widget>(0,10,20,10)
+        .setMargin<Widget>(0,0,20,10)
         .setBackgroundConnerRadius<Widget>(8.0f);
     container->addChild(cube1);
 
@@ -154,16 +153,16 @@ void TestUi::testColumContainerWeight(){
     auto cube3 = std::make_shared<Widget>(LAYOUT_MATCH_PARENT,0);
     cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
         .setMargin<Widget>(0,10,0,10)
-        .setLayoutWeight<Widget>(2)
+        .setLayoutWeight<Widget>(1)
         .setLayoutGravity<Widget>(LayoutGravity::TopRight)
         .setBackgroundConnerRadius<Widget>(8.0f);
     container->addChild(cube3);
 
-    auto text1 = std::make_shared<Text>(L"Hello World",LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
+    auto text1 = std::make_shared<Text>(L"你好呀~",LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
     text1->setBackgroundColor<Text>(ConverColorValue(Color::Yellow))
         .setFontSize<Text>(64.0f)
         .setFontColor<Text>(ConverColorValue(Color::Black))
-        .setLayoutWeight<Text>(0)
+        .setLayoutWeight<Text>(1)
         .setTextGravity<Text>(TextGravity::Center)
         .setLayoutGravity<Text>(LayoutGravity::TopCenter);
     container->addChild(text1);

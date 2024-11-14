@@ -36,8 +36,8 @@ public:
     static int fps;
 private:
     GLFWwindow* window = nullptr;
-    int screenWidth = 800;
-    int screenHeight = 600;
+    int screenWidth = 1280;
+    int screenHeight = 720;
     
     std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
 

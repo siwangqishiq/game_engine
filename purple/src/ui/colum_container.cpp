@@ -11,7 +11,7 @@ namespace purple{
                         std::vector<PWidget> &hasWeightList){
         int costH = childWidget->getMarginTop() + childWidget->getMarginBottom();
 
-        childWidget->measure(limitWidth , std::numeric_limits<int>::max());
+        childWidget->measure(limitWidth , limitHeight);
         if(childWidget->getLayoutWeight() > 0){
             hasWeightList.emplace_back(childWidget);
         }else{
@@ -33,7 +33,8 @@ namespace purple{
             //测量子布局
             const int costH = measureChildWidgetSize(child,
                 parentRequestWidth - paddingLeft_ - paddingRight_ 
-                    - child->getMarginLeft()- child->getMarginRight(),0 , weightWeightList);
+                    - child->getMarginLeft()- child->getMarginRight()
+                    , parentRequestHeight, weightWeightList);
 
             totalCostHeight += costH;
             if(maxChildWidth < child->getWidth()){
@@ -43,8 +44,13 @@ namespace purple{
         }//end for each
 
         if(!weightWeightList.empty()){
-            
-            const int weightTotalHeight = parentRequestHeight - totalCostHeight;
+            int realHeight = parentRequestHeight;
+            if(requestHeight_ == LAYOUT_MATCH_PARENT || requestHeight_ == LAYOUT_WRAP_CONTENT){
+                realHeight = parentRequestHeight;
+            }else{
+                realHeight = requestHeight_ - paddingTop_ - paddingBottom_;
+            }
+            const int weightTotalHeight = realHeight - totalCostHeight;
             int totalWeight = 0;
             for(auto &p : weightWeightList){
                 totalWeight += p->getLayoutWeight();
@@ -70,9 +76,9 @@ namespace purple{
         }
 
         // self height
-        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
+        if(requestHeight_ == LAYOUT_MATCH_PARENT){
             height_ = parentRequestHeight;
-        }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
+        }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             height_ = paddingTop_ + childTotalHeight + paddingBottom_;
         }else{
             height_ = requestHeight_;
