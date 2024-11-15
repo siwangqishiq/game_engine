@@ -24,4 +24,6 @@ private:
     void testColumContainerWeight();
 
     void testColumContainerComplex();
+
+    void testRowContainer();
 };
