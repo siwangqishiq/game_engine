@@ -104,7 +104,7 @@ namespace purple{
         this->left = l;
         this->top = t;
 
-        Log::w("test" , "widget id: %s pos: %d , %d" , this->id.c_str(), this->left , this->top);
+        // Log::w("test" , "widget id: %s pos: %d , %d" , this->id.c_str(), this->left , this->top);
     }
 
     void Widget::render(){
