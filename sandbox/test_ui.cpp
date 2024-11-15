@@ -170,6 +170,62 @@ void TestUi::testColumContainerWeight(){
     ui->rootContainer_ = container;
 }
 
+void TestUi::testColumContainerComplex(){
+    using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>();
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setSize<ColumContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT)
+        .setBackgroundConnerRadius<ColumContainer>(0.0f);
+
+    auto cube1 = std::make_shared<Widget>(100,100);
+    cube1->setBackgroundColor<Widget>(ConverColorValue(Color::Purple))
+        .setMargin<Widget>(0,0,20,10)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube1);
+
+    auto childContainer = std::make_shared<ColumContainer>(500,200);
+    childContainer->setBackgroundColor<ColumContainer>(ConverColorValue(Color::Blue));
+    childContainer->setId<ColumContainer>("outter_view");
+    auto text1 = std::make_shared<Text>(L"Hello",
+        LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    text1->setFontSize<Text>(64.0f)
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setLayoutWeight<Text>(1)
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("inner_text");
+    childContainer->addChild(text1);
+
+    auto text2 = std::make_shared<Text>(L"Hello2",
+        LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    text2->setFontSize<Text>(64.0f)
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setLayoutWeight<Text>(1)
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("inner_text");
+    childContainer->addChild(text2);
+
+    container->addChild(childContainer);
+
+    auto cube2 = std::make_shared<Widget>(100,100);
+    cube2->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setMargin<Widget>(0,10,0,10)
+        .setLayoutGravity<Widget>(LayoutGravity::TopCenter)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube2);
+
+    auto cube3 = std::make_shared<Widget>(LAYOUT_MATCH_PARENT,0);
+    cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
+        .setMargin<Widget>(0,10,0,10)
+        .setLayoutWeight<Widget>(1)
+        .setLayoutGravity<Widget>(LayoutGravity::TopRight)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube3);
+
+    
+    ui->rootContainer_ = container;
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -180,7 +236,8 @@ void TestUi::onInit(){
     // testContainer();
     // testColoumContainer();
     // testColumContainerGravity();
-    testColumContainerWeight();
+    // testColumContainerWeight();
+    this->testColumContainerComplex();
 }
 
 void TestUi::onTick(){

@@ -43,6 +43,8 @@ namespace purple{
         int left = 0;
         int top = 0;
 
+        std::string id;
+
         int getWidth(){
             return width_;
         }
@@ -139,10 +141,15 @@ namespace purple{
             return static_cast<T&>(*this);
         }
 
+        template<typename T>
+        T& setId(std::string id){
+            this->id = id;
+            return static_cast<T&>(*this);
+        }
+
     protected:
         Container *parent_ = nullptr;
 
-        std::string id;
 
         glm::vec4 bgColor_;
         float bgConnerRadius_ = 0.0f;
