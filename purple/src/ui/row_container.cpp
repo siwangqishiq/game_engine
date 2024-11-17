@@ -52,7 +52,20 @@ namespace purple{
                 continue;
             }
             
-            widget->layout(x + widget->getMarginLeft() , y + widget->getMarginTop()); 
+            const LayoutGravity gravity = widget->getLayoutGravity();
+            if(gravity == LayoutGravity::TopCenter
+                || gravity == LayoutGravity::TopLeft
+                || gravity == LayoutGravity::TopRight){ // top
+                y = top - paddingTop_;
+            }else if(gravity == LayoutGravity::CenterLeft 
+                || gravity == LayoutGravity::Center 
+                || gravity == LayoutGravity::CenterRight){ // center
+                y = top - (this->height_ >> 1) +(widget->getHeight() >> 1);
+            }else{ //bottom
+                y = top - this->height_ + widget->getHeight();
+            }//end if
+            
+            widget->layout(x + widget->getMarginLeft() , y - widget->getMarginTop()); 
             x += widget->getMarginLeft() + widget->getMarginRight() + widget->getWidth();
         }//end for each
     }

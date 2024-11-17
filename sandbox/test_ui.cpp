@@ -264,6 +264,46 @@ void TestUi::testRowContainer(){
     ui->rootContainer_ = container;
 }
 
+void TestUi::testRowContainerGravity(){
+    using namespace purple;
+
+    auto container = std::make_shared<RowContainer>();
+    container->setBackgroundColor<RowContainer>(ConverColorValue(Color::White))
+        .setSize<RowContainer>(LAYOUT_MATCH_PARENT, LAYOUT_WRAP_CONTENT)
+        .setBackgroundConnerRadius<RowContainer>(30.0f);
+
+    auto cube1 = std::make_shared<Widget>(100,200);
+    cube1->setBackgroundColor<Widget>(ConverColorValue(Color::Purple))
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube1);
+
+    auto cube2 = std::make_shared<Widget>(100,100);
+    cube2->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setMargin<Widget>(20,0,0,0)
+        .setLayoutGravity<Widget>(LayoutGravity::CenterRight)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube2);
+
+    auto text1 = std::make_shared<Text>(L"Hello你好",
+        LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    text1->setFontSize<Text>(64.0f)
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setMargin<Text>(20,0,0,0)
+        .setBackgroundColor<Text>(ConverColorValue(Color::SkyBlue))
+        .setTextGravity<Text>(TextGravity::BottomRight)
+        .setLayoutGravity<Text>(LayoutGravity::BottomRight);
+    container->addChild(text1);
+
+    auto cube3 = std::make_shared<Widget>(200,30);
+    cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
+        .setMargin<Widget>(80,10,0,10)
+        .setLayoutWeight<Widget>(1)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube3);
+
+    ui->rootContainer_ = container;
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -276,7 +316,8 @@ void TestUi::onInit(){
     // testColumContainerGravity();
     // testColumContainerWeight();
     // testColumContainerComplex();
-    testRowContainer();
+    // testRowContainer();
+    testRowContainerGravity();
 }
 
 void TestUi::onTick(){

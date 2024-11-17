@@ -26,4 +26,5 @@ private:
     void testColumContainerComplex();
 
     void testRowContainer();
+    void testRowContainerGravity();
 };
