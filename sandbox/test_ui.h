@@ -18,13 +18,12 @@ private:
     void testContainer();
 
     void testColoumContainer();
-
     void testColumContainerGravity();
-
     void testColumContainerWeight();
-
     void testColumContainerComplex();
 
     void testRowContainer();
     void testRowContainerGravity();
+    void testRowContainerWeight();
+    void testRowContainerCompose();
 };

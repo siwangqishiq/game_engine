@@ -8,12 +8,21 @@ namespace purple{
         int maxWidgetHeight = 0;
         int totalWidgetWidth = 0;
         const auto childWidgets = getChildrenWidgets();
+        std::vector<PWidget> hasWeightWidgetList;
+
+        int costWidthSize = paddingLeft_ + paddingRight_;
         for(auto widget: childWidgets){
             if(widget == nullptr){
                 continue;
             }
-            
+
             widget->measure(parentRequestWidth , parentRequestHeight);
+            if(widget->getLayoutWeight() > 0){
+                hasWeightWidgetList.emplace_back(widget);
+                costWidthSize += widget->getMarginLeft() + widget->getMarginRight();
+            }else{
+                costWidthSize += widget->getMarginLeft() + widget->getWidth() + widget->getMarginRight();
+            }
 
             totalWidgetWidth += widget->getMarginLeft() + widget->getMarginRight() + widget->getWidth();
             if(maxWidgetHeight < widget->getHeight()){
@@ -26,10 +35,29 @@ namespace purple{
         if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
             this->width_ = parentRequestWidth;
         }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
+            if(hasWeightWidgetList.empty()){
+                this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
+            }else{
+                this->width_ = parentRequestWidth;
+            }
         }else {
             this->width_ = this->requestWidth_;
         }//endif
+
+        if(!hasWeightWidgetList.empty()){ //存在weight属性 重置关联widget width
+            int totalWeightValue = 0;
+            for(auto &widget: hasWeightWidgetList){
+                totalWeightValue += widget->getLayoutWeight();
+            }//end for each
+
+            const int cubeSize =  static_cast<int>(
+                static_cast<float>(this->width_ - costWidthSize) / static_cast<float>(totalWeightValue)
+            );
+
+            for(auto &widget: hasWeightWidgetList){
+                widget->setWidth(cubeSize * widget->getLayoutWeight());
+            }
+        }//end if
 
         //set height
         if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
@@ -39,6 +67,8 @@ namespace purple{
         }else {
             this->height_ = this->requestHeight_;
         }//end if
+
+
     }
 
     void RowContainer::layout(int l,int t) {
