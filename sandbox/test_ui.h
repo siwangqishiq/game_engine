@@ -26,4 +26,6 @@ private:
     void testRowContainerGravity();
     void testRowContainerWeight();
     void testRowContainerCompose();
+
+    void testStackContainer();
 };

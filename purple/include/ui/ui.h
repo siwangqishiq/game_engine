@@ -11,6 +11,7 @@
 namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
     const int LAYOUT_WRAP_CONTENT = -2;
+    const int LAYOUT_UNSET = -3;
 
     class Widget;
     class Container;

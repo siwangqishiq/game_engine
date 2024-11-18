@@ -3,6 +3,7 @@
 #include "ui/text.h"
 #include "ui/colum_container.h"
 #include "ui/row_container.h"
+#include "ui/stack_container.h"
 
 void TestUi::testContainer(){
     using namespace purple;
@@ -375,6 +376,72 @@ void TestUi::testRowContainerCompose(){
     ui->rootContainer_ = container;
 }
 
+void TestUi::testStackContainer(){
+    using namespace purple;
+
+    auto container = std::make_shared<StackContainer>();
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::White))
+        .setPadding<StackContainer>(10,10,10,10);
+
+    auto cube1 = std::make_shared<Widget>(200,200);
+    cube1->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setLayoutGravity<Widget>(LayoutGravity::TopLeft)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube1);
+
+    auto cube2 = std::make_shared<Widget>(200,200);
+    cube2->setBackgroundColor<Widget>(ConverColorValue(Color::Green))
+        .setLayoutGravity<Widget>(LayoutGravity::TopCenter)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube2);
+
+    auto cube3 = std::make_shared<Widget>(200,200);
+    cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
+        .setLayoutGravity<Widget>(LayoutGravity::TopRight)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube3);
+
+
+    auto cube4 = std::make_shared<Widget>(200,200);
+    cube4->setBackgroundColor<Widget>(ConverColorValue(Color::Green))
+        .setLayoutGravity<Widget>(LayoutGravity::CenterLeft)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube4);
+
+    auto cube5 = std::make_shared<Widget>(200,200);
+    cube5->setBackgroundColor<Widget>(ConverColorValue(Color::Blue))
+        .setLayoutGravity<Widget>(LayoutGravity::Center)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube5);
+
+    auto cube6 = std::make_shared<Widget>(200,200);
+    cube6->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setLayoutGravity<Widget>(LayoutGravity::CenterRight)
+        .setBackgroundConnerRadius<Widget>(8.0f);
+    container->addChild(cube6);
+
+
+    auto cube7 = std::make_shared<Widget>(200,200);
+    cube7->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
+        .setLayoutGravity<Widget>(LayoutGravity::BottomLeft)
+        .setBackgroundConnerRadius<Widget>(0.0f);
+    container->addChild(cube7);
+
+    auto cube8 = std::make_shared<Widget>(200,200);
+    cube8->setBackgroundColor<Widget>(ConverColorValue(Color::Blue))
+        .setLayoutGravity<Widget>(LayoutGravity::BottomCenter)
+        .setBackgroundConnerRadius<Widget>(0.0f);
+    container->addChild(cube8);
+
+    auto cube9 = std::make_shared<Widget>(200,200);
+    cube9->setBackgroundColor<Widget>(ConverColorValue(Color::Black))
+        .setLayoutGravity<Widget>(LayoutGravity::BottomRight)
+        .setBackgroundConnerRadius<Widget>(0.0f);
+    container->addChild(cube9);
+
+    ui->rootContainer_ = container;
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -390,7 +457,8 @@ void TestUi::onInit(){
     // testRowContainer();
     // testRowContainerGravity();
     // testRowContainerWeight();
-    testRowContainerCompose();
+    // testRowContainerCompose();
+    testStackContainer();
 }
 
 void TestUi::onTick(){
