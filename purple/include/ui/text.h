@@ -12,8 +12,8 @@ namespace purple{
 
         Text(std::wstring content,int w,int h):Widget(w, h),content_(content){}
 
-        virtual void measure(int parentRequestWidth , int parentRequestHeight);
-        virtual void render();
+        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
+        virtual void onRender() override;
 
         virtual ~Text();
 

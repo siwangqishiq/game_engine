@@ -13,9 +13,9 @@ namespace purple{
         StackContainer():Container(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT){
         }
 
-        virtual void measure(int parentRequestWidth , int parentRequestHeight);
+        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
 
-        virtual void layout(int l,int t);
+        virtual void onLayout(int l,int t) override;
         
         virtual ~StackContainer();
         

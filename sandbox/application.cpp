@@ -11,6 +11,7 @@
 #endif
 
 int Application::fps = 0;
+bool isFullScreen = false;
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -33,7 +34,9 @@ void Application::init(){
     // glfwWindowHint(GLFW_DECORATED , GLFW_FALSE); 
     // glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER , GLFW_TRUE);
 
-    window = glfwCreateWindow(screenWidth, screenHeight, "run", nullptr, nullptr);
+    GLFWmonitor *mointor = isFullScreen?glfwGetPrimaryMonitor():nullptr;
+
+    window = glfwCreateWindow(screenWidth, screenHeight, "run", mointor, nullptr);
     
     glfwSetCharCallback(window , [](GLFWwindow* window_, unsigned int codepoint){
         // std::cout << "ime:" << codepoint << std::endl;

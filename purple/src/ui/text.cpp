@@ -4,7 +4,7 @@
 
 namespace purple{
     
-    void Text::measure(int parentRequestWidth , int parentRequestHeight){
+    void Text::onMeasure(int parentRequestWidth , int parentRequestHeight){
         int preCalaulateHeight = -1;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
             width_ = parentRequestWidth;
@@ -30,8 +30,8 @@ namespace purple{
         // Log::i("ui","Text measue size %d , %d" , width_ , height_);
     }
         
-    void Text::render(){
-        Widget::render();//render background
+    void Text::onRender(){
+        Widget::onRender();//render background
         
         //render text
         auto render = purple::Engine::getRenderEngine();
@@ -52,6 +52,5 @@ namespace purple{
     }
 
     Text::~Text(){
-        
     }
 }

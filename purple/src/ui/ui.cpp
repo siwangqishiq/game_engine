@@ -53,26 +53,10 @@ namespace purple{
     //===============================================================================
     //================================================================================
 
-    // Widget::Widget(int w, int h){
-    //     this->width = w;
-    //     this->height = h;
-    //     Log::i("widget","widget construct");
-    // }
-
     void Widget::setParentWidget(Container *parent){
         this->parent_ = parent;
     }
 
-    // Widget& Widget::setSize(int requestW,int requestH){
-    //     this->requestWidth_ = requestW;
-    //     this->requestHeight_ = requestH;
-    //     return *this;
-    // }
-
-    // Widget& Widget::setBackgroundColor(glm::vec4 color){
-    //     this->bgColor_ = color;
-    //     return *this;
-    // }
 
     int Widget::contentWidth(){
         return 0;
@@ -82,7 +66,7 @@ namespace purple{
         return 0;
     }
 
-    void Widget::measure(int parentRequestWidth , int parentRequestHeight){
+    void Widget::onMeasure(int parentRequestWidth , int parentRequestHeight){
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
             width_ = parentRequestWidth;
         }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
@@ -100,16 +84,15 @@ namespace purple{
         }
     }
 
-    void Widget::layout(int l,int t){
+    void Widget::onLayout(int l,int t){
         this->left = l;
         this->top = t;
-
         // Log::w("test" , "widget id: %s pos: %d , %d" , this->id.c_str(), this->left , this->top);
     }
 
-    void Widget::render(){
+    void Widget::onRender(){
         // Log::e("render" , "render %d %d %d %d",this->left , this->top , this->width , this->height);
-
+        
         Rect bgRect(this->left , this->top , this->width_ , this->height_);
         Paint bgPaint;
         bgPaint.color = this->bgColor_;
@@ -123,11 +106,33 @@ namespace purple{
     }
 
     Widget::~Widget(){
-        Log::i("widget","widget desstory");
+        // Log::i("widget","widget desstory");
     }
 
     Container::~Container(){
-        Log::i("widget","Container desstory");
+        // Log::i("widget","Container desstory");
+    }
+
+    void Widget::measure(int parentRequestWidth , int parentRequestHeight){
+        if(visible_ == Gone){
+            return;
+        }
+
+        onMeasure(parentRequestWidth, parentRequestHeight);
+    }
+    void Widget::layout(int l , int t){
+        if(visible_ == Gone){
+            return;
+        }
+
+        onLayout(l,t);
+    }
+
+    void Widget::render(){
+        if(visible_ != Normal){
+            return;
+        }
+        onRender();
     }
 
     void Container::addChild(PWidget widget){
@@ -140,7 +145,7 @@ namespace purple{
         this->children_.erase(std::find(this->children_.begin(),this->children_.end(),widget));
     }
 
-    void Container::measure(int parentRequestWidth , int parentRequestHeight){
+    void Container::onMeasure(int parentRequestWidth , int parentRequestHeight){
         //set self width and height
         this->Widget::measure(parentRequestWidth, parentRequestHeight);
         
@@ -154,13 +159,17 @@ namespace purple{
         }//end for each
     }
 
-    void Container::layout(int l,int t){
+    void Container::onLayout(int l,int t){
         // Log::i("widget" , "Container start layout");
-        this->Widget::layout(l,t);
+        this->Widget::onLayout(l,t);
         //Container绝对布局 不需要设置子Widget位置
     }
 
-    void Container::render(){
+    void Container::onRender(){
+        if(visible_ == Gone || visible_ == InVisible){
+            return;
+        }
+
         this->renderContainerSelf();
 
         //set child measure
@@ -175,7 +184,7 @@ namespace purple{
 
     void Container::renderContainerSelf(){
         // Log::e("widget" , "renderContainerSelf");
-        this->Widget::render();
+        this->Widget::onRender();
     }
 
     std::vector<PWidget>& Container::getChildrenWidgets(){

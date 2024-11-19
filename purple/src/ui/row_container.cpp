@@ -3,7 +3,7 @@
 
 namespace purple{
 
-    void RowContainer::measure(int parentRequestWidth , int parentRequestHeight) {
+    void RowContainer::onMeasure(int parentRequestWidth , int parentRequestHeight) {
         int maxWidgetHeight = 0;
         int totalWidgetWidth = 0;
         const auto childWidgets = getChildrenWidgets();
@@ -23,10 +23,10 @@ namespace purple{
 
         int costWidthSize = paddingLeft_ + paddingRight_;
         for(auto widget: childWidgets){
-            if(widget == nullptr){
+            if(widget == nullptr || widget->getVisible() == Gone){
                 continue;
             }
-            
+
             widget->measure(width_ , height_);
             if(widget->getLayoutWeight() > 0){
                 hasWeightWidgetList.emplace_back(widget);
@@ -74,14 +74,14 @@ namespace purple{
         }//end if
     }
 
-    void RowContainer::layout(int l,int t) {
-        this->Container::layout(l , t);
+    void RowContainer::onLayout(int l,int t) {
+        this->Container::onLayout(l , t);
 
         int x = paddingLeft_ + left;
         int y = top - paddingTop_;
 
         for(auto widget: getChildrenWidgets()){
-            if(widget == nullptr){
+            if(widget == nullptr || widget->getVisible() == Gone){
                 continue;
             }
             

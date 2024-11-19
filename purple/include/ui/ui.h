@@ -19,6 +19,9 @@ namespace purple{
     typedef std::shared_ptr<Widget> PWidget;
     typedef std::shared_ptr<Container> PContainer;
 
+    enum VisibleState{
+        Normal = 0,InVisible = -1,Gone = -2
+    };
 
     class Widget{
     public:
@@ -32,9 +35,13 @@ namespace purple{
 
         virtual ~Widget();
 
-        virtual void measure(int parentRequestWidth , int parentRequestHeight);
-        virtual void layout(int l,int t);
-        virtual void render();
+        void measure(int parentRequestWidth , int parentRequestHeight);
+        void layout(int l , int t);
+        void render();
+
+        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight);
+        virtual void onLayout(int l,int t);
+        virtual void onRender();
 
         virtual int contentWidth();
         virtual int contentHeight();
@@ -45,6 +52,16 @@ namespace purple{
         int top = 0;
 
         std::string id;
+
+        VisibleState getVisible(){
+            return this->visible_;
+        }
+
+        void setVisible(VisibleState v){
+            if(visible_ != v){
+                visible_ = v;
+            }
+        }
 
         int getWidth(){
             return width_;
@@ -174,6 +191,8 @@ namespace purple{
         LayoutGravity layoutGravity_ = LayoutGravity::TopLeft;
         
         int layoutWeight_ = 0;
+
+        VisibleState visible_ = Normal;
     };//end class
 
     class Container:public Widget{
@@ -189,9 +208,9 @@ namespace purple{
         virtual void addChild(PWidget widget);
         virtual void removeChild(PWidget widget);
 
-        virtual void measure(int parentRequestWidth , int parentRequestHeight);
-        virtual void layout(int l,int t);
-        virtual void render();
+        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
+        virtual void onLayout(int l,int t) override;
+        virtual void onRender() override;
 
         void renderContainerSelf();
 

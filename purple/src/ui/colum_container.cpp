@@ -21,7 +21,7 @@ namespace purple{
         return costH;
     }
 
-    void ColumContainer::measure(int parentRequestWidth , int parentRequestHeight){
+    void ColumContainer::onMeasure(int parentRequestWidth , int parentRequestHeight){
         // Log::i("ui","ColumContainer measure...");
 
         //计算自身大小
@@ -38,6 +38,10 @@ namespace purple{
 
         int totalCostHeight = 0;
         for(PWidget &child: getChildrenWidgets()){
+            if(child == nullptr || child->getVisible() == Gone){
+                continue;
+            }
+
             //测量子布局
             const int costH = measureChildWidgetSize(child,
                 parentRequestWidth - paddingLeft_ - paddingRight_ 
@@ -86,8 +90,8 @@ namespace purple{
         }
     }
 
-    void ColumContainer::layout(int l,int t){
-        this->Widget::layout(l, t);
+    void ColumContainer::onLayout(int l,int t){
+        this->Widget::onLayout(l, t);
 
         int x = left;
         int y = top - paddingTop_;
@@ -95,7 +99,7 @@ namespace purple{
         const int childLen = getChildrenWidgets().size();
         for(int i = 0; i < childLen; i++){
             PWidget child = getChildrenWidgets()[i];
-            if(child == nullptr){
+            if(child == nullptr || child->getVisible() == Gone){
                 continue;
             }
 

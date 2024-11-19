@@ -474,6 +474,7 @@ void TestUi::testContainerCompose(){
         .setId<Text>("tab1")
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab1);
+    // footContainer->setVisible(VisibleState::Gone);
 
     auto tab2 = std::make_shared<Text>(L"Tab2",0,LAYOUT_MATCH_PARENT);
     tab2->setFontColor<Text>(ConverColorValue(Color::Black))
@@ -490,6 +491,15 @@ void TestUi::testContainerCompose(){
         .setId<Text>("tab3")
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab3);
+
+    auto tab4 = std::make_shared<Text>(L"Tab4",0,LAYOUT_MATCH_PARENT);
+    tab4->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(ConverColorValue(Color::White))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab4")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab4);
+
 
     auto headText = std::make_shared<Text>(L"我是标题",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
     headText->setMargin<Text>(20,0,0,0)

@@ -15,9 +15,9 @@ namespace purple{
 
         virtual ~ColumContainer();
 
-        virtual void measure(int parentRequestWidth , int parentRequestHeight) override;
+        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
 
-        virtual void layout(int l,int t) override;
+        virtual void onLayout(int l,int t) override;
 
         virtual int measureChildWidgetSize(PWidget childWidget,
                         int limitWidth, 

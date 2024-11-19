@@ -5,11 +5,11 @@ namespace purple{
         Log::i("ui","StackContainer descontructor");
     }
 
-    void StackContainer::measure(int parentRequestWidth , int parentRequestHeight){
+    void StackContainer::onMeasure(int parentRequestWidth , int parentRequestHeight){
         int maxChildWidgetWidth = 0;
         int maxChildWidgetHeight = 0;
         for(PWidget widget: getChildrenWidgets()){
-            if(widget == nullptr){
+            if(widget == nullptr || widget->getVisible() == Gone){
                 continue;
             }
             widget->measure(parentRequestWidth , parentRequestHeight);
@@ -50,11 +50,11 @@ namespace purple{
         }
     }
         
-    void StackContainer::layout(int l,int t){
-        this->Container::layout(l , t);
+    void StackContainer::onLayout(int l,int t){
+        this->Container::onLayout(l , t);
 
         for(PWidget widget: getChildrenWidgets()){
-            if(widget == nullptr){
+            if(widget == nullptr || widget->getVisible() == Gone){
                 continue;
             }
 
