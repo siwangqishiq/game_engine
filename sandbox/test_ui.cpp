@@ -243,21 +243,21 @@ void TestUi::testRowContainer(){
 
     auto cube2 = std::make_shared<Widget>(100,100);
     cube2->setBackgroundColor<Widget>(ConverColorValue(Color::Red))
-        .setMargin<Widget>(0,10,0,10)
+        .setMargin<Widget>(0,0,0,10)
         .setBackgroundConnerRadius<Widget>(8.0f);
     container->addChild(cube2);
 
-    auto text1 = std::make_shared<Text>(L"Hello你好",
-        LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    auto text1 = std::make_shared<Text>(L"Hello你好", LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
     text1->setFontSize<Text>(64.0f)
         .setFontColor<Text>(ConverColorValue(Color::Black))
         .setLayoutWeight<Text>(1)
-        .setTextGravity<Text>(TextGravity::Center);
+        .setBackgroundColor<Text>(glm::vec4(1.0f,0.0f,0.0f,0.4f))
+        .setTextGravity<Text>(TextGravity::CenterLeft);
     container->addChild(text1);
 
     auto cube3 = std::make_shared<Widget>(200,300);
     cube3->setBackgroundColor<Widget>(ConverColorValue(Color::SkyBlue))
-        .setMargin<Widget>(80,10,0,10)
+        .setMargin<Widget>(0,0,80,0)
         .setLayoutWeight<Widget>(1)
         .setBackgroundConnerRadius<Widget>(8.0f);
     container->addChild(cube3);
@@ -442,6 +442,64 @@ void TestUi::testStackContainer(){
     ui->rootContainer_ = container;
 }
 
+void TestUi::testContainerCompose(){
+    using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>();
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setPadding<ColumContainer>(0,0,0,0);
+    
+    auto headContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    headContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
+    container->addChild(headContainer);
+
+    auto contentContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,0);
+    contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
+        .setLayoutWeight<StackContainer>(1);
+    container->addChild(contentContainer);
+    auto contentText = std::make_shared<Text>(L"我是内容",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    contentText->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontSize<Text>(64.0f)
+        .setLayoutGravity<Text>(LayoutGravity::Center);
+    contentContainer->addChild(contentText);
+
+    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,150);
+    footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
+    container->addChild(footContainer);
+
+    auto tab1 = std::make_shared<Text>(L"Tab1",0,LAYOUT_MATCH_PARENT);
+    tab1->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(1.0f , 0.0f ,0.0f , 1.0f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab1")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab1);
+
+    auto tab2 = std::make_shared<Text>(L"Tab2",0,LAYOUT_MATCH_PARENT);
+    tab2->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 1.0f ,0.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab2")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab2);
+
+    auto tab3 = std::make_shared<Text>(L"Tab3",0,LAYOUT_MATCH_PARENT);
+    tab3->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 0.0f ,1.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab3")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab3);
+
+    auto headText = std::make_shared<Text>(L"我是标题",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    headText->setMargin<Text>(20,0,0,0)
+        .setTextGravity<Text>(TextGravity::CenterLeft)
+        .setFontColor<Text>(ConverColorValue(Color::Black));
+    headContainer->addChild(headText);
+
+    ui->rootContainer_ = container;
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -458,7 +516,8 @@ void TestUi::onInit(){
     // testRowContainerGravity();
     // testRowContainerWeight();
     // testRowContainerCompose();
-    testStackContainer();
+    // testStackContainer();
+    testContainerCompose();
 }
 
 void TestUi::onTick(){

@@ -28,4 +28,6 @@ private:
     void testRowContainerCompose();
 
     void testStackContainer();
+
+    void testContainerCompose();
 };

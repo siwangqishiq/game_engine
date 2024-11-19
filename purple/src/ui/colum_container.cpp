@@ -1,6 +1,7 @@
 
 #include "ui/colum_container.h"
 #include <limits>
+#include <algorithm>
 
 
 namespace purple{
@@ -22,6 +23,13 @@ namespace purple{
 
     void ColumContainer::measure(int parentRequestWidth , int parentRequestHeight){
         // Log::i("ui","ColumContainer measure...");
+
+        //计算自身大小
+        //self width
+        width_ = requestWidth_;
+        if(requestWidth_ == LAYOUT_MATCH_PARENT){
+            width_ = parentRequestWidth;
+        }
 
         int maxChildWidth = 0;
         int childTotalHeight = 0;
@@ -64,15 +72,8 @@ namespace purple{
             }//end for each
         }
 
-
-        //计算自身大小
-        //self width
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
-        }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = paddingLeft_ + maxChildWidth + paddingRight_;
-        }else{
-            width_ = requestWidth_;
+        if(requestWidth_ == LAYOUT_WRAP_CONTENT){
+            width_ = std::min(paddingLeft_ + maxChildWidth + paddingRight_ , parentRequestWidth);
         }
 
         // self height

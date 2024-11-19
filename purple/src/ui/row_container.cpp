@@ -1,6 +1,5 @@
-
-
 #include "ui/row_container.h"
+#include <algorithm>
 
 namespace purple{
 
@@ -9,14 +8,26 @@ namespace purple{
         int totalWidgetWidth = 0;
         const auto childWidgets = getChildrenWidgets();
         std::vector<PWidget> hasWeightWidgetList;
+        
+        this->height_ = this->requestHeight_;
+        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
+            this->height_ = parentRequestHeight;
+        }
+
+        //set width
+        if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
+            width_ = parentRequestWidth;
+        }else {
+            width_ = requestWidth_;
+        }//endif
 
         int costWidthSize = paddingLeft_ + paddingRight_;
         for(auto widget: childWidgets){
             if(widget == nullptr){
                 continue;
             }
-
-            widget->measure(parentRequestWidth , parentRequestHeight);
+            
+            widget->measure(width_ , height_);
             if(widget->getLayoutWeight() > 0){
                 hasWeightWidgetList.emplace_back(widget);
                 costWidthSize += widget->getMarginLeft() + widget->getMarginRight();
@@ -30,20 +41,6 @@ namespace purple{
             }
         }//end for each
 
-
-        //set width
-        if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
-            this->width_ = parentRequestWidth;
-        }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            if(hasWeightWidgetList.empty()){
-                this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
-            }else{
-                this->width_ = parentRequestWidth;
-            }
-        }else {
-            this->width_ = this->requestWidth_;
-        }//endif
-
         if(!hasWeightWidgetList.empty()){ //存在weight属性 重置关联widget width
             int totalWeightValue = 0;
             for(auto &widget: hasWeightWidgetList){
@@ -56,19 +53,25 @@ namespace purple{
 
             for(auto &widget: hasWeightWidgetList){
                 widget->setWidth(cubeSize * widget->getLayoutWeight());
+                // Log::i("ui","widget %s set width = %d" , widget->id.c_str(), widget->getWidth());
+            }
+        }//end if
+
+        
+        //set width
+        if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
+            if(hasWeightWidgetList.empty()){
+                this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
+            }else{
+                this->width_ = parentRequestWidth;
             }
         }//end if
 
         //set height
-        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
-            this->height_ = parentRequestHeight;
-        }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
-            this->height_ = maxWidgetHeight + paddingTop_ + paddingBottom_;
-        }else {
-            this->height_ = this->requestHeight_;
+        if(requestHeight_ == LAYOUT_WRAP_CONTENT){
+            height_ = std::min(maxWidgetHeight + paddingTop_ + paddingBottom_ , 
+                                parentRequestHeight);
         }//end if
-
-
     }
 
     void RowContainer::layout(int l,int t) {
@@ -90,7 +93,7 @@ namespace purple{
             }else if(gravity == LayoutGravity::CenterLeft 
                 || gravity == LayoutGravity::Center 
                 || gravity == LayoutGravity::CenterRight){ // center
-                y = top - (this->height_ >> 1) +(widget->getHeight() >> 1);
+                y = top - (this->height_ >> 1) + (widget->getHeight() >> 1);
             }else{ //bottom
                 y = top - this->height_ + widget->getHeight();
             }//end if

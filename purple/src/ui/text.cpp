@@ -26,7 +26,6 @@ namespace purple{
                 preCalculateTextRectSize(outRect, parentRequestWidth);
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
-            height_ = std::min(height_,parentRequestHeight);
         }
         // Log::i("ui","Text measue size %d , %d" , width_ , height_);
     }
