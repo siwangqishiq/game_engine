@@ -4,6 +4,7 @@
 #include "test1_app.h"
 #include "test_render_text.h"
 #include "test_ui.h"
+#include "test_ui_img.h"
 
 #ifndef __ANDROID__
 #define GLFW_INCLUDE_NONE
@@ -11,7 +12,7 @@
 #endif
 
 int Application::fps = 0;
-bool isFullScreen = false;
+bool isFullScreen = true;
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -76,6 +77,8 @@ void Application::init(){
     #endif
 
     purple::Engine::init(screenWidth , screenHeight);
+    showExtensionInfo();
+
     onCreate();
     for(auto &app : appInstanceList){
         app->onInit();
@@ -92,7 +95,8 @@ void Application::onCreate(){
     // appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
 
-    appInstanceList.push_back(std::make_shared<TestUi>());
+    // appInstanceList.push_back(std::make_shared<TestUi>());
+    appInstanceList.push_back(std::make_shared<TestImgUi>());
 }
 
 void Application::tick(){
@@ -107,6 +111,18 @@ void Application::tick(){
     
     fps++;
     showDebugInfo();
+}
+
+void Application::showExtensionInfo(){
+    purple::Log::i(TAG , "===== ExtensionInfo BEGIN====================");
+    GLint extensionCount = 0;
+    glGetIntegerv(GL_NUM_EXTENSIONS , &extensionCount);
+    purple::Log::i(TAG , "ExtensionCount: %d" , extensionCount);
+    for(int i = 0 ; i< extensionCount ;i++){
+        std::string extensionName = reinterpret_cast<const char*>(glGetStringi(GL_EXTENSIONS, i));
+        purple::Log::i(TAG , "Extension: \t %s" , extensionName.c_str());
+    }//end for i
+    purple::Log::i(TAG , "===== ExtensionInfo End =====================");
 }
 
 void Application::showDebugInfo(){

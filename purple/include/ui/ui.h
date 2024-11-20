@@ -232,6 +232,8 @@ namespace purple{
 
         void startRenderUI();
 
+        void setRootContainer(PContainer container);
+
         PContainer rootContainer_ = nullptr;
 
         ~UiRoot();

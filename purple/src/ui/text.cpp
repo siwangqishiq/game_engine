@@ -42,7 +42,7 @@ namespace purple{
         int textHeight = this->height_ - this->paddingTop_ - this->paddingBottom_;
         Rect textRect(textLeft , textTop , textWidth , textHeight);
         render->renderTextWithRect(this->content_,textRect,this->textPaint_ , nullptr);
-
+        
         // Log::i("ui","Text render size %d , %d pos: %d, %d" , width_ , height_ , left , top);
     }
 

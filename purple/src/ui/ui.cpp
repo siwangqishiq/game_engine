@@ -17,6 +17,10 @@ namespace purple{
         Log::i("ui", "UiRoot destoryed");
     }
 
+    void UiRoot::setRootContainer(PContainer container){
+        this->rootContainer_ = container;
+    }
+
     void UiRoot::measure(){
         // Log::i("widget" , "UiRoot start measure");
         if(this->rootContainer_ == nullptr){

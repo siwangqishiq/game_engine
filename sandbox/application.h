@@ -22,6 +22,9 @@ public:
 
     //show debug info
     void showDebugInfo();
+
+    //扩展信息显示
+    void showExtensionInfo();
     
     //run this app
     int execute(){

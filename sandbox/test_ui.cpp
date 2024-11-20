@@ -1,9 +1,5 @@
 #include "test_ui.h"
-#include "ui/color.h"
-#include "ui/text.h"
-#include "ui/colum_container.h"
-#include "ui/row_container.h"
-#include "ui/stack_container.h"
+#include "purple_ui.h"
 
 void TestUi::testContainer(){
     using namespace purple;
