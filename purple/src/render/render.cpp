@@ -57,7 +57,7 @@ namespace purple{
     void RenderEngine::glContextInit(){
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
-        glDepthRange(-1.0f, 1.0f);
+        glDepthRangef(-1.0f, 1.0f);
         glDepthFunc(GL_GREATER);
         glEnable(GL_DEPTH_TEST);
     }
