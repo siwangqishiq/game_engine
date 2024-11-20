@@ -12,7 +12,7 @@
 #endif
 
 int Application::fps = 0;
-bool isFullScreen = true;
+bool isFullScreen = false;
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -101,9 +101,6 @@ void Application::onCreate(){
 
 void Application::tick(){
     purple::Engine::tick();
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for(auto &app : appInstanceList){
         app->onTick();

@@ -48,6 +48,8 @@ namespace purple{
 
         void init();
 
+        void glContextInit();
+
         void clearRenderCommands();
 
         void submitRenderCommand(std::shared_ptr<RenderCommand> cmd);

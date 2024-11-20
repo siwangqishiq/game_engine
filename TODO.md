@@ -20,8 +20,8 @@
 
 - 显示组件
     - Text 文本显示 
-    - Button 按钮 点击事件
     - Image 图片 加载本地Asset图片
+    - Button 按钮 点击事件
 
 - 布局
     - ColumnContainer 垂直布局

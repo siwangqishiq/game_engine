@@ -64,7 +64,7 @@ namespace purple{
     }
 
     void ShapeBatch::flush(){
-        //do real opengul render
+        //do real opengl render
         executeGlCommands();
     }
 
@@ -72,9 +72,6 @@ namespace purple{
         if(index_ <= 0){
             return;
         }
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
         glBindBuffer(GL_ARRAY_BUFFER , vbo_);
         glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
@@ -363,9 +360,6 @@ namespace purple{
             return;
         }
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_DEPTH_TEST);
         
         glBindBuffer(GL_ARRAY_BUFFER , vbo_);
         glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,

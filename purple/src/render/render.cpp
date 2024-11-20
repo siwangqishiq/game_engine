@@ -26,23 +26,6 @@
 namespace purple{
     std::unordered_map<wchar_t , wchar_t> SymbolMap;
 
-    // void RenderEngine::render(){
-    //     // glClearColor(0.0f , 1.0f , 0.0f , 1.0f);
-    //     // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //     // glEnable(GL_DEPTH_TEST);
-        
-    //     //gl render
-    //     for(auto &cmd : renderCommandList_){
-    //         cmd->runCommands();
-    //         cmd->used = false;
-    //     }
-        
-    //     //clear cmd list
-    //     clearRenderCommands();
-    //     vramManager_->onPostRender();
-    // }
-
     void RenderEngine::free(){
         if(shapeBatch_ != nullptr){
             shapeBatch_->dispose();
@@ -71,8 +54,17 @@ namespace purple{
         glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    void RenderEngine::glContextInit(){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+        glDepthRange(-1.0f, 1.0f);
+        glDepthFunc(GL_GREATER);
+        glEnable(GL_DEPTH_TEST);
+    }
+
     void RenderEngine::init(){
         Log::i(TAG , "render engine init start");
+        glContextInit();
 
         vramManager_ = std::make_shared<VRamManager>();
         // vramManager_ = VRamManager::getInstance();
@@ -392,13 +384,13 @@ namespace purple{
     }
 
     float RenderEngine::getAndChangeDepthValue(){
-        float result = depthValue;
-        depthValue -= 0.000001f;
+        const float result = depthValue;
+        depthValue += 0.000001f;
         return result;    
     }
 
     void RenderEngine::resetDepth(){
-        depthValue = 1.0f;
+        depthValue = 0.0f;
     }
 
     //绘制文字

@@ -51,6 +51,11 @@ namespace purple{
     }
 
     void Engine::tick(){
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearDepth(0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        renderEngine_->resetDepth();
+
         if(timer_ != nullptr){
             timer_->trick();
         }
