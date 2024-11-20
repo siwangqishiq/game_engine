@@ -50,6 +50,20 @@ void TestImgUi::testImgWrapContent(){
     image->setLayoutGravity<Img>(LayoutGravity::Center);
     container->addChild(image);
 
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/t2.jpg");
+    auto image2 = std::make_shared<Img>(imgTexture2 , 200,200);
+    image2->setLayoutGravity<Img>(LayoutGravity::BottomRight);
+    container->addChild(image2);
+
+    auto imgTexture3 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto image3 = std::make_shared<Img>(imgTexture3 , 200,200);
+    image3->setLayoutGravity<Img>(LayoutGravity::TopRight);
+    container->addChild(image3);
+
+    purple::Engine::getTimer()->schedule([container](void *){
+        container->setVisible(VisibleState::Gone);
+    },4000);
+
     ui->setRootContainer(container);
 }
 

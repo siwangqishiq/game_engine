@@ -453,11 +453,17 @@ void TestUi::testContainerCompose(){
     contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
         .setLayoutWeight<StackContainer>(1);
     container->addChild(contentContainer);
-    auto contentText = std::make_shared<Text>(L"我是内容",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
-    contentText->setFontColor<Text>(ConverColorValue(Color::Black))
-        .setFontSize<Text>(64.0f)
-        .setLayoutGravity<Text>(LayoutGravity::Center);
-    contentContainer->addChild(contentText);
+
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto image2 = std::make_shared<Img>(imgTexture2 , 200,200);
+    image2->setLayoutGravity<Img>(LayoutGravity::Center);
+    contentContainer->addChild(image2);
+
+    // auto contentText = std::make_shared<Text>(L"我是内容",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    // contentText->setFontColor<Text>(ConverColorValue(Color::Black))
+    //     .setFontSize<Text>(64.0f)
+    //     .setLayoutGravity<Text>(LayoutGravity::Center);
+    // contentContainer->addChild(contentText);
 
     auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,150);
     footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));

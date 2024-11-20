@@ -384,8 +384,9 @@ namespace purple{
     }
 
     float RenderEngine::getAndChangeDepthValue(){
-        const float result = depthValue;
         depthValue += 0.000001f;
+        
+        const float result = depthValue;
         return result;    
     }
 
