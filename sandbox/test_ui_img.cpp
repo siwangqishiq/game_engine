@@ -45,10 +45,34 @@ void TestImgUi::testImgWrapContent(){
     auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
     container->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue));
 
-    auto imgTexture = purple::ImageSource::fromAsset("img/player_walking.png");
-    auto image = std::make_shared<Img>(imgTexture , LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
-    image->setLayoutGravity<Img>(LayoutGravity::Center);
+    // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/la.jpg");
+    // auto image = std::make_shared<Img>(imgTexture , 100,500);
+    // image->setLayoutGravity<Img>(LayoutGravity::Center)
+    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
+    //     .setScaleMode<Img>(ImgScale::Mode::FitCenter);
+    // container->addChild(image);
+
+    // auto imgTexture = purple::ImageSource::fromAsset("img/la.jpg");
+    // auto image = std::make_shared<Img>(imgTexture , 500,500);
+    // image->setLayoutGravity<Img>(LayoutGravity::Center)
+    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
+    //     .setScaleMode<Img>(ImgScale::Mode::FitTop);
+    // container->addChild(image);
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/t2.jpg");
+    auto image = std::make_shared<Img>(imgTexture , 200,500);
+    image->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
+        .setScaleMode<Img>(ImgScale::Mode::FitBottom);
     container->addChild(image);
+
+    // auto imgTexture = purple::ImageSource::fromAsset("img/t2.jpg");
+    // auto image = std::make_shared<Img>(imgTexture , 200,500);
+    // image->setLayoutGravity<Img>(LayoutGravity::Center)
+    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
+    //     .setScaleMode<Img>(ImgScale::Mode::FitXY);
+    // container->addChild(image);
 
     auto imgTexture2 = purple::ImageSource::fromAsset("img/t2.jpg");
     auto image2 = std::make_shared<Img>(imgTexture2 , 200,200);
@@ -59,10 +83,6 @@ void TestImgUi::testImgWrapContent(){
     auto image3 = std::make_shared<Img>(imgTexture3 , 200,200);
     image3->setLayoutGravity<Img>(LayoutGravity::TopRight);
     container->addChild(image3);
-
-    purple::Engine::getTimer()->schedule([container](void *){
-        container->setVisible(VisibleState::Gone);
-    },4000);
 
     ui->setRootContainer(container);
 }

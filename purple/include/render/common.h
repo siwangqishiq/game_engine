@@ -65,7 +65,7 @@ namespace purple{
         normal = 0,//普通
         italic = 1 //斜体
     };
-
+    
     enum TextGravity{
         TopLeft,
         TopCenter,

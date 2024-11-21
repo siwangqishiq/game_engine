@@ -50,27 +50,77 @@ namespace purple{
 
         Rect srcRect = textureImage_->getRect();
 
-        const int dstWidth = getWidth() - paddingRight_ - paddingLeft_;
-        const int dstHeight = getHeight() - paddingBottom_ - paddingTop_;
-        Rect dstRect(left + paddingLeft_, top - paddingTop_, 
-                            dstWidth, dstHeight);
+        const int viewWidth = getWidth() - paddingRight_ - paddingLeft_;
+        const int viewHeight = getHeight() - paddingBottom_ - paddingTop_;
+        Rect viewRect(left + paddingLeft_, 
+                            top - paddingTop_, 
+                            viewWidth, viewHeight);
         // Log::i("debug" , "render text id in img %d", textureImage_->getTextureId());
-        auto render = purple::Engine::getRenderEngine();
-        auto speiteBatch = render->getSpriteBatch();
-        speiteBatch->begin();
+        Rect dstRect;
         switch(scaleMode_){
-            case FitCenter:
-            case FitTop:
-            case FitBottom:
-            case FitXY:
-            case ScaleCenter:
-            case ScaleCrop:
-            case ScaleInside:
-                speiteBatch->renderImage(*textureImage_ , srcRect , dstRect);
+            case ImgScale::Mode::FitCenter:{
+                dstRect = findFitScaleDstRect(srcRect,viewRect);
+                break;
+            }
+            case ImgScale::Mode::FitTop:{
+                dstRect = findFitScaleDstRect(srcRect,viewRect);
+                dstRect.top = viewRect.top;
+                break;
+            }
+            case ImgScale::Mode::FitBottom:{
+                dstRect = findFitScaleDstRect(srcRect,viewRect);
+                dstRect.top = viewRect.top - viewRect.height + dstRect.height;
+                break;
+            }
+            case ImgScale::Mode::FitXY:{
+                dstRect = viewRect;
+                break;
+            }
+            case ImgScale::Mode::Center:
+            case ImgScale::Mode::CenterCrop:
+            case ImgScale::Mode::CenterInside:
                 break;
             default:
                 break;
         }//end switch
+
+
+        auto render = purple::Engine::getRenderEngine();
+        auto speiteBatch = render->getSpriteBatch();
+        speiteBatch->begin();
+        speiteBatch->renderImage(*textureImage_ , srcRect , dstRect);
         speiteBatch->end();
     }
+
+    Rect Img::findFitScaleDstRect(Rect &srcRect,Rect &viewRect){
+        const float ratio = srcRect.width / srcRect.height;
+        Rect dstRect;
+        if(viewRect.width >= viewRect.height){
+            dstRect.height = viewRect.height;
+            dstRect.width = dstRect.height * ratio;
+            if(dstRect.width > viewRect.width){
+                dstRect.width = viewRect.width;
+                dstRect.height = dstRect.width / ratio;
+                dstRect.left = viewRect.left;
+                dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
+            }else{
+                dstRect.left = viewRect.left + viewRect.width / 2.0f - dstRect.width / 2.0f;
+                dstRect.top = viewRect.top;
+            }
+        }else{
+            dstRect.width = viewRect.width;
+            dstRect.height = viewRect.width/ ratio;
+            if(dstRect.height > viewRect.height){
+                dstRect.height = viewRect.height;
+                dstRect.width = dstRect.height * ratio;
+                dstRect.left = viewRect.left + viewRect.width / 2.0f - dstRect.width / 2.0f;
+                dstRect.top = viewRect.top;
+            }else{
+                dstRect.left = viewRect.left;
+                dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
+            }
+        }
+        return dstRect;
+    }
+
 }

@@ -13,15 +13,17 @@ namespace purple{
         static std::shared_ptr<TextureImage> fromFile(std::string path);
     };
 
-    enum ImgScaleMode{
-        FitCenter,
-        FitTop,
-        FitBottom,
-        FitXY,
-        ScaleCenter,
-        ScaleCrop,
-        ScaleInside
-    };
+    namespace ImgScale{
+        enum Mode {
+            FitCenter,//被等比缩放到能够填充控件大小
+            FitTop,//
+            FitBottom,
+            FitXY,
+            Center,
+            CenterCrop,
+            CenterInside
+        };
+    }
 
     class Img : public Widget{
         public:
@@ -38,7 +40,7 @@ namespace purple{
             }
             
             template<typename T>
-            T& setScaleMode(ImgScaleMode mode){
+            T& setScaleMode(ImgScale::Mode mode){
                 this->scaleMode_ = mode;
                 return static_cast<T&>(*this);
             }
@@ -51,6 +53,8 @@ namespace purple{
         private:
             std::shared_ptr<TextureImage> textureImage_ = nullptr;
             
-            ImgScaleMode scaleMode_ = ImgScaleMode::FitTop;
+            ImgScale::Mode scaleMode_ = ImgScale::Mode::FitCenter;
+
+            Rect findFitScaleDstRect(Rect &srcRect,Rect &viewRect);
     };
 }
