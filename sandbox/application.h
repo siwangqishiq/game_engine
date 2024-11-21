@@ -44,6 +44,6 @@ private:
     
     std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
 
-    std::wstring fpsStr = L"";
+    std::wstring fpsStr = L"0";
 };
 

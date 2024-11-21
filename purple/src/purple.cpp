@@ -23,12 +23,14 @@ namespace purple{
         long startTime = currentTimeMillis();
         ScreenWidth = width;
         ScreenHeight = height;
-
+        
         Log::w(TAG,"init screen size: %d  , %d" , ScreenWidth , ScreenHeight);
-
+        
         renderEngine_ = std::make_shared<RenderEngine>();
         renderEngine_->init();
         renderEngine_->onScreenResize();
+
+        std::cout << " error init2 : " << glGetError() << std::endl;
         
         AudioManager::getInstance()->init();
         
@@ -51,10 +53,8 @@ namespace purple{
     }
 
     void Engine::tick(){
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClearDepthf(0.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         renderEngine_->resetDepth();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if(timer_ != nullptr){
             timer_->trick();

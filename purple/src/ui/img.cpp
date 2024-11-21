@@ -54,7 +54,7 @@ namespace purple{
         const int dstHeight = getHeight() - paddingBottom_ - paddingTop_;
         Rect dstRect(left + paddingLeft_, top - paddingTop_, 
                             dstWidth, dstHeight);
-
+        // Log::i("debug" , "render text id in img %d", textureImage_->getTextureId());
         auto render = purple::Engine::getRenderEngine();
         auto speiteBatch = render->getSpriteBatch();
         speiteBatch->begin();

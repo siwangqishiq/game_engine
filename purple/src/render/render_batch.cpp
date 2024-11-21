@@ -404,10 +404,11 @@ namespace purple{
             return;
         }
 
+        // Log::i("SpriteBatch" , "current --> render  texture %d" , currentTextureId_);
         if(texId != currentTextureId_){
             end();
             currentTextureId_ = texId;
-            // Logi("SpriteBatch" , "switch texture %d" , currentTextureId_);
+            // Log::i("SpriteBatch" , "switch texture %d" , currentTextureId_);
             begin();
         }
 

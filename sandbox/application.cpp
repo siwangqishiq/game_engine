@@ -95,11 +95,12 @@ void Application::onCreate(){
     // appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
 
-    appInstanceList.push_back(std::make_shared<TestUi>());
-    // appInstanceList.push_back(std::make_shared<TestImgUi>());
+    // appInstanceList.push_back(std::make_shared<TestUi>());
+    appInstanceList.push_back(std::make_shared<TestImgUi>());
 }
 
 void Application::tick(){
+    // std::cout << " begin tick" << std::endl;
     purple::Engine::tick();
 
     for(auto &app : appInstanceList){
@@ -108,6 +109,7 @@ void Application::tick(){
     
     fps++;
     showDebugInfo();
+    // std::cout << " error : " << glGetError() << std::endl;
 }
 
 void Application::showExtensionInfo(){
@@ -117,7 +119,7 @@ void Application::showExtensionInfo(){
     purple::Log::i(TAG , "ExtensionCount: %d" , extensionCount);
     for(int i = 0 ; i< extensionCount ;i++){
         std::string extensionName = reinterpret_cast<const char*>(glGetStringi(GL_EXTENSIONS, i));
-        purple::Log::i(TAG , "Extension: \t %s" , extensionName.c_str());
+        // purple::Log::i(TAG , "Extension: \t %s" , extensionName.c_str());
     }//end for i
     purple::Log::i(TAG , "===== ExtensionInfo End =====================");
 }
@@ -135,7 +137,6 @@ void Application::showDebugInfo(){
     paint.textGravity = purple::TopRight;
     
     purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , paint, nullptr);
-    // purple::Engine::getRenderEngine()->renderTextWithRect(fpsStr , outputRect , paint, nullptr);
 }
 
 void Application::runLoop(){

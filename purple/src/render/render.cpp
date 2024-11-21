@@ -50,25 +50,26 @@ namespace purple{
         glViewport(0 , 0 , purple::Engine::ScreenWidth , purple::Engine::ScreenHeight);
         
         //打开混合模式 文字有透明度
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+        glContextInit();
     }
 
     void RenderEngine::glContextInit(){
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
-        glDepthRangef(-1.0f, 1.0f);
-        glDepthFunc(GL_GREATER);
+
         glEnable(GL_DEPTH_TEST);
+        // glDepthRangef(0.0f, 10.0f);
+        // glDepthFunc(GL_GREATER);
+        // glClearDepthf(1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     void RenderEngine::init(){
         Log::i(TAG , "render engine init start");
-        glContextInit();
+        // glContextInit();
 
         vramManager_ = std::make_shared<VRamManager>();
-        // vramManager_ = VRamManager::getInstance();
-
+        
         loadShapeShader();
         shapeBatch_ = std::make_shared<ShapeBatch>(this);//std::shared_ptr<RenderEngine>(this)
         shapeBatch_->init();
@@ -384,14 +385,13 @@ namespace purple{
     }
 
     float RenderEngine::getAndChangeDepthValue(){
-        depthValue += 0.000001f;
-        
-        const float result = depthValue;
-        return result;    
+        depthValue -= 0.00001f;
+        // const float result = depthValue;
+        return depthValue;    
     }
 
     void RenderEngine::resetDepth(){
-        depthValue = 0.0f;
+        depthValue = 1.0f;
     }
 
     //绘制文字

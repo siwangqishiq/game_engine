@@ -21,8 +21,10 @@ namespace purple{
     {
         SdfTextRenderCommand cmd(renderEngine_ , this);
         cmd.limitRect_ = showRect;
-        cmd.putTextParamsByRectLimit(text , showRect ,outInfo, textPaint);
-        cmd.runCommands();
+        auto ret =  cmd.putTextParamsByRectLimit(text , showRect ,outInfo, textPaint);
+        if(ret >= 0){
+            cmd.runCommands();
+        }
     }
 
     void TextRender::preCalTextRect(std::wstring text, 

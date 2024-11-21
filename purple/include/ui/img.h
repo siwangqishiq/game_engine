@@ -50,7 +50,7 @@ namespace purple{
             ~Img();
         private:
             std::shared_ptr<TextureImage> textureImage_ = nullptr;
-
-            ImgScaleMode scaleMode_;
+            
+            ImgScaleMode scaleMode_ = ImgScaleMode::FitTop;
     };
 }

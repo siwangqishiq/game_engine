@@ -44,7 +44,7 @@ namespace purple{
         // Logi("TextRenderCommand" , "vertexcount = %d", vertexCount_);
         int requestSize = vertexCount_ * attrCount_ * sizeof(float);
         int allocateSize = 0;
-        // Logi("command" , "allocator size = %d" , requestSize);
+        // Log::i("command" , "allocator size = %d" , requestSize);
         allocatorVRam(requestSize , allocateSize);
         return vbo_;
     }

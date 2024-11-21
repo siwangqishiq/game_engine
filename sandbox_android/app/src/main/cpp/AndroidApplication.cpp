@@ -28,14 +28,9 @@ void AndroidApplication::init(){
 
 void AndroidApplication::tick(){
     purple::Engine::tick();
-
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     for(std::shared_ptr<purple::IApp> &app : appInstanceList){
         app->onTick();
     }
-
     fps++;
 }
 
