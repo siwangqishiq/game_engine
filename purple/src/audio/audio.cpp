@@ -27,6 +27,7 @@ namespace purple{
         ma_decoder decoder;
         bool isPlay = false;
         bool isLoop = false;
+        unsigned long pcmLength = 0;
 
         // std::function<void(
         //     ma_device* pDevice, 
@@ -73,6 +74,13 @@ namespace purple{
             entity->decoder.outputChannels,
             entity->decoder.outputSampleRate,
             entity->decoder.outputFormat);
+
+        ma_uint64 pcmLength;
+        if(ma_data_source_get_length_in_pcm_frames(&entity->decoder, &pcmLength)!= MA_SUCCESS){
+            Log::e("audio" , "framesRead occur error!");
+        }
+        Log::i("audio" , "frames length: %u" , pcmLength);
+        entity->pcmLength = pcmLength;
 
         entity->dataCallback = [](ma_device* pDevice, void* pOutput, const void* pInput, 
             ma_uint32 frameCount){

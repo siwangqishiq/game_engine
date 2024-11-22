@@ -101,6 +101,8 @@ namespace purple{
                 break;
             }
             case ImgScale::Mode::CenterCrop:
+                
+                break;
             case ImgScale::Mode::CenterInside:
                 break;
             default:
