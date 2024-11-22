@@ -76,7 +76,30 @@ namespace purple{
                 dstRect = viewRect;
                 break;
             }
-            case ImgScale::Mode::Center:
+            case ImgScale::Mode::Center:{
+                if(srcRect.width <= viewRect.width){
+                    dstRect.width = srcRect.width;
+                    dstRect.left = viewRect.left + viewRect.width / 2.0f - dstRect.width / 2.0f;
+                } else { //原图大于view 需要截断
+                    dstRect.width = viewRect.width;
+                    dstRect.left = viewRect.left;
+
+                    srcRect.left = srcRect.left + (srcRect.width - viewRect.width) / 2.0f;
+                    srcRect.width = dstRect.width;
+                }
+
+                if(srcRect.height <=viewRect.height){
+                    dstRect.height = srcRect.height;
+                    dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
+                }else{
+                    dstRect.height = viewRect.height;
+                    dstRect.top = viewRect.top;
+
+                    srcRect.top = srcRect.top - (srcRect.height - viewRect.height)/2.0f;
+                    srcRect.height = viewRect.height;
+                }
+                break;
+            }
             case ImgScale::Mode::CenterCrop:
             case ImgScale::Mode::CenterInside:
                 break;

@@ -10,7 +10,11 @@ void TestImgUi::onInit(){
 
     // testImg();
     // testImgMatchParent();
-    testImgWrapContent();
+    // testImgWrapContent();
+    testImgScaleMode();
+    
+    // bgm = purple::AudioManager::getInstance()->loadAudioEntity("audio/test.mp3",true);
+    // purple::AudioManager::getInstance()->playAudioEntity(bgm);
 }
 
 void TestImgUi::testImg(){
@@ -45,34 +49,12 @@ void TestImgUi::testImgWrapContent(){
     auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
     container->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue));
 
-    // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
-    // auto imgTexture = purple::ImageSource::fromAsset("img/la.jpg");
-    // auto image = std::make_shared<Img>(imgTexture , 100,500);
-    // image->setLayoutGravity<Img>(LayoutGravity::Center)
-    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
-    //     .setScaleMode<Img>(ImgScale::Mode::FitCenter);
-    // container->addChild(image);
-
-    // auto imgTexture = purple::ImageSource::fromAsset("img/la.jpg");
-    // auto image = std::make_shared<Img>(imgTexture , 500,500);
-    // image->setLayoutGravity<Img>(LayoutGravity::Center)
-    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
-    //     .setScaleMode<Img>(ImgScale::Mode::FitTop);
-    // container->addChild(image);
-
-    auto imgTexture = purple::ImageSource::fromAsset("img/t2.jpg");
-    auto image = std::make_shared<Img>(imgTexture , 200,500);
+    auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+    auto image = std::make_shared<Img>(imgTexture , LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
         .setScaleMode<Img>(ImgScale::Mode::FitBottom);
     container->addChild(image);
-
-    // auto imgTexture = purple::ImageSource::fromAsset("img/t2.jpg");
-    // auto image = std::make_shared<Img>(imgTexture , 200,500);
-    // image->setLayoutGravity<Img>(LayoutGravity::Center)
-    //     .setBackgroundColor<Img>(ConverColorValue(Color::Pink))
-    //     .setScaleMode<Img>(ImgScale::Mode::FitXY);
-    // container->addChild(image);
 
     auto imgTexture2 = purple::ImageSource::fromAsset("img/t2.jpg");
     auto image2 = std::make_shared<Img>(imgTexture2 , 200,200);
@@ -87,6 +69,32 @@ void TestImgUi::testImgWrapContent(){
     ui->setRootContainer(container);
 }
 
+void TestImgUi::testImgScaleMode(){
+    using namespace purple;
+
+    auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::White));
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+
+    auto imageBase = std::make_shared<Img>(imgTexture , LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    imageBase->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setScaleMode<Img>(ImgScale::Mode::Center);
+    container->addChild(imageBase);
+
+    auto image = std::make_shared<Img>(300,300);
+    image->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
+        .setScaleMode<Img>(ImgScale::Mode::Center);
+    container->addChild(image);
+    
+    ui->setRootContainer(container);
+
+    purple::Engine::getTimer()->schedule([image, imgTexture](void *){
+        image->setImage<Img>(imgTexture);
+    },4000);
+}
+
 void TestImgUi::onTick(){
     if(ui != nullptr){
         ui->startRenderUI();
@@ -94,6 +102,8 @@ void TestImgUi::onTick(){
 }
 
 void TestImgUi::onDispose(){
-
+    if(bgm != nullptr){
+        purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+    }
 }
 

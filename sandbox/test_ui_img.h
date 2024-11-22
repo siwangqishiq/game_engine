@@ -13,7 +13,11 @@ public:
 private:
     std::shared_ptr<purple::UiRoot> ui = nullptr;
 
+    std::shared_ptr<purple::AudioEntity> bgm = nullptr;
+
     void testImg();
     void testImgMatchParent();
     void testImgWrapContent();
+
+    void testImgScaleMode();
 };

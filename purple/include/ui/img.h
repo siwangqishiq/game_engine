@@ -19,7 +19,7 @@ namespace purple{
             FitTop,//
             FitBottom,
             FitXY,
-            Center,
+            Center, //讲图片置于view的中心 会发生裁剪
             CenterCrop,
             CenterInside
         };

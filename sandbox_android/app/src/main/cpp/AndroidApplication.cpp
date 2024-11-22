@@ -6,6 +6,7 @@
 #include "test1_app.h"
 #include "test_render_text.h"
 #include "test_ui.h"
+#include "test_ui_img.h"
 
 #include <vector>
 
@@ -14,7 +15,8 @@ void AndroidApplication::init(){
 
     // appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
-    appInstanceList.push_back(std::make_shared<TestUi>());
+//    appInstanceList.push_back(std::make_shared<TestUi>());
+    appInstanceList.push_back(std::make_shared<TestImgUi>());
     
     for(std::shared_ptr<purple::IApp> &app : appInstanceList){
         app->onInit();
