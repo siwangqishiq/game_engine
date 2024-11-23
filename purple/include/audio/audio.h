@@ -3,9 +3,21 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <functional>
 
 namespace purple{
     struct AudioEntity;
+
+    struct AudioInfo{
+        std::string name = "";
+        bool isPlay = false;
+        bool isLoop = false;
+        unsigned long pcmFrameLength = 0;
+        float duration = 0.0f;
+        unsigned long readedFrame = 0;
+    };
+
+    typedef std::function<void(unsigned long, unsigned long , double)> ProgressUpdateCallbackFn;
 
     class AudioManager{
     public:
@@ -42,6 +54,9 @@ namespace purple{
 
         void restartAudioEntity(std::shared_ptr<AudioEntity> entity);
 
+        void setAudioPlayProgressCallback(std::shared_ptr<AudioEntity> entity , ProgressUpdateCallbackFn callback);
+
+        AudioInfo getAudioEntityInfo(std::shared_ptr<AudioEntity> entity);
     private:
         std::map<std::string , std::shared_ptr<AudioEntity>> audioMap_;
     };

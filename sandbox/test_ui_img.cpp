@@ -1,6 +1,7 @@
 #include "test_ui_img.h"
 #include "ui/img.h"
 #include "purple_ui.h"
+#include "log.h"
 
 void TestImgUi::onInit(){
     ui = std::make_shared<purple::UiRoot>(
@@ -13,7 +14,11 @@ void TestImgUi::onInit(){
     // testImgWrapContent();
     testImgScaleMode();
     
-    // bgm = purple::AudioManager::getInstance()->loadAudioEntity("audio/test.mp3",true);
+    // bgm = purple::AudioManager::getInstance()->loadAudioEntity("audio/jiangtiandao.mp3",true);
+    // purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
+    //     double currentTime = (static_cast<double>(progress) / total) * totalTime;
+    //     purple::Log::i("play_music","progress %lld / %lld  -- %f :%f" , progress  , total ,currentTime , totalTime);
+    // });
     // purple::AudioManager::getInstance()->playAudioEntity(bgm);
 }
 

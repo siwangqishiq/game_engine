@@ -30,7 +30,7 @@ namespace purple{
         renderEngine_->init();
         renderEngine_->onScreenResize();
 
-        std::cout << " error init2 : " << glGetError() << std::endl;
+        // std::cout << " error init2 : " << glGetError() << std::endl;
         
         AudioManager::getInstance()->init();
         
