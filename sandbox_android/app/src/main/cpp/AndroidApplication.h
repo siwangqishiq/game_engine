@@ -17,7 +17,6 @@ public:
     void resize(int w , int h);
     void onTouchEvent(int action , float x , float y);
 
-
 private:
     std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
 

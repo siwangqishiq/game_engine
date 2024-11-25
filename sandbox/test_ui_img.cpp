@@ -14,12 +14,25 @@ void TestImgUi::onInit(){
     // testImgWrapContent();
     testImgScaleMode();
     
-    // bgm = purple::AudioManager::getInstance()->loadAudioEntity("audio/jiangtiandao.mp3",true);
-    // purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
-    //     double currentTime = (static_cast<double>(progress) / total) * totalTime;
-    //     purple::Log::i("play_music","progress %lld / %lld  -- %f :%f" , progress  , total ,currentTime , totalTime);
-    // });
-    // purple::AudioManager::getInstance()->playAudioEntity(bgm);
+    std::string audioPath = "audio/test.mp3";
+    bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
+    
+    purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
+        double currentTime = (static_cast<double>(progress) / total) * totalTime;
+        purple::Log::i("play_music","progress %lld / %lld  -- %f :%f" , progress  , total ,currentTime , totalTime);
+    });
+    purple::AudioManager::getInstance()->playAudioEntity(bgm);
+
+    // purple::AudioManager::getInstance()->loadAudio(audioPath, "music", true);
+    // purple::AudioManager::getInstance()->playAudio("music");
+
+    // purple::Engine::getTimer()->schedule([this](void *){
+    //     if(bgm != nullptr){
+    //         purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+    //         purple::Log::e("TestImgUi","TestImgUi::onDispose releaseAudioEntity");
+    //         bgm = nullptr;
+    //     }
+    // },10000);
 }
 
 void TestImgUi::testImg(){
@@ -100,6 +113,10 @@ void TestImgUi::testImgScaleMode(){
     },4000);
 }
 
+void TestImgUi::testImgScaleMode2(){
+
+}
+
 void TestImgUi::onTick(){
     if(ui != nullptr){
         ui->startRenderUI();
@@ -107,6 +124,7 @@ void TestImgUi::onTick(){
 }
 
 void TestImgUi::onDispose(){
+    purple::Log::e("TestImgUi","TestImgUi::onDispose");
     if(bgm != nullptr){
         purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
     }

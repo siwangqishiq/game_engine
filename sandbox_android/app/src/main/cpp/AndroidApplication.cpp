@@ -7,13 +7,14 @@
 #include "test_render_text.h"
 #include "test_ui.h"
 #include "test_ui_img.h"
-
+#include <thread>
+#include <string>
 #include <vector>
 
 void AndroidApplication::init(){
     purple::Engine::init(width , height);
 
-    // appInstanceList.push_back(std::make_shared<Test1App>());
+//     appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
 //    appInstanceList.push_back(std::make_shared<TestUi>());
     appInstanceList.push_back(std::make_shared<TestImgUi>());
@@ -23,7 +24,8 @@ void AndroidApplication::init(){
     }
 
     purple::Engine::getTimer()->scheduleAtFixedRate([this](void *app){
-        purple::Log::w("fps" , "fps : %d" , fps);
+        std::string fpsStr = "fps : " + std::to_string(fps);
+        purple::Log::w("fps" , fpsStr);
         fps = 0;
     } , 1000L);
 }

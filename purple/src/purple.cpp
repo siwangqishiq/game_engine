@@ -73,6 +73,9 @@ namespace purple{
         if(renderEngine_ != nullptr){
             renderEngine_->free();
         }
+        if(timer_ != nullptr){
+            timer_->clear();
+        }
     }
 
     std::shared_ptr<RenderEngine> Engine::getRenderEngine(){

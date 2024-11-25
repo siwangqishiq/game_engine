@@ -36,6 +36,7 @@ namespace purple{
         ShaderManager::getInstance()->clear();
 
         AudioManager::getInstance()->dispose();
+        
     }
 
     void RenderEngine::clearRenderCommands(){

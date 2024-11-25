@@ -20,4 +20,6 @@ private:
     void testImgWrapContent();
 
     void testImgScaleMode();
+
+    void testImgScaleMode2();
 };

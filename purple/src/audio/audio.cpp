@@ -26,6 +26,7 @@ namespace purple{
         ma_decoder decoder;
         bool isPlay = false;
         bool isLoop = false;
+        bool isReleased = false;
         unsigned long pcmFrameLength = 0;
         double duration = 0.0f;
         unsigned long readedFrame = 0;//记录播放时
@@ -144,9 +145,6 @@ namespace purple{
             return;
         }
 
-        // ma_device_uninit(&entity->device);
-        // ma_device_init(nullptr, &(entity->deviceConfig), &(entity->device));
-
         entity->isPlay = true;
         if (ma_device_start(&(entity->device)) != MA_SUCCESS) {
             Log::i("audio" , "Failed to start playback device");
@@ -213,13 +211,18 @@ namespace purple{
 
         Log::i("audio" , "audio %s release" , entity->name.c_str());
 
+        if(entity->isReleased){
+            Log::i("audio" , "this audio %s had been released" , entity->name.c_str());
+            return;    
+        }
+
         entity->isPlay = false;
         ma_device_stop(&(entity->device));
 
         ma_device_uninit(&(entity->device));
         ma_decoder_uninit(&(entity->decoder));
-        // need this?
-        // entity->pData.release();
+        entity->pData = nullptr;
+        entity->isReleased = true;
     }
 
     //载入音频资源

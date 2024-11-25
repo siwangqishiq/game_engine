@@ -32,13 +32,17 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_tick(JNIEnv *env, jclass clazz) {
     //LOGI("app tick");
-    app->tick();
+    if(app != nullptr){
+        app->tick();
+    }
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_free(JNIEnv *env, jclass clazz) {
     app->dispose();
+    haveGetSize = false;
+    app = nullptr;
 }
 
 extern "C"
