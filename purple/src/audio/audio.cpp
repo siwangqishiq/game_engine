@@ -81,7 +81,7 @@ namespace purple{
         if(ma_data_source_get_length_in_pcm_frames(&entity->decoder, &pcmLength)!= MA_SUCCESS){
             Log::e("audio" , "framesRead occur error!");
         }
-        Log::i("audio" , "frames length: %u" , pcmLength);
+        Log::i("audio" , "frames length: %lu" , pcmLength);
         entity->pcmFrameLength = pcmLength;
         const double durationTime = static_cast<double>(pcmLength) / entity->decoder.outputSampleRate;
         entity->duration = durationTime;

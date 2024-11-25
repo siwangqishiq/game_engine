@@ -12,27 +12,17 @@ void TestImgUi::onInit(){
     // testImg();
     // testImgMatchParent();
     // testImgWrapContent();
-    testImgScaleMode();
+    // testImgScaleMode();
+    testImgScaleMode2();
     
     std::string audioPath = "audio/test.mp3";
     bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
     
     purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
         double currentTime = (static_cast<double>(progress) / total) * totalTime;
-        purple::Log::i("play_music","progress %lld / %lld  -- %f :%f" , progress  , total ,currentTime , totalTime);
+        purple::Log::i("play_music","progress %lu / %lu  -- %f :%f" , progress  , total ,currentTime , totalTime);
     });
     purple::AudioManager::getInstance()->playAudioEntity(bgm);
-
-    // purple::AudioManager::getInstance()->loadAudio(audioPath, "music", true);
-    // purple::AudioManager::getInstance()->playAudio("music");
-
-    // purple::Engine::getTimer()->schedule([this](void *){
-    //     if(bgm != nullptr){
-    //         purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
-    //         purple::Log::e("TestImgUi","TestImgUi::onDispose releaseAudioEntity");
-    //         bgm = nullptr;
-    //     }
-    // },10000);
 }
 
 void TestImgUi::testImg(){
@@ -114,7 +104,20 @@ void TestImgUi::testImgScaleMode(){
 }
 
 void TestImgUi::testImgScaleMode2(){
+    using namespace purple;
 
+    auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::White));
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+
+    auto image = std::make_shared<Img>(300,100);
+    image->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
+        .setScaleMode<Img>(ImgScale::Mode::CenterCrop);
+    container->addChild(image);
+    
+    ui->setRootContainer(container);
 }
 
 void TestImgUi::onTick(){
@@ -124,9 +127,9 @@ void TestImgUi::onTick(){
 }
 
 void TestImgUi::onDispose(){
-    purple::Log::e("TestImgUi","TestImgUi::onDispose");
-    if(bgm != nullptr){
-        purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
-    }
+    // purple::Log::e("TestImgUi","TestImgUi::onDispose");
+    // if(bgm != nullptr){
+    //     purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+    // }
 }
 
