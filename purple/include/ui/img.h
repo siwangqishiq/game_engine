@@ -56,5 +56,9 @@ namespace purple{
             ImgScale::Mode scaleMode_ = ImgScale::Mode::FitCenter;
 
             Rect findFitScaleDstRect(Rect &srcRect,Rect &viewRect);
+
+            Rect findCenterDstRect(Rect &srcRect,Rect &viewRect);
+
+            Rect findCenterCropDstRect(Rect &srcRect,Rect &viewRect);
     };
 }

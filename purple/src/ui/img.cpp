@@ -77,34 +77,16 @@ namespace purple{
                 break;
             }
             case ImgScale::Mode::Center:{
-                if(srcRect.width <= viewRect.width){
-                    dstRect.width = srcRect.width;
-                    dstRect.left = viewRect.left + viewRect.width / 2.0f - dstRect.width / 2.0f;
-                } else { //原图大于view 需要截断
-                    dstRect.width = viewRect.width;
-                    dstRect.left = viewRect.left;
-
-                    srcRect.left = srcRect.left + (srcRect.width - viewRect.width) / 2.0f;
-                    srcRect.width = dstRect.width;
-                }
-
-                if(srcRect.height <=viewRect.height){
-                    dstRect.height = srcRect.height;
-                    dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
-                }else{
-                    dstRect.height = viewRect.height;
-                    dstRect.top = viewRect.top;
-
-                    srcRect.top = srcRect.top - (srcRect.height - viewRect.height)/2.0f;
-                    srcRect.height = viewRect.height;
-                }
+                dstRect = findCenterDstRect(srcRect,viewRect);
                 break;
             }
-            case ImgScale::Mode::CenterCrop:
-                
+            case ImgScale::Mode::CenterCrop:{
+                dstRect = findCenterCropDstRect(srcRect,viewRect);
                 break;
-            case ImgScale::Mode::CenterInside:
+            }
+            case ImgScale::Mode::CenterInside:{
                 break;
+            }
             default:
                 break;
         }//end switch
@@ -144,6 +126,66 @@ namespace purple{
                 dstRect.left = viewRect.left;
                 dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
             }
+        }
+        return dstRect;
+    }
+
+    Rect Img::findCenterDstRect(Rect &srcRect,Rect &viewRect){
+        Rect dstRect;
+        if(srcRect.width <= viewRect.width){
+            dstRect.width = srcRect.width;
+            dstRect.left = viewRect.left + viewRect.width / 2.0f - dstRect.width / 2.0f;
+        } else { //原图大于view 需要截断
+            dstRect.width = viewRect.width;
+            dstRect.left = viewRect.left;
+
+            srcRect.left = srcRect.left + (srcRect.width - viewRect.width) / 2.0f;
+            srcRect.width = dstRect.width;
+        }
+
+        if(srcRect.height <=viewRect.height){
+            dstRect.height = srcRect.height;
+            dstRect.top = viewRect.top - viewRect.height / 2.0f + dstRect.height / 2.0f;
+        }else{
+            dstRect.height = viewRect.height;
+            dstRect.top = viewRect.top;
+
+            srcRect.top = srcRect.top - (srcRect.height - viewRect.height)/2.0f;
+            srcRect.height = viewRect.height;
+        }
+        return dstRect;
+    }
+
+    Rect Img::findCenterCropDstRect(Rect &srcRect,Rect &viewRect){
+        Rect dstRect;
+        const float ratio = srcRect.width / srcRect.height;
+        if(viewRect.width >= viewRect.height){
+            float scale = viewRect.width / srcRect.width;
+
+            dstRect.width = viewRect.width;
+            dstRect.height = dstRect.width / ratio;
+
+            if(dstRect.height >= viewRect.height){
+                dstRect.height = viewRect.height;
+
+                dstRect.left = viewRect.left;
+                dstRect.top = viewRect.top;
+
+                float overflowHeight = dstRect.height - viewRect.height;
+                srcRect.top = srcRect.top - (srcRect.height - overflowHeight * scale);
+                srcRect.height = srcRect.height - overflowHeight * scale;
+            }else{
+                dstRect.top = viewRect.top;
+                dstRect.left = viewRect.left;
+            }
+        }else{
+            float scale = viewRect.width / srcRect.width;
+
+            dstRect.height = viewRect.height;
+            dstRect.width = ratio * dstRect.height;
+            
+            dstRect.top = viewRect.top;
+            dstRect.left = viewRect.left;
         }
         return dstRect;
     }

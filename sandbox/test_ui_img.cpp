@@ -15,14 +15,14 @@ void TestImgUi::onInit(){
     // testImgScaleMode();
     testImgScaleMode2();
     
-    std::string audioPath = "audio/test.mp3";
-    bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
+    // std::string audioPath = "audio/test.mp3";
+    // bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
     
-    purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
-        double currentTime = (static_cast<double>(progress) / total) * totalTime;
-        purple::Log::i("play_music","progress %lu / %lu  -- %f :%f" , progress  , total ,currentTime , totalTime);
-    });
-    purple::AudioManager::getInstance()->playAudioEntity(bgm);
+    // purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
+    //     double currentTime = (static_cast<double>(progress) / total) * totalTime;
+    //     purple::Log::i("play_music","progress %lu / %lu  -- %f :%f" , progress  , total ,currentTime , totalTime);
+    // });
+    // purple::AudioManager::getInstance()->playAudioEntity(bgm);
 }
 
 void TestImgUi::testImg(){
@@ -111,9 +111,10 @@ void TestImgUi::testImgScaleMode2(){
 
     auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
 
-    auto image = std::make_shared<Img>(300,100);
+    auto image = std::make_shared<Img>(imgTexture, 300,100);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
         .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
+        .setPadding<Img>(10,10,10,10)
         .setScaleMode<Img>(ImgScale::Mode::CenterCrop);
     container->addChild(image);
     
