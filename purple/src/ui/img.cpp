@@ -159,34 +159,28 @@ namespace purple{
     Rect Img::findCenterCropDstRect(Rect &srcRect,Rect &viewRect){
         Rect dstRect;
         const float ratio = srcRect.width / srcRect.height;
-        if(viewRect.width >= viewRect.height){
-            float scale = viewRect.width / srcRect.width;
+        dstRect.left = viewRect.left;
+        dstRect.top = viewRect.top;
+        dstRect.width = srcRect.width;
+        dstRect.height = srcRect.height;
 
-            dstRect.width = viewRect.width;
-            dstRect.height = dstRect.width / ratio;
+        auto dstCenter = dstRect.center();
+        auto viewCenter = viewRect.center();
+        float tranX = dstCenter.x - viewCenter.x;
+        float tranY = dstCenter.y - viewCenter.y;
 
-            if(dstRect.height >= viewRect.height){
-                dstRect.height = viewRect.height;
+        dstRect.left -= tranX;
+        dstRect.top -= tranY;
 
-                dstRect.left = viewRect.left;
-                dstRect.top = viewRect.top;
 
-                float overflowHeight = dstRect.height - viewRect.height;
-                srcRect.top = srcRect.top - (srcRect.height - overflowHeight * scale);
-                srcRect.height = srcRect.height - overflowHeight * scale;
-            }else{
-                dstRect.top = viewRect.top;
-                dstRect.left = viewRect.left;
-            }
-        }else{
-            float scale = viewRect.width / srcRect.width;
-
-            dstRect.height = viewRect.height;
-            dstRect.width = ratio * dstRect.height;
-            
-            dstRect.top = viewRect.top;
+        if(dstRect.left < viewRect.left){
             dstRect.left = viewRect.left;
         }
+
+        if(dstRect.top > viewRect.top){
+            dstRect.top = viewRect.top;
+        }
+
         return dstRect;
     }
 

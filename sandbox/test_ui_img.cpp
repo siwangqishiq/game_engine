@@ -109,7 +109,7 @@ void TestImgUi::testImgScaleMode2(){
     auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
     container->setBackgroundColor<StackContainer>(ConverColorValue(Color::White));
 
-    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
 
     auto image = std::make_shared<Img>(imgTexture, 300,100);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
