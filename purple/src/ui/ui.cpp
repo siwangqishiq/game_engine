@@ -2,6 +2,7 @@
 #include "log.h"
 #include "purple.h"
 #include "algorithm"
+#include "ui/color.h"
 
 namespace purple{
 
@@ -96,7 +97,10 @@ namespace purple{
 
     void Widget::onRender(){
         // Log::e("render" , "render %d %d %d %d",this->left , this->top , this->width , this->height);
-        
+        if(this->bgColor_ == ConverColorValue(Color::Transparent)){
+            return;
+        }
+
         Rect bgRect(this->left , this->top , this->width_ , this->height_);
         Paint bgPaint;
         bgPaint.color = this->bgColor_;

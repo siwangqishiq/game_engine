@@ -13,7 +13,8 @@ void TestImgUi::onInit(){
     // testImgMatchParent();
     // testImgWrapContent();
     // testImgScaleMode();
-    testImgScaleMode2();
+    // testImgScaleMode2();
+    testImgScaleMode3();
     
     // std::string audioPath = "audio/test.mp3";
     // bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
@@ -111,12 +112,54 @@ void TestImgUi::testImgScaleMode2(){
 
     auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
 
-    auto image = std::make_shared<Img>(imgTexture, 300,100);
+    auto image = std::make_shared<Img>(imgTexture, 400,400);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
         .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
         .setPadding<Img>(10,10,10,10)
         .setScaleMode<Img>(ImgScale::Mode::CenterCrop);
     container->addChild(image);
+    
+    ui->setRootContainer(container);
+}
+
+void TestImgUi::testImgScaleMode3(){
+    using namespace purple;
+
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    const int imageSizeWidth = 400;
+    const int imageSizeHeight = 400;
+
+    auto leftContainer = std::make_shared<StackContainer>(0,LAYOUT_MATCH_PARENT);
+    leftContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
+        .setLayoutWeight<StackContainer>(1);
+    container->addChild(leftContainer);
+    auto leftImage = std::make_shared<Img>(imgTexture , imageSizeWidth,imageSizeHeight);
+    leftImage->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setScaleMode<Img>(ImgScale::Mode::FitCenter)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
+    leftContainer->addChild(leftImage);
+
+    auto rightContainer = std::make_shared<StackContainer>(0,LAYOUT_MATCH_PARENT);
+    rightContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue))
+        .setLayoutWeight<StackContainer>(1);
+    container->addChild(rightContainer);
+    auto rightImage = std::make_shared<Img>(imgTexture , imageSizeWidth,imageSizeHeight);
+    rightImage->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setScaleMode<Img>(ImgScale::Mode::FitXY)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
+    rightContainer->addChild(rightImage);
+
+
+
+
+    // auto image = std::make_shared<Img>(imgTexture, 400,400);
+    // image->setLayoutGravity<Img>(LayoutGravity::Center)
+    //     .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
+    //     .setPadding<Img>(10,10,10,10)
+    //     .setScaleMode<Img>(ImgScale::Mode::CenterCrop);
+    // container->addChild(image);
     
     ui->setRootContainer(container);
 }

@@ -7,6 +7,7 @@
 #include "glm/vec4.hpp"
 #include "log.h"
 #include "render/common.h"
+#include "ui/color.h"
 
 namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
@@ -169,7 +170,7 @@ namespace purple{
         Container *parent_ = nullptr;
 
 
-        glm::vec4 bgColor_;
+        glm::vec4 bgColor_ = ConverColorValue(Color::Transparent);
         float bgConnerRadius_ = 0.0f;
 
         int requestWidth_;

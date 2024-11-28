@@ -15,12 +15,20 @@ namespace purple{
 
     namespace ImgScale{
         enum Mode {
-            FitCenter,//被等比缩放到能够填充控件大小
-            FitTop,//
+            //被等比缩放到能够填充控件大小
+            FitCenter,
+            
+            FitTop,
             FitBottom,
             FitXY,
-            Center, //讲图片置于view的中心 会发生裁剪
-            CenterCrop,
+
+            //图片置于view的中心 会发生裁剪
+            Center, 
+
+            //图片置于view的中心 若图片原始尺寸大于view尺寸 进行缩放 保证覆盖满view  会产生剪裁
+            CenterCrop, 
+
+            //图片置于view的中心 若图片原始尺寸大于view尺寸 进行缩放 保证位图被完整显示 不会产生剪裁
             CenterInside
         };
     }
