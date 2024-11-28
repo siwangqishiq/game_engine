@@ -19,6 +19,8 @@ namespace purple{
 
     typedef std::function<void(unsigned long, unsigned long , double)> ProgressUpdateCallbackFn;
 
+    typedef std::function<void(std::string path)> PlayEndCallbackFn;
+
     class AudioManager{
     public:
         static std::shared_ptr<AudioManager> getInstance();
@@ -57,6 +59,8 @@ namespace purple{
         void setAudioPlayProgressCallback(std::shared_ptr<AudioEntity> entity , ProgressUpdateCallbackFn callback);
 
         AudioInfo getAudioEntityInfo(std::shared_ptr<AudioEntity> entity);
+
+        void setAudioPlayEndCallback(std::shared_ptr<AudioEntity> entity , PlayEndCallbackFn callback);
     private:
         std::map<std::string , std::shared_ptr<AudioEntity>> audioMap_;
     };

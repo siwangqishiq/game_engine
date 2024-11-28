@@ -15,11 +15,16 @@ namespace purple{
 
     namespace ImgScale{
         enum Mode {
-            //被等比缩放到能够填充控件大小
+            //被等比缩放到能够填充控件大小 放置在view正中间 不会发生裁剪
             FitCenter,
             
+            //被等比缩放到能够填充控件大小 放置在view顶部 不会发生裁剪
             FitTop,
+
+            //被等比缩放到能够填充控件大小 放置在view底部 不会发生裁剪
             FitBottom,
+
+            //缩放到能够填充控件大小 会拉升图片 破坏图片原始宽高比 不会发生裁剪
             FitXY,
 
             //图片置于view的中心 会发生裁剪
@@ -29,6 +34,7 @@ namespace purple{
             CenterCrop, 
 
             //图片置于view的中心 若图片原始尺寸大于view尺寸 进行缩放 保证位图被完整显示 不会产生剪裁
+            // 与FitCenter的不同是 若原始图片大小小于View  不会产生缩放
             CenterInside
         };
     }
@@ -65,8 +71,16 @@ namespace purple{
 
             Rect findFitScaleDstRect(Rect &srcRect,Rect &viewRect);
 
+            Rect findFitTopDstRect(Rect &srcRect,Rect &viewRect);
+
+            Rect findFitBottomDstRect(Rect &srcRect,Rect &viewRect);
+
             Rect findCenterDstRect(Rect &srcRect,Rect &viewRect);
 
             Rect findCenterCropDstRect(Rect &srcRect,Rect &viewRect);
+
+            Rect findCenterInsideDstRect(Rect &srcRect,Rect &viewRect);
+
+            Rect findCenterModeRect(Rect &srcRect,Rect &viewRect,bool isCrop);
     };
 }

@@ -58,35 +58,27 @@ namespace purple{
         // Log::i("debug" , "render text id in img %d", textureImage_->getTextureId());
         Rect dstRect;
         switch(scaleMode_){
-            case ImgScale::Mode::FitCenter:{
+            case ImgScale::Mode::FitCenter:
                 dstRect = findFitScaleDstRect(srcRect,viewRect);
                 break;
-            }
-            case ImgScale::Mode::FitTop:{
-                dstRect = findFitScaleDstRect(srcRect,viewRect);
-                dstRect.top = viewRect.top;
+            case ImgScale::Mode::FitTop:
+                dstRect = findFitTopDstRect(srcRect,viewRect);
                 break;
-            }
-            case ImgScale::Mode::FitBottom:{
-                dstRect = findFitScaleDstRect(srcRect,viewRect);
-                dstRect.top = viewRect.top - viewRect.height + dstRect.height;
+            case ImgScale::Mode::FitBottom:
+                dstRect = findFitBottomDstRect(srcRect,viewRect);
                 break;
-            }
-            case ImgScale::Mode::FitXY:{
+            case ImgScale::Mode::FitXY:
                 dstRect = viewRect;
                 break;
-            }
-            case ImgScale::Mode::Center:{
+            case ImgScale::Mode::Center:
                 dstRect = findCenterDstRect(srcRect,viewRect);
                 break;
-            }
-            case ImgScale::Mode::CenterCrop:{
+            case ImgScale::Mode::CenterCrop:
                 dstRect = findCenterCropDstRect(srcRect,viewRect);
                 break;
-            }
-            case ImgScale::Mode::CenterInside:{
+            case ImgScale::Mode::CenterInside:
+                dstRect = findCenterInsideDstRect(srcRect,viewRect);
                 break;
-            }
             default:
                 break;
         }//end switch
@@ -97,6 +89,18 @@ namespace purple{
         speiteBatch->begin();
         speiteBatch->renderImage(*textureImage_ , srcRect , dstRect);
         speiteBatch->end();
+    }
+
+    Rect Img::findFitTopDstRect(Rect &srcRect,Rect &viewRect){
+        Rect dstRect = findFitScaleDstRect(srcRect,viewRect);
+        dstRect.top = viewRect.top;
+        return dstRect;
+    }
+
+    Rect Img::findFitBottomDstRect(Rect &srcRect,Rect &viewRect){
+        Rect dstRect = findFitScaleDstRect(srcRect,viewRect);
+        dstRect.top = viewRect.top - viewRect.height + dstRect.height;
+        return dstRect;
     }
 
     Rect Img::findFitScaleDstRect(Rect &srcRect,Rect &viewRect){
@@ -156,9 +160,8 @@ namespace purple{
         return dstRect;
     }
 
-    Rect Img::findCenterCropDstRect(Rect &srcRect,Rect &viewRect){
+    Rect Img::findCenterModeRect(Rect &srcRect,Rect &viewRect,bool isCrop){
         Rect dstRect;
-        const float ratio = srcRect.width / srcRect.height;
         dstRect.left = viewRect.left;
         dstRect.top = viewRect.top;
         dstRect.width = srcRect.width;
@@ -172,16 +175,48 @@ namespace purple{
         dstRect.left -= tranX;
         dstRect.top -= tranY;
 
-
-        if(dstRect.left < viewRect.left){
-            dstRect.left = viewRect.left;
+        // is in view quit
+        if(dstRect.left >= viewRect.left && dstRect.top <= viewRect.top){
+            return dstRect;
         }
+    
+        //do scale and src crop
+        const float srcWidth = srcRect.width;
+        const float srcHeight = srcRect.height;
 
+        const float scaleW = viewRect.width / srcWidth;
+        const float scaleH = viewRect.height / srcHeight;
+        const float scale = isCrop?std::max(scaleW , scaleH):std::min(scaleW , scaleH);
+        
+        //scale with center point
+        dstRect.width = scale * srcWidth;
+        dstRect.height = scale * srcHeight;
+
+        dstRect.left = scale * dstRect.left + viewCenter.x - viewCenter.x * scale;
+        dstRect.top = scale * dstRect.top + viewCenter.y - viewCenter.y * scale;
+
+        // crop src 
         if(dstRect.top > viewRect.top){
+            srcRect.top = srcRect.top - (dstRect.top  - viewRect.top) / (scale);
+            srcRect.height = viewRect.height / scale;
+                        
             dstRect.top = viewRect.top;
-        }
+            dstRect.height = viewRect.height;
+        }else if(dstRect.left < viewRect.left){
+            srcRect.left = srcRect.left + (viewRect.left - dstRect.left) / (scale);
+            srcRect.width = viewRect.width / scale;
 
+            dstRect.left = viewRect.left;
+            dstRect.width = viewRect.height;
+        }
         return dstRect;
     }
 
+    Rect Img::findCenterCropDstRect(Rect &srcRect,Rect &viewRect){
+        return findCenterModeRect(srcRect , viewRect , true);
+    }
+
+    Rect Img::findCenterInsideDstRect(Rect &srcRect,Rect &viewRect){
+        return findCenterModeRect(srcRect , viewRect , false);
+    }
 }

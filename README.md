@@ -39,4 +39,10 @@ file -> object for render or play
     ./app
 
 
+### 使用第三方库
+桌面窗口 [GLFW](https://www.glfw.org/) 
+
+音频播放 [miniaudio](https://miniaud.io/) 
+
+
 

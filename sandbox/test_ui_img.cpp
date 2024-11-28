@@ -14,16 +14,26 @@ void TestImgUi::onInit(){
     // testImgWrapContent();
     // testImgScaleMode();
     // testImgScaleMode2();
-    testImgScaleMode3();
+    // testImgScaleMode3();
+    testImgScaleMode4();
     
-    // std::string audioPath = "audio/test.mp3";
-    // bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,true);
+    std::string audioPath = "audio/heishenhua.mp3";
+    bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,false);
+
+    std::string audioPath2 = "audio/huangfengling.mp3";
+    bgm2 = purple::AudioManager::getInstance()->loadAudioEntity(audioPath2,false);
+
+
+    purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm, [this](std::string name){
+        purple::AudioManager::getInstance()->playAudioEntity(this->bgm2);
+    });
+
+    purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm2, [this](std::string name){
+        purple::AudioManager::getInstance()->playAudioEntity(this->bgm);
+    });
     
-    // purple::AudioManager::getInstance()->setAudioPlayProgressCallback(bgm, [this](unsigned long progress , unsigned long total , double totalTime){
-    //     double currentTime = (static_cast<double>(progress) / total) * totalTime;
-    //     purple::Log::i("play_music","progress %lu / %lu  -- %f :%f" , progress  , total ,currentTime , totalTime);
-    // });
     // purple::AudioManager::getInstance()->playAudioEntity(bgm);
+    purple::AudioManager::getInstance()->playAudioEntity(bgm2);
 }
 
 void TestImgUi::testImg(){
@@ -127,7 +137,11 @@ void TestImgUi::testImgScaleMode3(){
 
     auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
 
-    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+
+    auto imgTexture1 = purple::ImageSource::fromAsset("img/more_height.jpg");
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
     const int imageSizeWidth = 400;
     const int imageSizeHeight = 400;
 
@@ -135,9 +149,10 @@ void TestImgUi::testImgScaleMode3(){
     leftContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
         .setLayoutWeight<StackContainer>(1);
     container->addChild(leftContainer);
-    auto leftImage = std::make_shared<Img>(imgTexture , imageSizeWidth,imageSizeHeight);
+    auto leftImage = std::make_shared<Img>(imgTexture1 , imageSizeWidth,imageSizeHeight);
     leftImage->setLayoutGravity<Img>(LayoutGravity::Center)
-        .setScaleMode<Img>(ImgScale::Mode::FitCenter)
+        .setPadding<Img>(5,5,5,5)
+        .setScaleMode<Img>(ImgScale::Mode::CenterCrop)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
     leftContainer->addChild(leftImage);
 
@@ -145,22 +160,50 @@ void TestImgUi::testImgScaleMode3(){
     rightContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue))
         .setLayoutWeight<StackContainer>(1);
     container->addChild(rightContainer);
-    auto rightImage = std::make_shared<Img>(imgTexture , imageSizeWidth,imageSizeHeight);
+    auto rightImage = std::make_shared<Img>(imgTexture1 , imageSizeWidth,imageSizeHeight);
     rightImage->setLayoutGravity<Img>(LayoutGravity::Center)
-        .setScaleMode<Img>(ImgScale::Mode::FitXY)
+        .setPadding<Img>(5,5,5,5)
+        .setScaleMode<Img>(ImgScale::Mode::CenterInside)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
     rightContainer->addChild(rightImage);
 
+    ui->setRootContainer(container);
+}
 
+void TestImgUi::testImgScaleMode4(){
+    using namespace purple;
 
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
 
-    // auto image = std::make_shared<Img>(imgTexture, 400,400);
-    // image->setLayoutGravity<Img>(LayoutGravity::Center)
-    //     .setBackgroundColor<Img>(ConverColorValue(Color::SkyBlue))
-    //     .setPadding<Img>(10,10,10,10)
-    //     .setScaleMode<Img>(ImgScale::Mode::CenterCrop);
-    // container->addChild(image);
-    
+    // auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    const int imageSizeWidth = 400;
+    const int imageSizeHeight = 400;
+
+    auto leftContainer = std::make_shared<StackContainer>(0,LAYOUT_MATCH_PARENT);
+    leftContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
+        .setLayoutWeight<StackContainer>(1);
+    container->addChild(leftContainer);
+    auto leftImage = std::make_shared<Img>(imgTexture2 , imageSizeWidth,imageSizeHeight);
+    leftImage->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setPadding<Img>(5,5,5,5)
+        .setScaleMode<Img>(ImgScale::Mode::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
+    leftContainer->addChild(leftImage);
+
+    auto rightContainer = std::make_shared<StackContainer>(0,LAYOUT_MATCH_PARENT);
+    rightContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue))
+        .setLayoutWeight<StackContainer>(1);
+    container->addChild(rightContainer);
+    auto rightImage = std::make_shared<Img>(imgTexture2 , imageSizeWidth,imageSizeHeight);
+    rightImage->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setPadding<Img>(5,5,5,5)
+        .setScaleMode<Img>(ImgScale::Mode::CenterInside)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
+    rightContainer->addChild(rightImage);
+
     ui->setRootContainer(container);
 }
 
@@ -171,9 +214,13 @@ void TestImgUi::onTick(){
 }
 
 void TestImgUi::onDispose(){
-    // purple::Log::e("TestImgUi","TestImgUi::onDispose");
-    // if(bgm != nullptr){
-    //     purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
-    // }
+    purple::Log::i("TestImgUi","TestImgUi::onDispose");
+    if(bgm != nullptr){
+        purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+    }
+
+     if(bgm2 != nullptr){
+        purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+    }
 }
 

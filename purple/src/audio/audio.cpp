@@ -34,8 +34,15 @@ namespace purple{
          //播放进度更新回调
         ProgressUpdateCallbackFn onPlayProgressUpdate = nullptr;
 
+        //播放结束 回调
+        PlayEndCallbackFn onPlayEndCallback = nullptr;
+
         void setPlayProgressUpdateCallback(ProgressUpdateCallbackFn callback){
             onPlayProgressUpdate = callback;
+        }
+
+        void setPlayEndCallback(PlayEndCallbackFn callback){
+            onPlayEndCallback = callback;
         }
     };
 
@@ -114,6 +121,11 @@ namespace purple{
                 if(readCount < frameCount){
                     audioEntity->readedFrame = 0;
                     ma_decoder_seek_to_pcm_frame(pDecoder , 0);
+
+                    if(audioEntity->onPlayEndCallback != nullptr){
+                        audioEntity->onPlayEndCallback(audioEntity->name);
+                    }
+
                     if(!(audioEntity->isLoop)){
                         audioEntity->isPlay = false;
                     }
@@ -185,6 +197,14 @@ namespace purple{
         }
 
         entity->setPlayProgressUpdateCallback(callback);
+    }
+
+    void AudioManager::setAudioPlayEndCallback(std::shared_ptr<AudioEntity> entity , PlayEndCallbackFn callback){
+        if(entity == nullptr){
+            return;
+        }
+
+        entity->setPlayEndCallback(callback);
     }
 
     AudioInfo AudioManager::getAudioEntityInfo(std::shared_ptr<AudioEntity> entity){
