@@ -69,8 +69,8 @@ namespace purple{
 
     Shader SdfTextRenderCommand::fetchSdfTextShader(){
         return ShaderManager::getInstance()->loadAssetShader(SAHDER_NAME_SDF_TEXT, 
-                    "shader/render_sdftext_vert.glsl", 
-                    "shader/render_sdftext_frag.glsl");
+                    "shader/text/render_sdftext_vert.glsl",
+                    "shader/text/render_sdftext_frag.glsl");
     }
 
 

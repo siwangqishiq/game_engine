@@ -99,22 +99,22 @@ namespace purple{
         
         //实心矩形
         ShaderManager::getInstance()->loadAssetShader("primitive_rect" , 
-            "shader/primitive_vert.glsl", "shader/primitive_rect_frag.glsl");
+            "shader/shape/primitive_vert.glsl", "shader/shape/primitive_rect_frag.glsl");
 
         // GL_LINES 方式画线
         ShaderManager::getInstance()->loadAssetShader("primitive_lines" , 
-            "shader/primitive_lines_vert.glsl", "shader/primitive_lines_frag.glsl");
+            "shader/shape/primitive_lines_vert.glsl", "shader/shape/primitive_lines_frag.glsl");
         //render smooth lines
         ShaderManager::getInstance()->loadAssetShader("primitive_lines_smooth" , 
-            "shader/primitive_smooth_lines_vert.glsl", "shader/primitive_smooth_lines_frag.glsl");
+            "shader/shape/primitive_smooth_lines_vert.glsl", "shader/shape/primitive_smooth_lines_frag.glsl");
         
         //arc
         ShaderManager::getInstance()->loadAssetShader("primitive_arc" , 
-            "shader/primitive_arc_vert.glsl", "shader/primitive_arc_frag.glsl");
+            "shader/shape/primitive_arc_vert.glsl", "shader/shape/primitive_arc_frag.glsl");
 
         //triangle
         ShaderManager::getInstance()->loadAssetShader("primitive_triangles",
-            "shader/primitive_triangles_vert.glsl", "shader/primitive_triangles_frag.glsl");
+            "shader/shape/primitive_triangles_vert.glsl", "shader/shape/primitive_triangles_frag.glsl");
     }
 
     void RenderEngine::resetNormalMat(float w , float h){

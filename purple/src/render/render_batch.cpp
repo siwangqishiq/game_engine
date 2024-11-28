@@ -47,7 +47,7 @@ namespace purple{
         glBindVertexArray(0);
         
         shader_ = ShaderManager::getInstance()->loadAssetShader("shape_batch_render",
-                        "shader/shape_batch_vertex.glsl", "shader/shape_batch_frag.glsl");
+                        "shader/shape/shape_batch_vertex.glsl", "shader/shape/shape_batch_frag.glsl");
     }
 
     void ShapeBatch::begin(){
@@ -328,7 +328,7 @@ namespace purple{
         glBindVertexArray(0);
 
         shader_ = ShaderManager::getInstance()->loadAssetShader("sprite_batch_render",
-                        "shader/sprite_batch_vertex.glsl", "shader/sprite_batch_frag.glsl");
+                        "shader/sprite/sprite_batch_vertex.glsl", "shader/sprite/sprite_batch_frag.glsl");
     }
 
     void SpriteBatch::begin(){
