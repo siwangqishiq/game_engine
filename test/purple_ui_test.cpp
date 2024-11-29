@@ -78,6 +78,24 @@ TEST_F(PurpleUiTest,rootview_init_visible_set_invisible){
     EXPECT_EQ(200, container->getHeight());
 }
 
+TEST_F(PurpleUiTest,rootview_container_match_parent){
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth , 
+        purple::Engine::ScreenHeight
+    );
+
+    using namespace purple;
+    auto container = std::make_shared<Container>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(container);
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(screenWidth, container->getWidth());
+    EXPECT_EQ(screenHeight, container->getHeight());
+    EXPECT_EQ(0, container->left);
+    EXPECT_EQ(screenHeight, container->top);
+}
+
 
 
 

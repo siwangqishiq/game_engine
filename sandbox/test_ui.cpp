@@ -522,6 +522,13 @@ void TestUi::testContainerCompose(){
     ui->rootContainer_ = container;
 }
 
+void TestUi::testRootUI(){
+    using namespace purple;
+    PContainer container = std::make_shared<Container>(LAYOUT_MATCH_PARENT , LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<Container>(ConverColorValue(Color::SkyBlue));
+    this->ui->setRootContainer(container);
+}
+
 
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
@@ -539,7 +546,8 @@ void TestUi::onInit(){
     // testRowContainerWeight();
     // testRowContainerCompose();
     // testStackContainer();
-    testContainerCompose();
+    // testContainerCompose();
+    testRootUI();
 }
 
 void TestUi::onTick(){

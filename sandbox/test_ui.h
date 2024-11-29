@@ -19,18 +19,17 @@ private:
     std::shared_ptr<purple::UiRoot> ui = nullptr;
     
     void testContainer();
-
     void testColoumContainer();
     void testColumContainerGravity();
     void testColumContainerWeight();
     void testColumContainerComplex();
-
     void testRowContainer();
     void testRowContainerGravity();
     void testRowContainerWeight();
     void testRowContainerCompose();
-
     void testStackContainer();
-
     void testContainerCompose();
+
+
+    void testRootUI();
 };
