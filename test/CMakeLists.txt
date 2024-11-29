@@ -36,6 +36,11 @@ else()
     message(STATUS "This is not a Linux system with ARM architecture")
 endif()
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl -lX11 -latomic")
+    set (CMAKE_CXX_FLAGS -pthread)
+endif()
+
 include_directories(../purple/include)
 include_directories(../vender/glfw/include)
 
