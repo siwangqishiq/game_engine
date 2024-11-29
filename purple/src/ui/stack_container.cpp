@@ -36,7 +36,7 @@ namespace purple{
                 maxChildWidgetHeight = widgetHeight;
             }
         }//end for each
-
+        
         measureSelf(parentRequestWidth ,parentRequestHeight, 
             maxChildWidgetWidth, maxChildWidgetHeight);//
 

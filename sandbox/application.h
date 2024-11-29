@@ -9,6 +9,9 @@
 class Application{
 public:
     const std::string TAG = "SandBoxApp";
+    const static int screenWidth = 1280;
+    const static int screenHeight = 720;
+
     //init application
     void init();
 
@@ -41,8 +44,6 @@ public:
     static int fps;
 private:
     GLFWwindow* window = nullptr;
-    int screenWidth = 1280;
-    int screenHeight = 720;
     
     std::vector<std::shared_ptr<purple::IApp>> appInstanceList;
 

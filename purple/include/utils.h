@@ -38,6 +38,10 @@ namespace purple{
     }
 
     
+    // 被测试的函数
+    int add(int a, int b) {
+        return a + b;
+    }
 }
 
 
