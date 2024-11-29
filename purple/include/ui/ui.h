@@ -14,6 +14,13 @@ namespace purple{
     const int LAYOUT_WRAP_CONTENT = -2;
     const int LAYOUT_UNSET = -3;
 
+    //测量模式
+    enum MeasureSpecMode{
+        Exactly,
+        Atmost,
+        Unset
+    };
+
     class Widget;
     class Container;
 

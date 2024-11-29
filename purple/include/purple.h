@@ -17,6 +17,8 @@ namespace purple{
     
     const bool isDebug = true;
 
+    extern bool UNITTEST;
+
     class IApp{
     public:
         virtual void onInit() = 0;

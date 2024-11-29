@@ -17,7 +17,9 @@ namespace purple{
     int purple::Engine::ScreenWidth = 0;
     int purple::Engine::ScreenHeight = 0;
     const char* purple::Engine::TAG = "purple";
-    
+
+    bool UNITTEST = false;
+
     void Engine::init(int width , int height){
         Log::w(TAG,"init engine");
         long startTime = currentTimeMillis();
@@ -25,6 +27,10 @@ namespace purple{
         ScreenHeight = height;
         
         Log::w(TAG,"init screen size: %d  , %d" , ScreenWidth , ScreenHeight);
+
+        if(UNITTEST){
+            return;
+        }
         
         renderEngine_ = std::make_shared<RenderEngine>();
         renderEngine_->init();
@@ -69,6 +75,10 @@ namespace purple{
 
 
     void Engine::dispose(){
+        if(UNITTEST){
+            return;
+        }
+
         Log::w(TAG,"engine dispose");
         if(renderEngine_ != nullptr){
             renderEngine_->free();
