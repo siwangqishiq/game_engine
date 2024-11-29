@@ -59,7 +59,10 @@ namespace purple{
                 return static_cast<T&>(*this);
             }
 
-            virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
+            virtual void onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue) override;
 
             virtual void onRender() override;
 

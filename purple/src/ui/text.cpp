@@ -4,28 +4,31 @@
 
 namespace purple{
     
-    void Text::onMeasure(int parentRequestWidth , int parentRequestHeight){
+    void Text::onMeasure(MeasureSpecMode widthSpecMode, 
+                            int widthValue, 
+                            MeasureSpecMode heightSpecMode,
+                            int heightValue){
         int preCalaulateHeight = -1;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
+            width_ = widthValue;
         }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
             Rect outRect;
-            preCalculateTextRectSize(outRect, parentRequestWidth);
+            preCalculateTextRectSize(outRect, heightValue);
             width_ = std::min(static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
-                        , parentRequestWidth);
+                        , widthValue);
             preCalaulateHeight = static_cast<int>(outRect.height);
         }else{
             width_ = requestWidth_;
         }
 
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = parentRequestHeight;
+            height_ = heightValue;
         }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             if(preCalaulateHeight != -1){//已经在宽度的计算中预先计算出来了
                 height_ = preCalaulateHeight + this->paddingTop_ + this->paddingBottom_;
             }else{
                 Rect outRect;
-                preCalculateTextRectSize(outRect, parentRequestWidth);
+                preCalculateTextRectSize(outRect, widthValue);
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
         }else{

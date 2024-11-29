@@ -5,15 +5,18 @@ namespace purple{
         Log::i("ui","StackContainer descontructor");
     }
 
-    void StackContainer::onMeasure(int parentRequestWidth , int parentRequestHeight){
+    void StackContainer::onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue){
         this->width_ = requestWidth_;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            setWidth(parentRequestWidth);
+            setWidth(widthValue);
         }
 
         this->height_ = requestHeight_;
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            setHeight(parentRequestHeight);
+            setHeight(heightValue);
         }
 
         int maxChildWidgetWidth = 0;
@@ -23,8 +26,7 @@ namespace purple{
                 continue;
             }
 
-            // Log::e("test", "container child widget %d,%d", width_ , height_);
-            widget->measure(parentRequestWidth , parentRequestHeight);
+            widget->measure(widthSpecMode , widthValue , heightSpecMode , heightValue);
             
             int widgetWidth = widget->getMarginLeft() + widget->getWidth() + widget->getMarginRight();
             if(maxChildWidgetWidth < widgetWidth){
@@ -37,8 +39,7 @@ namespace purple{
             }
         }//end for each
         
-        measureSelf(parentRequestWidth ,parentRequestHeight, 
-            maxChildWidgetWidth, maxChildWidgetHeight);//
+        measureSelf(widthValue , heightValue, maxChildWidgetWidth, maxChildWidgetHeight);//
 
         // Log::i("ui","Stack measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }

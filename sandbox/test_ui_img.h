@@ -14,7 +14,7 @@ public:
 
 private:
     std::shared_ptr<purple::UiRoot> ui = nullptr;
-
+    
     std::shared_ptr<purple::AudioEntity> bgm = nullptr;
     std::shared_ptr<purple::AudioEntity> bgm2 = nullptr;
 

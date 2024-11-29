@@ -12,7 +12,7 @@ namespace purple{
                         std::vector<PWidget> &hasWeightList){
         int costH = childWidget->getMarginTop() + childWidget->getMarginBottom();
 
-        childWidget->measure(limitWidth , limitHeight);
+        childWidget->measure(MeasureSpecMode::Atmost , limitWidth , MeasureSpecMode::Atmost, limitHeight);
         if(childWidget->getLayoutWeight() > 0){
             hasWeightList.emplace_back(childWidget);
         }else{
@@ -21,14 +21,15 @@ namespace purple{
         return costH;
     }
 
-    void ColumContainer::onMeasure(int parentRequestWidth , int parentRequestHeight){
+    void ColumContainer::onMeasure(MeasureSpecMode widthSpecMode,int widthValue, 
+                                MeasureSpecMode heightSpecMode,int heightValue){
         // Log::i("ui","ColumContainer measure...");
 
         //计算自身大小
         //self width
         width_ = requestWidth_;
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
+            width_ = widthValue;
         }
 
         int maxChildWidth = 0;
@@ -44,8 +45,8 @@ namespace purple{
 
             //测量子布局
             const int costH = measureChildWidgetSize(child,
-                    parentRequestWidth - paddingLeft_ - paddingRight_ - child->getMarginLeft()- child->getMarginRight()
-                    , parentRequestHeight, weightWeightList);
+                    widthValue - paddingLeft_ - paddingRight_ - child->getMarginLeft()- child->getMarginRight()
+                    , heightValue, weightWeightList);
 
             totalCostHeight += costH;
             if(maxChildWidth < child->getWidth()){
@@ -55,9 +56,9 @@ namespace purple{
         }//end for each
 
         if(!weightWeightList.empty()){
-            int realHeight = parentRequestHeight;
+            int realHeight = heightValue;
             if(requestHeight_ == LAYOUT_MATCH_PARENT || requestHeight_ == LAYOUT_WRAP_CONTENT){
-                realHeight = parentRequestHeight;
+                realHeight = heightValue;
             }else{
                 realHeight = requestHeight_ - paddingTop_ - paddingBottom_;
             }
@@ -70,19 +71,16 @@ namespace purple{
             float cubeSize = static_cast<float>(weightTotalHeight) / static_cast<float>(totalWeight);
             for(auto &p : weightWeightList){
                 p->setHeight(cubeSize * p->getLayoutWeight());
-                p->onMeasure(-1,-1);
-                // Log::i("test" , "weightWeight %d , left : %d top:%d  width:%d", p->getHeight(),p->left,
-                //     p->top,p->getWidth());
             }//end for each
         }
 
         if(requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = std::min(paddingLeft_ + maxChildWidth + paddingRight_ , parentRequestWidth);
+            width_ = std::min(paddingLeft_ + maxChildWidth + paddingRight_ , widthValue);
         }
 
         // self height
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = parentRequestHeight;
+            height_ = heightValue;
         }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             height_ = paddingTop_ + childTotalHeight + paddingBottom_;
         }else{

@@ -14,9 +14,12 @@ namespace purple{
     Img::~Img(){
     }
 
-    void Img::onMeasure(int parentRequestWidth , int parentRequestHeight){
+    void Img::onMeasure(MeasureSpecMode widthSpecMode, 
+                        int widthValue, 
+                        MeasureSpecMode heightSpecMode,
+                        int heightValue){
         if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
+            width_ = widthValue;
         }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
             width_ = paddingLeft_ + paddingRight_;
             if(textureImage_ != nullptr ){
@@ -27,7 +30,7 @@ namespace purple{
         }
 
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = parentRequestHeight;
+            height_ = heightValue;
         }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             height_ = paddingTop_ + paddingBottom_;
             if(textureImage_ != nullptr ){

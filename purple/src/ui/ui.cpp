@@ -28,7 +28,35 @@ namespace purple{
             return;
         }
 
-        this->rootContainer_->measure(this->rootWidth_ , this->rootHeight_);
+        int reqW = this->rootContainer_->getRequestWidth();
+        MeasureSpecMode wMode = MeasureSpecMode::Unset;
+        int widthValue = 0;
+        if(reqW == LAYOUT_MATCH_PARENT){
+            wMode = MeasureSpecMode::Exactly;
+            widthValue = this->rootWidth_;
+        }else if(reqW == LAYOUT_WRAP_CONTENT){
+            wMode = MeasureSpecMode::Atmost;
+            widthValue = this->rootWidth_;
+        }else {
+            wMode = MeasureSpecMode::Exactly;
+            widthValue = reqW;
+        }
+
+        int reqH = this->rootContainer_->getRequestHeight();
+        MeasureSpecMode hMode = MeasureSpecMode::Unset;
+        int heightValue = 0;
+        if(reqH == LAYOUT_MATCH_PARENT){
+            hMode = MeasureSpecMode::Exactly;
+            heightValue = this->rootHeight_;
+        }else if(reqH == LAYOUT_WRAP_CONTENT){
+            hMode = MeasureSpecMode::Atmost;
+            heightValue = this->rootHeight_;
+        }else {
+            hMode = MeasureSpecMode::Exactly;
+            heightValue = reqH;
+        }
+
+        this->rootContainer_->measure(wMode, widthValue, hMode, heightValue);
     }
     
     void UiRoot::layout(){
@@ -52,7 +80,9 @@ namespace purple{
     void UiRoot::startRenderUI(){
         measure();
         layout();
-        render();
+        if(!purple::UNITTEST){
+            render();
+        }
     }
 
     //===============================================================================
@@ -71,21 +101,25 @@ namespace purple{
         return 0;
     }
 
-    void Widget::onMeasure(int parentRequestWidth , int parentRequestHeight){
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
-        }else if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = std::min(paddingLeft_ + contentWidth() + paddingRight_, parentRequestWidth);
-        }else{
-            width_ = requestWidth_;
+    void Widget::onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue){
+        // std::cout << "Widget::onMeasure" << std::endl;
+        if(widthSpecMode == MeasureSpecMode::Exactly){
+            setWidth(widthValue);
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
+            setWidth(std::min(paddingLeft_ + contentWidth() + paddingRight_, widthValue));
+        }else if(widthSpecMode == MeasureSpecMode::Unset){
+            setWidth(LAYOUT_UNSET);
         }
 
-        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = parentRequestHeight;
-        }else if(this->requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = std::min(paddingTop_ + contentHeight() + paddingBottom_, parentRequestHeight);
-        }else{
-            height_ = requestHeight_;
+        if(heightSpecMode == MeasureSpecMode::Exactly){
+            setHeight(heightValue);
+        }else if(heightSpecMode == MeasureSpecMode::Atmost){
+            setHeight(std::min(paddingTop_ + contentHeight() + paddingBottom_, heightValue));
+        }else if(heightSpecMode == MeasureSpecMode::Unset){
+            setHeight(LAYOUT_UNSET);
         }
     }
 
@@ -121,12 +155,15 @@ namespace purple{
         // Log::i("widget","Container desstory");
     }
 
-    void Widget::measure(int parentRequestWidth , int parentRequestHeight){
+    void Widget::measure(MeasureSpecMode widthSpecMode, 
+                        int widthValue, 
+                        MeasureSpecMode heightSpecMode,
+                        int heightValue) {
         if(visible_ == Gone){
             return;
         }
 
-        onMeasure(parentRequestWidth, parentRequestHeight);
+        onMeasure(widthSpecMode , widthValue, heightSpecMode , heightValue);
     }
     void Widget::layout(int l , int t){
         if(visible_ == Gone){
@@ -153,9 +190,12 @@ namespace purple{
         this->children_.erase(std::find(this->children_.begin(),this->children_.end(),widget));
     }
 
-    void Container::onMeasure(int parentRequestWidth , int parentRequestHeight){
+    void Container::onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue){
         //set self width and height
-        this->Widget::measure(parentRequestWidth, parentRequestHeight);
+        this->Widget::onMeasure(widthSpecMode, widthValue, heightSpecMode, heightValue);
         
         //set child measure
         if(this->children_.empty()){
@@ -163,7 +203,7 @@ namespace purple{
         }
 
         for(auto &child: this->getChildrenWidgets()){
-            child->measure(this->width_ , this->height_);
+            child->measure(widthSpecMode, this->width_ ,heightSpecMode, this->height_);
         }//end for each
     }
 

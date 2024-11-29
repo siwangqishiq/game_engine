@@ -16,7 +16,10 @@ namespace purple{
 
         }
 
-        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
+        virtual void onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue) override;
 
         virtual void onLayout(int l,int t) override;
 

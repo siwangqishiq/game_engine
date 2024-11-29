@@ -16,9 +16,9 @@ namespace purple{
 
     //测量模式
     enum MeasureSpecMode{
-        Exactly,
-        Atmost,
-        Unset
+        Exactly = 1, //准确数值
+        Atmost = 2, //最大数值
+        Unset = 0 //未设置 后面会补上
     };
 
     class Widget;
@@ -43,11 +43,15 @@ namespace purple{
 
         virtual ~Widget();
 
-        void measure(int parentRequestWidth , int parentRequestHeight);
+        void measure(MeasureSpecMode widthSpecMode, 
+                        int widthValue, 
+                        MeasureSpecMode heightSpecMode,
+                        int heightValue);
         void layout(int l , int t);
         void render();
 
-        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight);
+        virtual void onMeasure(MeasureSpecMode widthSpecMode,int widthValue, 
+                                MeasureSpecMode heightSpecMode,int heightValue);
         virtual void onLayout(int l,int t);
         virtual void onRender();
 
@@ -109,6 +113,22 @@ namespace purple{
 
         void setHeight(int height){
             this->height_ = height;
+        }
+
+        void setRequestWidth(int reqW){
+            this->requestWidth_ = reqW;
+        }
+
+        int getRequestWidth(){
+            return this->requestWidth_;
+        }
+
+        void setRequestHeight(int reqH){
+            this->requestHeight_ = reqH;
+        }
+
+        int getRequestHeight(){
+            return this->requestHeight_;
         }
 
         template<typename T>
@@ -180,8 +200,8 @@ namespace purple{
         glm::vec4 bgColor_ = ConverColorValue(Color::Transparent);
         float bgConnerRadius_ = 0.0f;
 
-        int requestWidth_;
-        int requestHeight_;
+        int requestWidth_ = LAYOUT_UNSET;
+        int requestHeight_ = LAYOUT_UNSET;
 
         int width_ = 0;
         int height_ = 0;
@@ -214,10 +234,16 @@ namespace purple{
         virtual ~Container();
 
         virtual void addChild(PWidget widget);
+
         virtual void removeChild(PWidget widget);
 
-        virtual void onMeasure(int parentRequestWidth , int parentRequestHeight) override;
+        virtual void onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue) override;
+
         virtual void onLayout(int l,int t) override;
+
         virtual void onRender() override;
 
         void renderContainerSelf();

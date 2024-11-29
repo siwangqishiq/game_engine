@@ -3,7 +3,10 @@
 
 namespace purple{
 
-    void RowContainer::onMeasure(int parentRequestWidth , int parentRequestHeight) {
+    void RowContainer::onMeasure(MeasureSpecMode widthSpecMode, 
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue) {
         int maxWidgetHeight = 0;
         int totalWidgetWidth = 0;
         const auto childWidgets = getChildrenWidgets();
@@ -11,12 +14,12 @@ namespace purple{
         
         this->height_ = this->requestHeight_;
         if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
-            this->height_ = parentRequestHeight;
+            this->height_ = heightValue;
         }
 
         //set width
         if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = parentRequestWidth;
+            width_ = widthValue;
         }else {
             width_ = requestWidth_;
         }//endif
@@ -27,7 +30,7 @@ namespace purple{
                 continue;
             }
 
-            widget->measure(width_ , height_);
+            widget->measure(widthSpecMode , width_ , heightSpecMode , height_);
             if(widget->getLayoutWeight() > 0){
                 hasWeightWidgetList.emplace_back(widget);
                 costWidthSize += widget->getMarginLeft() + widget->getMarginRight();
@@ -63,14 +66,14 @@ namespace purple{
             if(hasWeightWidgetList.empty()){
                 this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
             }else{
-                this->width_ = parentRequestWidth;
+                this->width_ = widthValue;
             }
         }//end if
 
         //set height
         if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             height_ = std::min(maxWidgetHeight + paddingTop_ + paddingBottom_ , 
-                                parentRequestHeight);
+                                heightValue);
         }//end if
     }
 
