@@ -22,6 +22,7 @@ namespace purple{
         virtual void onInit() = 0;
         virtual void onTick() = 0;
         virtual void onDispose() = 0;
+        virtual void onResize(int w, int h){}
         virtual void onEvent(int action , float x , float y){}
     };
 

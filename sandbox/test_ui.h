@@ -10,6 +10,9 @@ public:
     virtual void onTick() override;
     virtual void onDispose() override;
 
+    virtual void onResize(int w, int h) override{
+        onInit();
+    }
 private:
     float mTime = 0.0f;
     

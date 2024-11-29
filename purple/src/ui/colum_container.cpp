@@ -44,8 +44,7 @@ namespace purple{
 
             //测量子布局
             const int costH = measureChildWidgetSize(child,
-                parentRequestWidth - paddingLeft_ - paddingRight_ 
-                    - child->getMarginLeft()- child->getMarginRight()
+                    parentRequestWidth - paddingLeft_ - paddingRight_ - child->getMarginLeft()- child->getMarginRight()
                     , parentRequestHeight, weightWeightList);
 
             totalCostHeight += costH;
@@ -71,6 +70,7 @@ namespace purple{
             float cubeSize = static_cast<float>(weightTotalHeight) / static_cast<float>(totalWeight);
             for(auto &p : weightWeightList){
                 p->setHeight(cubeSize * p->getLayoutWeight());
+                p->onMeasure(-1,-1);
                 // Log::i("test" , "weightWeight %d , left : %d top:%d  width:%d", p->getHeight(),p->left,
                 //     p->top,p->getWidth());
             }//end for each

@@ -14,6 +14,8 @@ namespace purple{
             width_ = std::min(static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
                         , parentRequestWidth);
             preCalaulateHeight = static_cast<int>(outRect.height);
+        }else{
+            width_ = requestWidth_;
         }
 
         if(requestHeight_ == LAYOUT_MATCH_PARENT){
@@ -26,12 +28,18 @@ namespace purple{
                 preCalculateTextRectSize(outRect, parentRequestWidth);
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
+        }else{
+            height_ = requestHeight_;
         }
-        // Log::i("ui","Text measue size %d , %d" , width_ , height_);
+        Log::i("ui","Text measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }
         
     void Text::onRender(){
         Widget::onRender();//render background
+
+        if(width_ == 0 || height_ == 0){
+            return;
+        }
         
         //render text
         auto render = purple::Engine::getRenderEngine();

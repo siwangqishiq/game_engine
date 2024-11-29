@@ -6,12 +6,24 @@ namespace purple{
     }
 
     void StackContainer::onMeasure(int parentRequestWidth , int parentRequestHeight){
+        this->width_ = requestWidth_;
+        if(requestWidth_ == LAYOUT_MATCH_PARENT){
+            setWidth(parentRequestWidth);
+        }
+
+        this->height_ = requestHeight_;
+        if(requestHeight_ == LAYOUT_MATCH_PARENT){
+            setHeight(parentRequestHeight);
+        }
+
         int maxChildWidgetWidth = 0;
         int maxChildWidgetHeight = 0;
         for(PWidget widget: getChildrenWidgets()){
             if(widget == nullptr || widget->getVisible() == Gone){
                 continue;
             }
+
+            // Log::e("test", "container child widget %d,%d", width_ , height_);
             widget->measure(parentRequestWidth , parentRequestHeight);
             
             int widgetWidth = widget->getMarginLeft() + widget->getWidth() + widget->getMarginRight();
@@ -27,26 +39,20 @@ namespace purple{
 
         measureSelf(parentRequestWidth ,parentRequestHeight, 
             maxChildWidgetWidth, maxChildWidgetHeight);//
+
+        // Log::i("ui","Stack measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }
 
     void StackContainer::measureSelf(int parentRequestWidth , 
             int parentRequestHeight,
             int childMaxWidth , 
             int childMaxHeight){
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            setWidth(parentRequestWidth);
-        }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
+        if(requestWidth_ == LAYOUT_WRAP_CONTENT){
             setWidth(paddingLeft_ + paddingRight_ + childMaxWidth);
-        }else{
-            setWidth(requestWidth_);
         }
 
-        if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            setHeight(parentRequestHeight);
-        }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
+        if(requestHeight_ == LAYOUT_WRAP_CONTENT){
             setHeight(paddingTop_ + paddingBottom_ + childMaxHeight);
-        }else{
-            setHeight(requestHeight_);
         }
     }
         

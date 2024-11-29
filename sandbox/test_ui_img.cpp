@@ -32,8 +32,12 @@ void TestImgUi::onInit(){
     //     purple::AudioManager::getInstance()->playAudioEntity(this->bgm);
     // });
     
-    // // purple::AudioManager::getInstance()->playAudioEntity(bgm);
+    // // // purple::AudioManager::getInstance()->playAudioEntity(bgm);
     // purple::AudioManager::getInstance()->playAudioEntity(bgm2);
+}
+
+void TestImgUi::onResize(int w , int h){
+    onInit();
 }
 
 void TestImgUi::testImg(){
@@ -220,7 +224,7 @@ void TestImgUi::onDispose(){
     }
 
      if(bgm2 != nullptr){
-        purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
+        purple::AudioManager::getInstance()->releaseAudioEntity(bgm2);
     }
 }
 

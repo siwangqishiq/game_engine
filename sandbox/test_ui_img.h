@@ -10,6 +10,8 @@ public:
     virtual void onTick() override;
     virtual void onDispose() override;
 
+    virtual void onResize(int w , int h) override;
+
 private:
     std::shared_ptr<purple::UiRoot> ui = nullptr;
 

@@ -51,8 +51,10 @@ void Application::init(){
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
-        // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(windows_));
-        purple::Engine::resize(w , h);
+        Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(windows_));
+        if(app_ != nullptr){
+            app_->onResize(w, h);
+        }
     });
 
     if (window == nullptr) {
@@ -62,6 +64,7 @@ void Application::init(){
     }
 
     glfwMakeContextCurrent(window);
+    glfwSetWindowUserPointer(window, static_cast<void *>(this));
 
     #ifndef ANDROID
         #ifdef __ARM_ARCH //for 树梅派
@@ -137,6 +140,14 @@ void Application::showDebugInfo(){
     paint.textGravity = purple::TopRight;
     
     purple::Engine::getRenderEngine()->renderTextWithRectV2(fpsStr , outputRect , paint, nullptr);
+}
+
+void Application::onResize(int w, int h){
+    purple::Engine::resize(w , h);
+
+    for(auto &app : appInstanceList){
+        app->onResize(w, h);
+    }//end for each
 }
 
 void Application::runLoop(){

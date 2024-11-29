@@ -23,6 +23,8 @@ public:
     //show debug info
     void showDebugInfo();
 
+    void onResize(int w , int h);
+
     //扩展信息显示
     void showExtensionInfo();
     

@@ -448,16 +448,26 @@ void TestUi::testContainerCompose(){
     auto headContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
     headContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
     container->addChild(headContainer);
+    // headContainer->setVisible(VisibleState::InVisible);
 
     auto contentContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,0);
-    contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Silver))
-        .setLayoutWeight<StackContainer>(1);
+    contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Yellow))
+        .setLayoutWeight<StackContainer>(1)
+        .setPadding<StackContainer>(20,20,20,20);
     container->addChild(contentContainer);
 
-    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
-    auto image2 = std::make_shared<Img>(imgTexture2 , 200,200);
-    image2->setLayoutGravity<Img>(LayoutGravity::Center);
-    contentContainer->addChild(image2);
+    // auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto image2 = std::make_shared<Img>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    // image2->setLayoutGravity<Img>(LayoutGravity::CenterLeft)
+    //     .setBackgroundColor<Img>(ConverColorValue(Color::Red))
+    //     .setScaleMode<Img>(ImgScale::CenterCrop);
+    // contentContainer->addChild(image2);
+
+    auto text = std::make_shared<Text>(L"哈哈哈哈哈哈哈哈哈",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    text->setLayoutGravity<Text>(LayoutGravity::Center)
+        .setId<Text>("myText")
+        .setBackgroundColor<Text>(ConverColorValue(Color::Black));
+    contentContainer->addChild(text);
 
     // auto contentText = std::make_shared<Text>(L"我是内容",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
     // contentText->setFontColor<Text>(ConverColorValue(Color::Black))
