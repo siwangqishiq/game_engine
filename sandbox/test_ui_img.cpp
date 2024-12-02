@@ -16,24 +16,28 @@ void TestImgUi::onInit(){
     // testImgScaleMode2();
     // testImgScaleMode3();
     testImgScaleMode4();
+
+    if(bgm != nullptr){
+        return;
+    }
     
-    // std::string audioPath = "audio/heishenhua.mp3";
-    // bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,false);
+    std::string audioPath = "audio/heishenhua.mp3";
+    bgm = purple::AudioManager::getInstance()->loadAudioEntity(audioPath,false);
 
-    // std::string audioPath2 = "audio/test.mp3";
-    // bgm2 = purple::AudioManager::getInstance()->loadAudioEntity(audioPath2,false);
+    std::string audioPath2 = "audio/test.mp3";
+    bgm2 = purple::AudioManager::getInstance()->loadAudioEntity(audioPath2,false);
 
 
-    // purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm, [this](std::string name){
-    //     purple::AudioManager::getInstance()->playAudioEntity(this->bgm2);
-    // });
+    purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm, [this](std::string name){
+        purple::AudioManager::getInstance()->playAudioEntity(this->bgm2);
+    });
 
-    // purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm2, [this](std::string name){
-    //     purple::AudioManager::getInstance()->playAudioEntity(this->bgm);
-    // });
+    purple::AudioManager::getInstance()->setAudioPlayEndCallback(bgm2, [this](std::string name){
+        purple::AudioManager::getInstance()->playAudioEntity(this->bgm);
+    });
     
-    // // // purple::AudioManager::getInstance()->playAudioEntity(bgm);
-    // purple::AudioManager::getInstance()->playAudioEntity(bgm2);
+    // // purple::AudioManager::getInstance()->playAudioEntity(bgm);
+    purple::AudioManager::getInstance()->playAudioEntity(bgm2);
 }
 
 void TestImgUi::onResize(int w , int h){

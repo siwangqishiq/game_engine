@@ -23,9 +23,6 @@ namespace purple{
         virtual ~StackContainer();
         
     private:
-        void measureSelf(int parentRequestWidth , 
-                        int parentRequestHeight,
-                        int childMaxWidth , 
-                        int childMaxHeight);
+        
     };//end class
 }

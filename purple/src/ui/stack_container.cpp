@@ -9,54 +9,52 @@ namespace purple{
                                 int widthValue, 
                                 MeasureSpecMode heightSpecMode,
                                 int heightValue){
-        this->width_ = requestWidth_;
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            setWidth(widthValue);
-        }
 
-        this->height_ = requestHeight_;
-        if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            setHeight(heightValue);
-        }
-
-        int maxChildWidgetWidth = 0;
-        int maxChildWidgetHeight = 0;
-        for(PWidget widget: getChildrenWidgets()){
-            if(widget == nullptr || widget->getVisible() == Gone){
+        this->Widget::onMeasure(widthSpecMode, widthValue , heightSpecMode , heightValue);
+        
+        for(auto &pWidget : getChildrenWidgets()){
+            if(pWidget == nullptr){
                 continue;
             }
 
-            widget->measure(widthSpecMode , widthValue , heightSpecMode , heightValue);
-            
-            int widgetWidth = widget->getMarginLeft() + widget->getWidth() + widget->getMarginRight();
-            if(maxChildWidgetWidth < widgetWidth){
-                maxChildWidgetWidth = widgetWidth;
+            //width set
+            MeasureSpecMode widthMode = MeasureSpecMode::Unset;
+            int widthValue = 0;
+            const int limitMaxWidth = this->getWidth() 
+                    - this->paddingLeft_ - this->paddingRight_
+                    - pWidget->getMarginLeft() - pWidget->getMarginRight();
+            if(pWidget->getRequestWidth() == LAYOUT_MATCH_PARENT){
+                widthMode = MeasureSpecMode::Exactly;
+                widthValue = std::max(0, limitMaxWidth);
+            }else if(pWidget->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+                widthMode = MeasureSpecMode::Atmost;
+                widthValue = limitMaxWidth;
+            }else{
+                widthMode = MeasureSpecMode::Exactly;
+                widthValue = std::min(pWidget->getRequestWidth() , limitMaxWidth);
             }
 
-            int widgetHeight = widget->getMarginTop() + widget->getHeight() + widget->getMarginBottom();
-            if(maxChildWidgetHeight < widgetHeight){
-                maxChildWidgetHeight = widgetHeight;
+            //height set
+            MeasureSpecMode heightMode = MeasureSpecMode::Unset;
+            int heightValue = 0;
+            const int limitMaxHeight = this->getHeight() 
+                - this->paddingTop_ - this->paddingBottom_
+                - pWidget->getMarginTop() - pWidget->getMarginBottom();
+            if(pWidget->getRequestHeight() == LAYOUT_MATCH_PARENT){
+                heightMode = MeasureSpecMode::Exactly;
+                heightValue = std::max(0, limitMaxHeight);
+            }else if(pWidget->getRequestHeight() == LAYOUT_WRAP_CONTENT){
+                heightMode = MeasureSpecMode::Atmost;
+                heightValue = limitMaxHeight;
+            }else{
+                heightMode = MeasureSpecMode::Exactly;
+                heightValue = std::min(pWidget->getRequestHeight() , limitMaxHeight);
             }
-        }//end for each
-        
-        measureSelf(widthValue , heightValue, maxChildWidgetWidth, maxChildWidgetHeight);//
 
-        // Log::i("ui","Stack measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
+            pWidget->measure(widthMode , widthValue , heightMode , heightValue);
+        }//end for each                                  
     }
 
-    void StackContainer::measureSelf(int parentRequestWidth , 
-            int parentRequestHeight,
-            int childMaxWidth , 
-            int childMaxHeight){
-        if(requestWidth_ == LAYOUT_WRAP_CONTENT){
-            setWidth(paddingLeft_ + paddingRight_ + childMaxWidth);
-        }
-
-        if(requestHeight_ == LAYOUT_WRAP_CONTENT){
-            setHeight(paddingTop_ + paddingBottom_ + childMaxHeight);
-        }
-    }
-        
     void StackContainer::onLayout(int l,int t){
         this->Container::onLayout(l , t);
 

@@ -28,7 +28,9 @@ namespace purple{
     typedef std::shared_ptr<Container> PContainer;
 
     enum VisibleState{
-        Normal = 0,InVisible = -1,Gone = -2
+        Normal = 0,
+        InVisible = -1,
+        Gone = -2
     };
 
     class Widget{

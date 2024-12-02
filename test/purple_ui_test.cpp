@@ -2,12 +2,13 @@
 #include "purple.h"
 #include "purple_ui.h"
 
-const int screenWidth = 1280;
-const int screenHeight = 800;
-
-std::shared_ptr<purple::UiRoot> uiRoot = nullptr;
 
 class PurpleUiTest : public ::testing::Test{
+public:
+    const int screenWidth = 1280;
+    const int screenHeight = 800;
+    std::shared_ptr<purple::UiRoot> uiRoot = nullptr;
+    
 protected:
     void SetUp() override {
         purple::UNITTEST = true;
@@ -95,6 +96,35 @@ TEST_F(PurpleUiTest,rootview_container_match_parent){
     EXPECT_EQ(0, container->left);
     EXPECT_EQ(screenHeight, container->top);
 }
+
+TEST_F(PurpleUiTest,rootview_container_layout){
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth , 
+        purple::Engine::ScreenHeight
+    );
+
+    using namespace purple;
+    auto container = std::make_shared<Container>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(container);
+    auto childContainer = std::make_shared<Container>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    
+    container->addChild(childContainer);
+
+    childContainer->left = 20;
+    childContainer->top = 100;
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(screenWidth, container->getWidth());
+    EXPECT_EQ(screenHeight, container->getHeight());
+
+    EXPECT_EQ(20, childContainer->left);
+    EXPECT_EQ(100, childContainer->top);
+
+    EXPECT_EQ(container->getWidth(), childContainer->getWidth());
+    EXPECT_EQ(container->getHeight(), childContainer->getHeight());
+}
+
 
 
 

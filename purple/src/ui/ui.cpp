@@ -210,7 +210,13 @@ namespace purple{
     void Container::onLayout(int l,int t){
         // Log::i("widget" , "Container start layout");
         this->Widget::onLayout(l,t);
-        //Container绝对布局 不需要设置子Widget位置
+
+        // if(this->children_.empty()){
+        //     return;
+        // }
+        
+        // for(auto &child: this->getChildrenWidgets()){
+        // }//end for each
     }
 
     void Container::onRender(){
