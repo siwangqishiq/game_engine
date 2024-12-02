@@ -3,27 +3,27 @@
 #include "purple.h"
 
 namespace purple{
-    
     void Text::onMeasure(MeasureSpecMode widthSpecMode, 
                             int widthValue, 
                             MeasureSpecMode heightSpecMode,
                             int heightValue){
         int preCalaulateHeight = -1;
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
+        if(widthSpecMode == MeasureSpecMode::Exactly){
             width_ = widthValue;
-        }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
             Rect outRect;
             preCalculateTextRectSize(outRect, heightValue);
-            width_ = std::min(static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
-                        , widthValue);
+            width_ = std::min(
+                    static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
+                    , widthValue);
             preCalaulateHeight = static_cast<int>(outRect.height);
-        }else{
-            width_ = requestWidth_;
+        }else if(widthSpecMode == MeasureSpecMode::Unset){
+            width_ = 0;
         }
-
-        if(requestHeight_ == LAYOUT_MATCH_PARENT){
+        
+        if(heightSpecMode == MeasureSpecMode::Exactly){
             height_ = heightValue;
-        }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
+        }else if(heightSpecMode == MeasureSpecMode::Atmost){
             if(preCalaulateHeight != -1){//已经在宽度的计算中预先计算出来了
                 height_ = preCalaulateHeight + this->paddingTop_ + this->paddingBottom_;
             }else{
@@ -31,14 +31,15 @@ namespace purple{
                 preCalculateTextRectSize(outRect, widthValue);
                 height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
             }
-        }else{
-            height_ = requestHeight_;
+        }else if(heightSpecMode == MeasureSpecMode::Unset){
+            height_ = 0;
         }
+        
         Log::i("ui","Text measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }
         
     void Text::onRender(){
-        Widget::onRender();//render background
+        this->Widget::onRender();//render background
 
         if(width_ == 0 || height_ == 0){
             return;
@@ -52,6 +53,7 @@ namespace purple{
         int textWidth = this->width_ - this->paddingLeft_ - this->paddingRight_;
         int textHeight = this->height_ - this->paddingTop_ - this->paddingBottom_;
         Rect textRect(textLeft , textTop , textWidth , textHeight);
+
         render->renderTextWithRect(this->content_,textRect,this->textPaint_ , nullptr);
         
         // Log::i("ui","Text render size %d , %d pos: %d, %d" , width_ , height_ , left , top);

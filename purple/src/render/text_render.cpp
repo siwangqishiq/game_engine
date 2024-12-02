@@ -275,10 +275,11 @@ namespace purple{
 
             float charRealWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
 
-            if(x + charRealWidth <= limitRect.getRight() && ch != L'\n'){
+            const int adjustPadding = 16;
+            if(x + charRealWidth <= limitRect.getRight() + adjustPadding 
+                && ch != L'\n'){
                 renderCmd.putVertexDataToBuf(buf , index , x , y ,depthValue,
                     charInfoPtr , paint);
-                
                 x += charRealWidth;
                 lineWidth += charRealWidth;
                 if(outRect.width < lineWidth){

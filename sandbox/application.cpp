@@ -5,6 +5,7 @@
 #include "test_render_text.h"
 #include "test_ui.h"
 #include "test_ui_img.h"
+#include "test_ui_text.h"
 
 #ifndef __ANDROID__
 #define GLFW_INCLUDE_NONE
@@ -99,7 +100,8 @@ void Application::onCreate(){
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
 
     // appInstanceList.push_back(std::make_shared<TestUi>());
-    appInstanceList.push_back(std::make_shared<TestImgUi>());
+    // appInstanceList.push_back(std::make_shared<TestImgUi>());
+    appInstanceList.push_back(std::make_shared<TestTextUi>());
 }
 
 void Application::tick(){
