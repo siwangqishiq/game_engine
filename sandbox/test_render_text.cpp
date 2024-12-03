@@ -1,28 +1,30 @@
 #include "test_render_text.h"
 #include "render/text_render.h"
 #include "resource/asset_manager.h"
+#include "ui/color.h"
 
 void TestTextRender::onInit(){
-    novelContent_ = purple::AssetManager::getInstance()->readAssetTextFile("santi3.txt");
+    // novelContent_ = purple::AssetManager::getInstance()->readAssetTextFile("santi3.txt");
 
-    purple::Engine::getTimer()->scheduleAtFixedRate([this](void *){
-        readCount_++;
-    } ,  100);
+    // purple::Engine::getTimer()->scheduleAtFixedRate([this](void *){
+    //     readCount_++;
+    // } ,  100);
 
-    bool loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("youyuan" , "D:\\font\\youyuan.ttf");
-    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
+    // bool loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("youyuan" , "D:\\font\\youyuan.ttf");
+    // purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 
-    loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("shouxie" , "D:\\font\\shouxie.ttf");
-    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
+    // loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("shouxie" , "D:\\font\\shouxie.ttf");
+    // purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 
-    loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("child" , "D:\\font\\child_font.ttf");
-    purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
+    // loadFontCode = purple::Engine::getRenderEngine()->loadTextFontRes("child" , "D:\\font\\child_font.ttf");
+    // purple::Log::i("text_render" , "loadTextFontRes errCode : %d" , loadFontCode);
 }
 
 void TestTextRender::onTick(){
     // testTextRender();
     // testTextRenderWithRect();
-    testTextRenderLargeContent();
+    // testTextRenderLargeContent();
+    testTextRender2();
 }
 
 void TestTextRender::onDispose(){
@@ -105,5 +107,25 @@ void TestTextRender::testTextRender(){
     // purple::Rect rect(left , top + fontHeight , 400.0f , fontHeight);
     // batch->renderRect(rect , rectPaint);
     // batch->end();
+}
+
+void TestTextRender::testTextRender2(){
+    using namespace purple;
+    purple::TextPaint textPaint;
+    
+    textPaint.textColor = glm::vec4(ConverColorValue(Color::Black));
+    float fontHeight = 180.0f;
+    textPaint.textGravity = purple::TextGravity::Center; 
+    textPaint.setTextSize(fontHeight);
+
+    std::wstring str = L"你好世界 HelloWorld!";
+    purple::Rect rect;
+    rect.left = 0;
+    rect.top = purple::Engine::ScreenHeight;
+    rect.width = purple::Engine::ScreenWidth;
+    rect.height = purple::Engine::ScreenHeight;
+
+    purple::Engine::getRenderEngine()
+        ->renderTextWithRectV2(str , rect , textPaint , nullptr);
 }
 

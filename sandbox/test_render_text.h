@@ -18,6 +18,8 @@ private:
 
     void testTextRenderLargeContent();
 
+    void testTextRender2();
+
     std::wstring novelContent_;
 
     unsigned int readCount_ = 0;

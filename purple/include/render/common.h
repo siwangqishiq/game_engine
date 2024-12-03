@@ -158,6 +158,7 @@ namespace purple{
         TextStyle textStyle = normal;
         TextGravity textGravity = TopLeft;
         std::string fontName;
+        float fontWeight = 1.0f;
 
         inline void setTextSize(float size){
             textSizeScale = (size / FONT_DEFAULT_SIZE);

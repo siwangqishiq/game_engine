@@ -62,7 +62,7 @@ namespace purple{
         // glDepthRangef(0.0f, 10.0f);
         // glDepthFunc(GL_GREATER);
         // glClearDepthf(1.0f);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     void RenderEngine::init(){
