@@ -9,8 +9,15 @@
 class Application{
 public:
     const std::string TAG = "SandBoxApp";
+
+    #ifdef __ARM_ARCH //for 树梅派
+    const static int screenWidth = 800;
+    const static int screenHeight = 600;
+    #else
     const static int screenWidth = 1280;
     const static int screenHeight = 720;
+    #endif
+   
 
     //init application
     void init();
