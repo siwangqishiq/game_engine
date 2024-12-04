@@ -522,14 +522,6 @@ void TestUi::testContainerCompose(){
     ui->rootContainer_ = container;
 }
 
-void TestUi::testRootUI(){
-    using namespace purple;
-    PContainer container = std::make_shared<Container>(LAYOUT_MATCH_PARENT , LAYOUT_MATCH_PARENT);
-    container->setBackgroundColor<Container>(ConverColorValue(Color::SkyBlue));
-    this->ui->setRootContainer(container);
-}
-
-
 void TestUi::onInit(){
     purple::Log::i("test_ui", "Test Ui init");
 
@@ -547,7 +539,48 @@ void TestUi::onInit(){
     // testRowContainerCompose();
     // testStackContainer();
     // testContainerCompose();
-    testRootUI();
+    // testRootUI();
+    testStackContainerWithImage();
+}
+
+void TestUi::testRootUI(){
+    using namespace purple;
+    PContainer container = std::make_shared<Container>(LAYOUT_MATCH_PARENT , LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<Container>(ConverColorValue(Color::SkyBlue));
+    this->ui->setRootContainer(container);
+}
+
+void TestUi::testStackContainerWithImage(){
+     using namespace purple;
+
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    rootContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::White))
+        .setPadding<StackContainer>(20,20,20,20);
+
+    ui->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue))
+        .setPadding<StackContainer>(0,0,0,0);
+    rootContainer->addChild(container);
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+
+    auto img0 = std::make_shared<Img>(imgTexture , LAYOUT_MATCH_PARENT , LAYOUT_MATCH_PARENT);
+    img0->setScaleMode<Img>(ImgScale::FitXY)
+        .setLayoutGravity<Img>(LayoutGravity::Center);
+    container->addChild(img0);
+
+    auto img1 = std::make_shared<Img>(imgTexture , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
+    img1->setScaleMode<Img>(ImgScale::CenterCrop)
+        .setLayoutGravity<Img>(LayoutGravity::TopLeft);
+    container->addChild(img1);
+
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto img2 = std::make_shared<Img>(imgTexture2 , 200 , 200);
+    img2->setScaleMode<Img>(ImgScale::CenterCrop)
+        .setLayoutGravity<Img>(LayoutGravity::Center);
+    container->addChild(img2);
 }
 
 void TestUi::onTick(){

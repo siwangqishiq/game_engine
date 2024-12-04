@@ -6,9 +6,6 @@
 - ~~新的基于SDF的渲染API~~
 - ~~Shader二进制产物cache~~ 
 - ~~Android平台的支持~~
-- 实现常用SDF函数
-- 基于SDF的新绘图api接口
-- path路径绘制功能
 - 新的View体系(working)
 
 
@@ -27,9 +24,13 @@
     - ColumnContainer 垂直布局
     - RowContainer 水平布局
     - StackContainer 层叠布局 
+    
 
 - 事件分发 
     - 点击事件
 
 
 ### UI库 Ver2.0
+
+- 布局
+  - ConstraintContainer 约束布局

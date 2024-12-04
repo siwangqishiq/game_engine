@@ -1,6 +1,7 @@
 
 #include "ui/text.h"
 #include "purple.h"
+#include <algorithm>
 
 namespace purple{
     void Text::onMeasure(MeasureSpecMode widthSpecMode, 
@@ -9,33 +10,33 @@ namespace purple{
                             int heightValue){
         int preCalaulateHeight = -1;
         if(widthSpecMode == MeasureSpecMode::Exactly){
-            width_ = widthValue;
+            setWidth(widthValue);
         }else if(widthSpecMode == MeasureSpecMode::Atmost){
             Rect outRect;
             preCalculateTextRectSize(outRect, heightValue);
-            width_ = std::min(
+            setWidth(std::min(
                     static_cast<int>(outRect.width) + this->paddingLeft_ + this->paddingRight_
-                    , widthValue);
+                    , widthValue));
             preCalaulateHeight = static_cast<int>(outRect.height);
         }else if(widthSpecMode == MeasureSpecMode::Unset){
-            width_ = 0;
+            setWidth(0);
         }
         
         if(heightSpecMode == MeasureSpecMode::Exactly){
-            height_ = heightValue;
+            setHeight(heightValue);
         }else if(heightSpecMode == MeasureSpecMode::Atmost){
             if(preCalaulateHeight != -1){//已经在宽度的计算中预先计算出来了
-                height_ = preCalaulateHeight + this->paddingTop_ + this->paddingBottom_;
+                setHeight(preCalaulateHeight + this->paddingTop_ + this->paddingBottom_);
             }else{
                 Rect outRect;
                 preCalculateTextRectSize(outRect, widthValue);
-                height_ = static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_;
+                setHeight(static_cast<int>(outRect.height)+ this->paddingTop_ + this->paddingBottom_);
             }
         }else if(heightSpecMode == MeasureSpecMode::Unset){
-            height_ = 0;
+            setHeight(0);
         }
         
-        Log::i("ui","Text measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
+        // Log::i("ui","Text measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }
         
     void Text::onRender(){

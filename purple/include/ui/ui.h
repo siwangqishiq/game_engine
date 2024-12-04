@@ -194,7 +194,6 @@ namespace purple{
             this->id = id;
             return static_cast<T&>(*this);
         }
-
     protected:
         Container *parent_ = nullptr;
 

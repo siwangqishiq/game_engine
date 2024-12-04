@@ -1,5 +1,6 @@
 #include "ui/img.h"
 #include "purple.h"
+#include <algorithm>
 
 namespace purple{
     
@@ -18,27 +19,33 @@ namespace purple{
                         int widthValue, 
                         MeasureSpecMode heightSpecMode,
                         int heightValue){
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = widthValue;
-        }else if(requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = paddingLeft_ + paddingRight_;
-            if(textureImage_ != nullptr ){
-                width_ += textureImage_->getWidth();
+        if(widthSpecMode == MeasureSpecMode::Exactly){
+            setWidth(widthValue);
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
+            int contentWidth = 0;
+            if(textureImage_ != nullptr){
+                contentWidth = textureImage_->getWidth();
             }
-        }else{
-            width_ = requestWidth_;
+            const int realWidth = std::min(paddingLeft_ + paddingRight_ + contentWidth , widthValue);
+            setWidth(realWidth);
+        }else if(widthSpecMode == MeasureSpecMode::Unset){
+            setWidth(0);
         }
 
-        if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = heightValue;
-        }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = paddingTop_ + paddingBottom_;
-            if(textureImage_ != nullptr ){
-                height_ += textureImage_->getHeight();
+        if(heightSpecMode == MeasureSpecMode::Exactly){
+            setHeight(heightValue);
+        }else if(heightSpecMode == MeasureSpecMode::Atmost){
+            int contentHeight = 0;
+            if(textureImage_ != nullptr){
+                contentHeight = textureImage_->getHeight();
             }
-        }else{
-            height_ = requestHeight_;
+            const int realHeight = std::min(paddingTop_ + paddingBottom_ + contentHeight , heightValue);
+            setHeight(realHeight);
+        }else if(widthSpecMode == MeasureSpecMode::Unset){
+            setHeight(0);
         }
+
+        // Log::i("ui","Image Widget measue size %d , %d   %s" , width_ , height_ , this->id.c_str());
     }
             
     void Img::onRender(){

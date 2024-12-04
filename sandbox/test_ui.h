@@ -32,4 +32,5 @@ private:
 
 
     void testRootUI();
+    void testStackContainerWithImage();
 };

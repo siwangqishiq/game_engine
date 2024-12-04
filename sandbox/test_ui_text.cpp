@@ -69,7 +69,8 @@ void TestTextUi::testStackContainerWithText(){
         .setLayoutGravity<Text>(LayoutGravity::Center)
         .setBackgroundConnerRadius<Text>(16.0f)
         .setBackgroundColor<Text>(ConverColorValue(Color::Red))
-        .setPadding<Text>(20,20,20,20);
+        .setPadding<Text>(20,20,20,20)
+        .setFontWeight<Text>(100.0f);
     container->addChild(text3);
 
     auto text4 = std::make_shared<Text>(L"废刀令" , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);

@@ -115,6 +115,7 @@ void TestTextRender::testTextRender2(){
     
     textPaint.textColor = glm::vec4(ConverColorValue(Color::Black));
     textPaint.textGravity = purple::TextGravity::Center; 
+    textPaint.setTextSize(50.0f);
     
     std::wstring str = L"你好世界 \nHelloWorld!";
     purple::Rect rect;

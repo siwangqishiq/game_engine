@@ -6,19 +6,19 @@ void Test1App::onInit(){
     image = purple::BuildImageByAsset(std::string("img/t2.jpg"));
     
     mCircleSdfShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf_circle" , "shader/shader_vert.glsl","circle_sdf_frag.glsl");
+        ->loadAssetShader("sdf_circle" , "shader/shader_vert.glsl","shader/circle_sdf_frag.glsl");
 
     mSegSdfShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf_line" , "shader/shader_vert.glsl","segment_sdf_frag.glsl");
+        ->loadAssetShader("sdf_line" , "shader/shader_vert.glsl","shader/segment_sdf_frag.glsl");
 
     mRectShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf_rect" , "shader/shader_vert.glsl","rect_sdf_frag.glsl");
+        ->loadAssetShader("sdf_rect" , "shader/shader_vert.glsl","shader/rect_sdf_frag.glsl");
     
     mUnionShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("union_rect" , "shader/shader_vert.glsl","union_sdf_frag.glsl");
+        ->loadAssetShader("union_rect" , "shader/shader_vert.glsl","shader/union_sdf_frag.glsl");
 
     mTriangleShader = purple::ShaderManager::getInstance()
-        ->loadAssetShader("sdf_triangle" , "shader/shader_vert.glsl" ,"triangle_sdf_frag.glsl");
+        ->loadAssetShader("sdf_triangle" , "shader/shader_vert.glsl" ,"shader/triangle_sdf_frag.glsl");
 
     //play music
     purple::AudioManager::getInstance()->loadAudio("audio/jiangtiandao.mp3","music" , true);

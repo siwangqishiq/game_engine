@@ -4,6 +4,7 @@
 #include "color.h"
 #include "render/common.h"
 
+
 namespace purple{
 
     class Text :public Widget{
@@ -33,6 +34,12 @@ namespace purple{
         template<typename T>
         T& setFontSize(float fontSize){
             textPaint_.setTextSize(fontSize);
+            return static_cast<T&>(*this);
+        }
+
+        template<typename T>
+        T& setFontWeight(float fontWeight){
+            textPaint_.fontWeight = fontWeight;
             return static_cast<T&>(*this);
         }
 
