@@ -9,9 +9,20 @@ namespace purple{
                                 int widthValue, 
                                 MeasureSpecMode heightSpecMode,
                                 int heightValue){
+        if(widthSpecMode == MeasureSpecMode::Exactly){
+            setWidth(widthValue);
+        }else {
+            setWidth(LAYOUT_UNSET);
+        }
 
-        this->Widget::onMeasure(widthSpecMode, widthValue , heightSpecMode , heightValue);
+        if(heightSpecMode == MeasureSpecMode::Exactly){
+            setHeight(heightValue);
+        }else {
+            setHeight(LAYOUT_UNSET);
+        }
         
+        int childCostMaxWidth = 0;
+        int childCostMaxHeight = 0;
         for(auto &pWidget : getChildrenWidgets()){
             if(pWidget == nullptr){
                 continue;
@@ -20,9 +31,15 @@ namespace purple{
             //width set
             MeasureSpecMode widthMode = MeasureSpecMode::Unset;
             int widthValue = 0;
-            const int limitMaxWidth = this->getWidth() 
-                    - this->paddingLeft_ - this->paddingRight_
-                    - pWidget->getMarginLeft() - pWidget->getMarginRight();
+            int limitMaxWidth = 0;
+            if(this->width_ == LAYOUT_UNSET){
+                limitMaxWidth = WIDGET_MAX_WIDTH;
+            }else{
+                limitMaxWidth = this->getWidth() 
+                                    - this->getPaddingHorizontal() 
+                                    - pWidget->getMarginHorizontal();
+            }
+            
             if(pWidget->getRequestWidth() == LAYOUT_MATCH_PARENT){
                 widthMode = MeasureSpecMode::Exactly;
                 widthValue = std::max(0, limitMaxWidth);
@@ -37,9 +54,17 @@ namespace purple{
             //height set
             MeasureSpecMode heightMode = MeasureSpecMode::Unset;
             int heightValue = 0;
-            const int limitMaxHeight = this->getHeight() 
-                - this->paddingTop_ - this->paddingBottom_
-                - pWidget->getMarginTop() - pWidget->getMarginBottom();
+            int limitMaxHeight = 0 ;
+            
+            if(this->height_ == LAYOUT_UNSET){
+                limitMaxHeight = WIDGET_MAX_HEIGHT;
+            }else{
+                limitMaxHeight = this->getHeight() 
+                                - this->getPaddingVertial()
+                                - pWidget->getMarginVertical();
+            }
+
+            
             if(pWidget->getRequestHeight() == LAYOUT_MATCH_PARENT){
                 heightMode = MeasureSpecMode::Exactly;
                 heightValue = std::max(0, limitMaxHeight);
@@ -52,7 +77,23 @@ namespace purple{
             }
 
             pWidget->measure(widthMode , widthValue , heightMode , heightValue);
-        }//end for each                                  
+
+            if(childCostMaxWidth < pWidget->getWidth() + pWidget->getMarginHorizontal()){
+                childCostMaxWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
+            }
+
+            if(childCostMaxHeight < pWidget->getHeight() + pWidget->getMarginVertical()){
+                childCostMaxHeight = pWidget->getHeight() + pWidget->getMarginVertical();
+            }
+        }//end for each        
+
+        if(this->width_ == LAYOUT_UNSET){
+            setWidth(childCostMaxWidth + getPaddingHorizontal());
+        }
+        
+        if(this->height_ == LAYOUT_UNSET){
+            setHeight(childCostMaxHeight + getPaddingHorizontal());
+        }
     }
 
     void StackContainer::onLayout(int l,int t){

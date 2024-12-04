@@ -6,85 +6,149 @@
 
 namespace purple{
 
-    int ColumContainer::measureChildWidgetSize(PWidget childWidget,
-                        int limitWidth, 
-                        int limitHeight,
-                        std::vector<PWidget> &hasWeightList){
-        int costH = childWidget->getMarginTop() + childWidget->getMarginBottom();
-
-        childWidget->measure(MeasureSpecMode::Atmost , limitWidth , MeasureSpecMode::Atmost, limitHeight);
-        if(childWidget->getLayoutWeight() > 0){
-            hasWeightList.emplace_back(childWidget);
-        }else{
-            costH += childWidget->getHeight();
-        }//end if
-        return costH;
-    }
-
     void ColumContainer::onMeasure(MeasureSpecMode widthSpecMode,int widthValue, 
                                 MeasureSpecMode heightSpecMode,int heightValue){
-        // Log::i("ui","ColumContainer measure...");
+        chidlWidgetMaxWidth = 0;
+        childWidghtTotalHeight = 0;
 
-        //计算自身大小
-        //self width
-        width_ = requestWidth_;
-        if(requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = widthValue;
+        int limitMaxWidth = WIDGET_MAX_WIDTH;
+        setWidth(LAYOUT_UNSET);
+        if(widthSpecMode == MeasureSpecMode::Exactly){
+            setWidth(widthValue);
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
+            limitMaxWidth = widthValue;
+        }
+        
+        setHeight(LAYOUT_UNSET);
+        int limitMaxHeight = WIDGET_MAX_HEIGHT;
+        if(heightSpecMode == MeasureSpecMode::Exactly){
+            setHeight(heightValue);
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
+            limitMaxHeight = heightValue;
         }
 
-        int maxChildWidth = 0;
-        int childTotalHeight = 0;
+        measureChildWidgets(limitMaxWidth , limitMaxHeight);
+        
+        bool needReMeasure = false;
+        if(this->width_ == LAYOUT_UNSET){
+            setWidth(chidlWidgetMaxWidth + getPaddingHorizontal());
+            needReMeasure = true;
+        }
 
-        std::vector<PWidget> weightWeightList;
+        if(this->height_ == LAYOUT_UNSET){
+            setHeight(childWidghtTotalHeight + getPaddingVertial());
+            needReMeasure = true;
+        }
 
-        int totalCostHeight = 0;
-        for(PWidget &child: getChildrenWidgets()){
-            if(child == nullptr || child->getVisible() == Gone){
+        if(needReMeasure 
+            && this->width_ != LAYOUT_UNSET 
+            && this->height_ != LAYOUT_UNSET){
+            measureChildWidgets(limitMaxWidth , limitMaxHeight);
+        }
+    }
+
+    void ColumContainer::measureChildWidgets(int limitMaxWidth, int limitMaxHeight) {
+        
+        for(auto &pWidget : getChildrenWidgets()){
+            if(pWidget == nullptr){
                 continue;
             }
 
-            //测量子布局
-            const int costH = measureChildWidgetSize(child,
-                    widthValue - paddingLeft_ - paddingRight_ - child->getMarginLeft()- child->getMarginRight()
-                    , heightValue, weightWeightList);
+            //width set
+            MeasureSpecMode widthMode = MeasureSpecMode::Unset;
+            int widthValue = 0;
+            measureChildWidth(pWidget, limitMaxWidth, widthMode , widthValue);
 
-            totalCostHeight += costH;
-            if(maxChildWidth < child->getWidth()){
-                maxChildWidth = child->getWidth();
+            //height set
+            MeasureSpecMode heightMode = MeasureSpecMode::Unset;
+            int heightValue = 0;
+            measureChildHeight(pWidget , limitMaxHeight ,heightMode , heightValue);
+            
+            //子widget 大小自测
+            pWidget->measure(widthMode , widthValue , heightMode , heightValue);
+            
+            const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
+            if(chidlWidgetMaxWidth < costWidth){
+                chidlWidgetMaxWidth = costWidth;
             }
-            childTotalHeight += (child->getHeight() + child->getMarginTop() + child->getMarginBottom());
+            
+            const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
+            childWidghtTotalHeight += costHeight;
         }//end for each
+    }
 
-        if(!weightWeightList.empty()){
-            int realHeight = heightValue;
-            if(requestHeight_ == LAYOUT_MATCH_PARENT || requestHeight_ == LAYOUT_WRAP_CONTENT){
-                realHeight = heightValue;
+    void ColumContainer::measureChildWidth(
+            PWidget child, 
+            int limitMaxwidth,
+            MeasureSpecMode &mode , 
+            int &value){
+        const bool parentHasNotSetWidth = this->width_ == LAYOUT_UNSET;//父控件还未设置宽度
+
+        if(parentHasNotSetWidth){//父控件宽度未确定
+            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT
+                || child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+                mode = MeasureSpecMode::Atmost;
+                value = limitMaxwidth;
+            }else if(child->getRequestWidth() == LAYOUT_UNSET){
+                mode = MeasureSpecMode::Exactly;
+                value = 0;
             }else{
-                realHeight = requestHeight_ - paddingTop_ - paddingBottom_;
+                mode = MeasureSpecMode::Exactly;
+                value = child->getRequestWidth();
             }
-            const int weightTotalHeight = realHeight - totalCostHeight;
-            int totalWeight = 0;
-            for(auto &p : weightWeightList){
-                totalWeight += p->getLayoutWeight();
-            }//end for each
-
-            float cubeSize = static_cast<float>(weightTotalHeight) / static_cast<float>(totalWeight);
-            for(auto &p : weightWeightList){
-                p->setHeight(cubeSize * p->getLayoutWeight());
-            }//end for each
-        }
-
-        if(requestWidth_ == LAYOUT_WRAP_CONTENT){
-            width_ = std::min(paddingLeft_ + maxChildWidth + paddingRight_ , widthValue);
-        }
-
-        // self height
-        if(requestHeight_ == LAYOUT_MATCH_PARENT){
-            height_ = heightValue;
-        }else if(requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = paddingTop_ + childTotalHeight + paddingBottom_;
         }else{
-            height_ = requestHeight_;
+            const int limitMaxWidth = 
+                std::max(this->getWidth() - this->paddingLeft_ - this->paddingRight_ , 0);
+
+            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT){
+                mode = MeasureSpecMode::Exactly;
+                value = std::max(0, limitMaxWidth);
+            }else if(child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+                mode = MeasureSpecMode::Atmost;
+                value = limitMaxWidth;
+            }else if(child->getRequestWidth() == LAYOUT_UNSET){
+                mode = MeasureSpecMode::Exactly;
+                value = 0;
+            }else{
+                mode = MeasureSpecMode::Exactly;
+                value = std::min(child->getRequestWidth() , limitMaxWidth);
+            }
+        }
+    }
+
+    void ColumContainer::measureChildHeight(
+                            PWidget child,
+                            int limitMaxHeight, 
+                            MeasureSpecMode &mode , 
+                            int &value){
+        const bool parentNotSetHeight = this->height_ == LAYOUT_UNSET;//父控件还未设置高度
+        if(parentNotSetHeight){//父控件高度未设置
+            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT
+                || child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+                mode = MeasureSpecMode::Atmost;
+                value = limitMaxHeight;
+            } else if(child->getRequestWidth() == LAYOUT_UNSET){
+                mode = MeasureSpecMode::Exactly;
+                value = 0;
+            }else{
+                mode = MeasureSpecMode::Exactly;
+                value = std::min(child->getRequestHeight() , limitMaxHeight);
+            }
+        }else{ //父控件高度已经设置
+            limitMaxHeight = std::max(this->getHeight() - this->getPaddingVertial() , 0);
+            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT){
+                mode = MeasureSpecMode::Exactly;
+                value = std::max(0, limitMaxHeight);
+            }else if(child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+                mode = MeasureSpecMode::Atmost;
+                value = limitMaxHeight;
+            }else if(child->getRequestWidth() == LAYOUT_UNSET){
+                mode = MeasureSpecMode::Exactly;
+                value = 0;
+            }else{
+                mode = MeasureSpecMode::Exactly;
+                value = std::min(child->getRequestHeight() , limitMaxHeight);
+            }
         }
     }
 

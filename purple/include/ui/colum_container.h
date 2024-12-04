@@ -15,14 +15,20 @@ namespace purple{
 
         virtual ~ColumContainer();
 
-        virtual void onMeasure(MeasureSpecMode widthSpecMode,int widthValue, 
-                                MeasureSpecMode heightSpecMode,int heightValue) override;
+        virtual void onMeasure(MeasureSpecMode widthSpecMode,
+                                int widthValue, 
+                                MeasureSpecMode heightSpecMode,
+                                int heightValue) override;
 
         virtual void onLayout(int l,int t) override;
 
-        virtual int measureChildWidgetSize(PWidget childWidget,
-                        int limitWidth, 
-                        int limitHeight,
-                        std::vector<PWidget> &hasWeightList);
+    private:
+        int chidlWidgetMaxWidth = 0;
+        int childWidghtTotalHeight = 0;
+
+        void measureChildWidgets(int limitMaxWidth, int limitMaxHeight);
+        
+        void measureChildWidth(PWidget child, int limitMaxwidth, MeasureSpecMode &mode , int &value);
+        void measureChildHeight(PWidget child,int limitMaxHeight, MeasureSpecMode &mode , int &value);
     };
 }

@@ -17,4 +17,6 @@ private:
     
     void testText();
     void testStackContainerWithText();
+    void testColumContainer();
+    void testColumContainerInStack();
 };

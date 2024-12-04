@@ -14,6 +14,10 @@ namespace purple{
     const int LAYOUT_WRAP_CONTENT = -2;
     const int LAYOUT_UNSET = -3;
 
+    //控件最大宽高
+    const int WIDGET_MAX_WIDTH = 100000000;
+    const int WIDGET_MAX_HEIGHT = 100000000;
+
     //测量模式
     enum MeasureSpecMode{
         Exactly = 1, //准确数值
@@ -97,8 +101,24 @@ namespace purple{
             return marginRight_;
         }
 
+        int getMarginHorizontal(){
+            return marginLeft_ + marginRight_;
+        }
+
+        int getMarginVertical(){
+            return marginTop_ + marginBottom_;
+        }
+
         int getMarginBottom(){
             return marginBottom_;
+        }
+
+        int getPaddingHorizontal(){
+            return paddingLeft_ + paddingRight_;
+        }
+
+        int getPaddingVertial(){
+            return paddingTop_ + paddingBottom_;
         }
 
         LayoutGravity getLayoutGravity(){

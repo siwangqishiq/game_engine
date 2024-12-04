@@ -10,7 +10,9 @@ void TestTextUi::onInit(){
     );
 
     // testText();
-    testStackContainerWithText();
+    // testStackContainerWithText();
+    // testColumContainer();
+    testColumContainerInStack();
 }
 
 void TestTextUi::onResize(int w , int h){
@@ -88,6 +90,64 @@ void TestTextUi::testStackContainerWithText(){
         .setBackgroundColor<Text>(ConverColorValue(Color::SkyBlue))
         .setPadding<Text>(20,10,20,10);
     container->addChild(text5);
+
+    ui->setRootContainer(container);
+}
+
+
+void TestTextUi::testColumContainer(){
+    using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT, LAYOUT_WRAP_CONTENT);
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::SkyBlue))
+        .setPadding<ColumContainer>(10,10,10,10);
+
+    auto text1 = std::make_shared<Text>(L"你好" , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
+    text1->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontSize<Text>(50.0f)
+        .setMargin<Text>(0,0,0,0)
+        .setBackgroundColor<Text>(ConverColorValue(Color::Pink))
+        .setPadding<Text>(20,10,20,10);
+    container->addChild(text1);
+
+    auto text2 = std::make_shared<Text>(L"大政奉还" , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
+    text2->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontSize<Text>(50.0f)
+        .setMargin<Text>(0,0,0,0)
+        .setBackgroundColor<Text>(ConverColorValue(Color::Silver))
+        .setPadding<Text>(20,10,20,10);
+    container->addChild(text2);
+
+    ui->setRootContainer(container);
+}
+
+void TestTextUi::testColumContainerInStack(){
+    using namespace purple;
+    auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::White));
+
+    auto columContainer = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT, LAYOUT_WRAP_CONTENT);
+    columContainer->setBackgroundColor<ColumContainer>(ConverColorValue(Color::SkyBlue))
+        .setPadding<ColumContainer>(10,10,10,10)
+        .setLayoutGravity<ColumContainer>(LayoutGravity::Center);
+    container->addChild(columContainer);
+
+    auto text1 = std::make_shared<Text>(L"大政奉还" , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
+    text1->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontSize<Text>(50.0f)
+        .setMargin<Text>(0,0,0,0)
+        .setBackgroundColor<Text>(ConverColorValue(Color::Pink))
+        .setPadding<Text>(20,10,20,10);
+    columContainer->addChild(text1);
+
+    auto text2 = std::make_shared<Text>(L"大政奉还" , LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
+    text2->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontSize<Text>(50.0f)
+        .setFontWeight<Text>(75.0f)
+        .setMargin<Text>(0,20,0,0)
+        .setBackgroundColor<Text>(ConverColorValue(Color::Silver))
+        .setPadding<Text>(20,10,20,10);
+    columContainer->addChild(text2);
 
     ui->setRootContainer(container);
 }
