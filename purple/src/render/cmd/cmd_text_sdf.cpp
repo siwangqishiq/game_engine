@@ -44,6 +44,7 @@ namespace purple{
         shader.setUniformMat3("transMat" , engine_->normalMatrix_);
         shader.setUniformVec4("uTextColor" , paint_.textColor);
         shader.setUniformFloat("uFontSize" , paint_.getTextFontHeight());
+        shader.setUniformFloat("uFontWeight" , paint_.fontWeight);
 
         glBindVertexArray(vao_);
         glBindBuffer(GL_ARRAY_BUFFER , vbo_);

@@ -92,10 +92,11 @@ namespace purple{
     }
 
     std::shared_ptr<CharInfo> TextRender::findCharInfo(wchar_t &ch , int index){
-        if(charInfoMap_.find(ch) != charInfoMap_.end()){
+        if(charInfoMap_.find(ch) != charInfoMap_.end()){ //hit cache 
             return charInfoMap_[ch];
         }
 
+        //create
         std::shared_ptr<CharInfo> result = std::make_shared<CharInfo>();
 
         int width = 0;
@@ -109,7 +110,7 @@ namespace purple{
 
         unsigned char* sdfBitmap = stbtt_GetCodepointSDF(
             &fontInfo_, fontScale_, 
-            ch , 0, 128, -128/5.0f,
+            ch , 0, 128, 128/5.0f,
             &width, &height , &offX, &offY);
         if(sdfBitmap == nullptr || width <= 0 || height <= 0){
             Log::e(TAG ,"sdf data is null index = %d! width = %d , height = %d" 

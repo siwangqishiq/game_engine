@@ -5,6 +5,7 @@ out vec4 outColor;
 
 uniform float uFontSize;
 uniform vec4 uTextColor;
+uniform float uFontWeight;
 
 in vec3 vUvw;
 uniform sampler2DArray sdfTexture;
@@ -15,7 +16,9 @@ float fontSdf(){
 
 void main(){
     float sdfValue = fontSdf();
-    float SmoothSize = min(0.5f , 8.0f / uFontSize);
-    float sdfAlpha = uTextColor.a * (1.0f - smoothstep(0.0f - SmoothSize, 0.0f + SmoothSize, sdfValue));
+    float boldness = clamp(uFontWeight - 50.0f, 0.0f , 100.0f);
+    sdfValue += boldness * 0.005f;
+    float smoothSize = min(0.1f , fwidth(sdfValue));
+    float sdfAlpha = uTextColor.a * (smoothstep(-smoothSize, smoothSize, sdfValue));
     outColor = vec4(uTextColor.rgb, sdfAlpha);
 }

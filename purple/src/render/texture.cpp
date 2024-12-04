@@ -287,10 +287,9 @@ namespace purple{
 
         // std::cout << "glTexImage3D ->" << std::endl;
         uint8_t *data = new uint8_t[width * height *depth];
-        for(int i = 0 ; i < width * height *depth;i++){
-            data[i] = 255;
+        for(int i = 0 ; i < width * height * depth;i++){
+            data[i] = 0;
         }
-
         
         glTexImage3D(GL_TEXTURE_2D_ARRAY , 0, 
             convertChanelToInternalFormat(format),
@@ -300,7 +299,7 @@ namespace purple{
         delete[] data;
 
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
         

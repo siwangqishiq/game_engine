@@ -6,8 +6,8 @@
 
 namespace purple{
 
-    // const float FONT_DEFAULT_SIZE = 64.0f;
-    const float FONT_DEFAULT_SIZE = 32.0f;
+    const float FONT_DEFAULT_SIZE = 64.0f;
+    // const float FONT_DEFAULT_SIZE = 32.0f;
     
     //
     struct Point{
@@ -158,7 +158,7 @@ namespace purple{
         TextStyle textStyle = normal;
         TextGravity textGravity = TopLeft;
         std::string fontName;
-        float fontWeight = 1.0f;
+        float fontWeight = 50.0f;
 
         inline void setTextSize(float size){
             textSizeScale = (size / FONT_DEFAULT_SIZE);

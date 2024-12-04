@@ -114,11 +114,9 @@ void TestTextRender::testTextRender2(){
     purple::TextPaint textPaint;
     
     textPaint.textColor = glm::vec4(ConverColorValue(Color::Black));
-    float fontHeight = 180.0f;
     textPaint.textGravity = purple::TextGravity::Center; 
-    textPaint.setTextSize(fontHeight);
-
-    std::wstring str = L"你好世界 HelloWorld!";
+    
+    std::wstring str = L"你好世界 \nHelloWorld!";
     purple::Rect rect;
     rect.left = 0;
     rect.top = purple::Engine::ScreenHeight;
