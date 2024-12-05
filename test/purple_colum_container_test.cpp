@@ -244,6 +244,75 @@ TEST_F(PurpleUiColumContainerTest,colum_container_test_child_position){
     EXPECT_EQ(purple::Engine::ScreenHeight - 200 , child3->top);
 }
 
+TEST_F(PurpleUiColumContainerTest,colum_container_test_child_gravity_position){
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth , 
+        purple::Engine::ScreenHeight
+    );
+
+    using namespace purple;
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<ColumContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100 , 100);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(400 , 100);
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(100 , 100);
+    child3->setLayoutGravity<Widget>(LayoutGravity::TopRight);
+    container->addChild(child3);
+    
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(400, container->getWidth());
+    EXPECT_EQ(300, container->getHeight());
+    EXPECT_EQ(purple::Engine::ScreenHeight , child1->top);
+    EXPECT_EQ(purple::Engine::ScreenHeight - 100 , child2->top);
+    EXPECT_EQ(purple::Engine::ScreenHeight - 200 , child3->top);
+
+    EXPECT_EQ(0 , child1->left);
+    EXPECT_EQ(0 , child2->left);
+    EXPECT_EQ(300 , child3->left);
+}
+
+TEST_F(PurpleUiColumContainerTest,colum_container_test_weight_wrap){
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    using namespace purple;
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<ColumContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100 , 100);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(200 , LAYOUT_UNSET);
+    child2->setLayoutWeight<Widget>(1);
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(300 , 300);
+    container->addChild(child3);
+    
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(300, container->getWidth());
+    EXPECT_EQ(0, child2->getHeight());
+    EXPECT_EQ(100, child1->getHeight());
+    EXPECT_EQ(300, child3->getHeight());
+}
+
 
 
 

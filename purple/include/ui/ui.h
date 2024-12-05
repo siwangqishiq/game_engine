@@ -81,6 +81,14 @@ namespace purple{
             }
         }
 
+        int getLeft(){
+            return left;
+        }
+
+        int getTop(){
+            return top;
+        }
+
         int getWidth(){
             return width_;
         }
@@ -152,6 +160,8 @@ namespace purple{
         int getRequestHeight(){
             return this->requestHeight_;
         }
+
+        Rect getWidgetRect();
 
         template<typename T>
         T& setPosition(int l,int t){

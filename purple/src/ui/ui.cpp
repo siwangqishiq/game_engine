@@ -180,6 +180,14 @@ namespace purple{
         onRender();
     }
 
+    Rect Widget::getWidgetRect(){
+        const int l = this->left;
+        const int t = this->top;
+        const int w = this->width_;
+        const int h = this->height_;
+        return Rect(l, t, w ,h);
+    }
+
     void Container::addChild(PWidget widget){
         this->children_.push_back(widget);
         widget->setParentWidget(this);

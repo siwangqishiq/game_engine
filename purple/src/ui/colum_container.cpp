@@ -10,6 +10,7 @@ namespace purple{
                                 MeasureSpecMode heightSpecMode,int heightValue){
         chidlWidgetMaxWidth = 0;
         childWidghtTotalHeight = 0;
+        hasWeightWidgets_.clear();
 
         int limitMaxWidth = WIDGET_MAX_WIDTH;
         setWidth(LAYOUT_UNSET);
@@ -48,7 +49,6 @@ namespace purple{
     }
 
     void ColumContainer::measureChildWidgets(int limitMaxWidth, int limitMaxHeight) {
-        
         for(auto &pWidget : getChildrenWidgets()){
             if(pWidget == nullptr){
                 continue;
@@ -75,6 +75,8 @@ namespace purple{
             const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
             childWidghtTotalHeight += costHeight;
         }//end for each
+        
+        measureWeightWidgets(limitMaxWidth , limitMaxHeight);
     }
 
     void ColumContainer::measureChildWidth(
@@ -123,11 +125,11 @@ namespace purple{
                             int &value){
         const bool parentNotSetHeight = this->height_ == LAYOUT_UNSET;//父控件还未设置高度
         if(parentNotSetHeight){//父控件高度未设置
-            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT
-                || child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+            if(child->getRequestHeight() == LAYOUT_MATCH_PARENT
+                || child->getRequestHeight() == LAYOUT_WRAP_CONTENT){
                 mode = MeasureSpecMode::Atmost;
                 value = limitMaxHeight;
-            } else if(child->getRequestWidth() == LAYOUT_UNSET){
+            } else if(child->getRequestHeight() == LAYOUT_UNSET){
                 mode = MeasureSpecMode::Exactly;
                 value = 0;
             }else{
@@ -136,20 +138,56 @@ namespace purple{
             }
         }else{ //父控件高度已经设置
             limitMaxHeight = std::max(this->getHeight() - this->getPaddingVertial() , 0);
-            if(child->getRequestWidth() == LAYOUT_MATCH_PARENT){
+            if(child->getRequestHeight() == LAYOUT_MATCH_PARENT){
                 mode = MeasureSpecMode::Exactly;
                 value = std::max(0, limitMaxHeight);
-            }else if(child->getRequestWidth() == LAYOUT_WRAP_CONTENT){
+            }else if(child->getRequestHeight() == LAYOUT_WRAP_CONTENT){
                 mode = MeasureSpecMode::Atmost;
                 value = limitMaxHeight;
-            }else if(child->getRequestWidth() == LAYOUT_UNSET){
+            }else if(child->getRequestHeight() == LAYOUT_UNSET){
                 mode = MeasureSpecMode::Exactly;
                 value = 0;
+                if(child->getRequestHeight() > 0){ //设置了宽度权值  需要重新计算
+                    mode = MeasureSpecMode::Unset;
+                    value = 0;
+                    this->hasWeightWidgets_.emplace_back(child);
+                }
             }else{
                 mode = MeasureSpecMode::Exactly;
                 value = std::min(child->getRequestHeight() , limitMaxHeight);
             }
         }
+    }
+
+    void ColumContainer::measureWeightWidgets(int limitMaxWidth , int limitMaxHeight){
+        if(hasWeightWidgets_.empty()){
+            return;
+        }
+
+        const int currentCostHeight = childWidghtTotalHeight;
+        const int remainTotal = std::max(getHeight() - currentCostHeight , 0);
+        if(remainTotal > 0){
+            int totalWeight = 0;
+            for(auto &widget : hasWeightWidgets_){
+                totalWeight += widget->getLayoutWeight();
+            }//end for each
+
+            if(totalWeight == 0){
+                return;
+            }
+
+            const int cubeSize = remainTotal/totalWeight;
+            for(auto &pWidget : hasWeightWidgets_){
+                MeasureSpecMode widthMode = MeasureSpecMode::Unset;
+                int widthValue = 0;
+                measureChildWidth(pWidget, limitMaxWidth, widthMode , widthValue);
+
+                MeasureSpecMode heightMode = MeasureSpecMode::Exactly;
+                int heightValue = pWidget->getLayoutWeight() * cubeSize;
+                pWidget->measure(widthMode , widthValue , heightMode , heightValue);//子widget 大小自测
+            }//end for each
+        }
+        hasWeightWidgets_.clear();
     }
 
     void ColumContainer::onLayout(int l,int t){
