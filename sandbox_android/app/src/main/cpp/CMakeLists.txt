@@ -29,6 +29,7 @@ add_library( # Sets the name of the library.
         ${SANDBOX_DIR}/test_render_text.cpp
         ${SANDBOX_DIR}/test_ui.cpp
         ${SANDBOX_DIR}/test_ui_img.cpp
+        ${SANDBOX_DIR}/test_ui_text.cpp
         ${PURPLE_SRC_FILES}
         )
 
