@@ -24,7 +24,7 @@ namespace purple{
 
     private:
         int chidlWidgetMaxWidth = 0;
-        int childWidghtTotalHeight = 0;
+        int childWidgetTotalHeight = 0;
 
         std::vector<PWidget> hasWeightWidgets_;
 

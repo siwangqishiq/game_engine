@@ -540,7 +540,8 @@ void TestUi::onInit(){
     // testStackContainer();
     // testContainerCompose();
     // testRootUI();
-    testStackContainerWithImage();
+    // testStackContainerWithImage();
+    testColumContainer();
 }
 
 void TestUi::testRootUI(){
@@ -581,6 +582,43 @@ void TestUi::testStackContainerWithImage(){
     img2->setScaleMode<Img>(ImgScale::CenterCrop)
         .setLayoutGravity<Img>(LayoutGravity::Center);
     container->addChild(img2);
+}
+
+void TestUi::testColumContainer(){
+    using namespace purple;
+
+    auto rootContainer = std::make_shared<ColumContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    rootContainer->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setPadding<ColumContainer>(20,20,20,20);
+
+    ui->setRootContainer(rootContainer);
+    
+    auto childContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_WRAP_CONTENT);
+    childContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::SkyBlue))
+        .setPadding<StackContainer>(0,0,0,0);
+    rootContainer->addChild(childContainer);
+
+    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto img0 = std::make_shared<Img>(imgTexture , 100 , 100);
+    img0->setScaleMode<Img>(ImgScale::CenterCrop)
+        .setLayoutGravity<Img>(LayoutGravity::Center);
+    childContainer->addChild(img0);
+
+    auto text1 = std::make_shared<Text>(L"HelloWorld" , 500, LAYOUT_WRAP_CONTENT);
+    text1->setBackgroundColor<Text>(ConverColorValue(Color::Red));
+    rootContainer->addChild(text1);
+
+    auto text2 = std::make_shared<Text>(L"你好世界" , LAYOUT_MATCH_PARENT, LAYOUT_WRAP_CONTENT);
+    text2->setBackgroundColor<Text>(ConverColorValue(Color::Silver));
+    rootContainer->addChild(text2);
+
+    auto text3 = std::make_shared<Text>(L"工藤新一" , LAYOUT_MATCH_PARENT, LAYOUT_UNSET);
+    text3->setBackgroundColor<Text>(ConverColorValue(Color::Blue))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setFontColor<Text>(ConverColorValue(Color::Black))
+        .setFontWeight<Text>(100.0f)
+        .setLayoutWeight<Text>(2);
+    rootContainer->addChild(text3);
 }
 
 void TestUi::onTick(){

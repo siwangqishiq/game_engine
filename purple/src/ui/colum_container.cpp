@@ -9,7 +9,7 @@ namespace purple{
     void ColumContainer::onMeasure(MeasureSpecMode widthSpecMode,int widthValue, 
                                 MeasureSpecMode heightSpecMode,int heightValue){
         chidlWidgetMaxWidth = 0;
-        childWidghtTotalHeight = 0;
+        childWidgetTotalHeight = 0;
         hasWeightWidgets_.clear();
 
         int limitMaxWidth = WIDGET_MAX_WIDTH;
@@ -37,13 +37,15 @@ namespace purple{
         }
 
         if(this->height_ == LAYOUT_UNSET){
-            setHeight(childWidghtTotalHeight + getPaddingVertial());
+            setHeight(childWidgetTotalHeight + getPaddingVertial());
             needReMeasure = true;
         }
 
         if(needReMeasure 
             && this->width_ != LAYOUT_UNSET 
             && this->height_ != LAYOUT_UNSET){
+            // std::cout << "twice meausre ChildWidgets " << std::endl;
+            childWidgetTotalHeight = 0;
             measureChildWidgets(limitMaxWidth , limitMaxHeight);
         }
     }
@@ -73,7 +75,8 @@ namespace purple{
             }
             
             const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
-            childWidghtTotalHeight += costHeight;
+            // std::cout << pWidget->id << " meausre height = " << costHeight << std::endl;
+            childWidgetTotalHeight += costHeight;
         }//end for each
         
         measureWeightWidgets(limitMaxWidth , limitMaxHeight);
@@ -130,6 +133,7 @@ namespace purple{
                 mode = MeasureSpecMode::Atmost;
                 value = limitMaxHeight;
             } else if(child->getRequestHeight() == LAYOUT_UNSET){
+                // std::cout << "id = " << child->id << " layout height is unset" << std::endl;
                 mode = MeasureSpecMode::Exactly;
                 value = 0;
             }else{
@@ -147,10 +151,11 @@ namespace purple{
             }else if(child->getRequestHeight() == LAYOUT_UNSET){
                 mode = MeasureSpecMode::Exactly;
                 value = 0;
-                if(child->getRequestHeight() > 0){ //设置了宽度权值  需要重新计算
+                if(child->getLayoutWeight() > 0){ //设置了宽度权值  需要重新计算
                     mode = MeasureSpecMode::Unset;
                     value = 0;
                     this->hasWeightWidgets_.emplace_back(child);
+                    // std::cout << "add widget to weightset " << child->id << std::endl;
                 }
             }else{
                 mode = MeasureSpecMode::Exactly;
@@ -164,14 +169,19 @@ namespace purple{
             return;
         }
 
-        const int currentCostHeight = childWidghtTotalHeight;
+        const int currentCostHeight = childWidgetTotalHeight;
         const int remainTotal = std::max(getHeight() - currentCostHeight , 0);
+
+        // std::cout << "measureWeightWidgets remainTotal = " 
+        //     << remainTotal << " childWidghtTotalHeight = "
+        //     << childWidgetTotalHeight << std::endl;
         if(remainTotal > 0){
             int totalWeight = 0;
             for(auto &widget : hasWeightWidgets_){
                 totalWeight += widget->getLayoutWeight();
             }//end for each
-
+            
+            // std::cout << "measureWeightWidgets totalWeight = " << totalWeight << std::endl;
             if(totalWeight == 0){
                 return;
             }
@@ -184,7 +194,9 @@ namespace purple{
 
                 MeasureSpecMode heightMode = MeasureSpecMode::Exactly;
                 int heightValue = pWidget->getLayoutWeight() * cubeSize;
+                // std::cout << "id : " << pWidget->id << " height = " << heightValue << std::endl;
                 pWidget->measure(widthMode , widthValue , heightMode , heightValue);//子widget 大小自测
+                // std::cout << "id : " << pWidget->id << " after measure height = " << pWidget->getHeight() << std::endl;
             }//end for each
         }
         hasWeightWidgets_.clear();

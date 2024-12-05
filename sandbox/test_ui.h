@@ -33,4 +33,6 @@ private:
 
     void testRootUI();
     void testStackContainerWithImage();
+
+    void testColumContainer();
 };

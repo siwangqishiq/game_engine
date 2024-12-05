@@ -111,7 +111,7 @@ namespace purple{
         }else if(widthSpecMode == MeasureSpecMode::Atmost){
             setWidth(std::min(paddingLeft_ + contentWidth() + paddingRight_, widthValue));
         }else if(widthSpecMode == MeasureSpecMode::Unset){
-            setWidth(LAYOUT_UNSET);
+            setWidth(0);
         }
 
         if(heightSpecMode == MeasureSpecMode::Exactly){
@@ -119,7 +119,7 @@ namespace purple{
         }else if(heightSpecMode == MeasureSpecMode::Atmost){
             setHeight(std::min(paddingTop_ + contentHeight() + paddingBottom_, heightValue));
         }else if(heightSpecMode == MeasureSpecMode::Unset){
-            setHeight(LAYOUT_UNSET);
+            setHeight(0);
         }
     }
 
