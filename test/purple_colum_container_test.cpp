@@ -385,6 +385,39 @@ TEST_F(PurpleUiColumContainerTest,colum_container_test_weight_value2){
         child3->getHeight());
 }
 
+TEST_F(PurpleUiColumContainerTest,colum_container_test_weight_value_padding){
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    using namespace purple;
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT,LAYOUT_MATCH_PARENT);
+    container->setLayoutGravity<ColumContainer>(LayoutGravity::TopLeft);
+    container->setPadding<ColumContainer>(10,20,10,30);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100 , 100);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(200 , LAYOUT_UNSET);
+    child2->setLayoutWeight<Widget>(1)
+        .setId<Widget>("id2");
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(300 , 100);
+    container->addChild(child3);
+    
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(100, child1->getHeight());
+    EXPECT_EQ(100, child3->getHeight());
+    EXPECT_EQ(screenHeight - 100 - 100 - 20 - 30, child2->getHeight());
+}
+
 
 
 

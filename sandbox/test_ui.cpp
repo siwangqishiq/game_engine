@@ -610,6 +610,7 @@ void TestUi::testColumContainer(){
 
     auto text2 = std::make_shared<Text>(L"你好世界" , LAYOUT_MATCH_PARENT, LAYOUT_WRAP_CONTENT);
     text2->setBackgroundColor<Text>(ConverColorValue(Color::Silver));
+    text2->setMargin<Text>(0,10,0,10);
     rootContainer->addChild(text2);
 
     auto text3 = std::make_shared<Text>(L"工藤新一" , LAYOUT_MATCH_PARENT, LAYOUT_UNSET);

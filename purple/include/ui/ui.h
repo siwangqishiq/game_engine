@@ -97,6 +97,14 @@ namespace purple{
             return height_;
         }
 
+        int getContentHeight(){
+            return getHeight() - paddingBottom_ - paddingTop_;
+        }
+
+        int getContentWidth(){
+            return getWidth() - paddingLeft_ - paddingRight_;
+        }
+
         int getMarginTop(){
             return marginTop_;
         }

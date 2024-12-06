@@ -170,7 +170,7 @@ namespace purple{
         }
 
         const int currentCostHeight = childWidgetTotalHeight;
-        const int remainTotal = std::max(getHeight() - currentCostHeight , 0);
+        const int remainTotal = std::max(getContentHeight() - currentCostHeight , 0);
 
         // std::cout << "measureWeightWidgets remainTotal = " 
         //     << remainTotal << " childWidghtTotalHeight = "
