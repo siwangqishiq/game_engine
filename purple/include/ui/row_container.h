@@ -28,6 +28,8 @@ namespace purple{
         int childWidgetMaxHeight = 0;
         int childWidgetTotalWidth = 0;
 
+        std::vector<PWidget> hasWeightWidgets; 
+
         void measureChildWidgets(int limitMaxWdith , int limitMaxHeight);
 
         void measureChildWidth(PWidget widget , 
@@ -39,5 +41,7 @@ namespace purple{
                                 MeasureSpecMode &outHeightMode , 
                                 int &outHeightValue ,
                                 int limitMaxHeight);
+                                
+        void measureWeightWidgets(int limitMaxWidth , int limitMaxHeight);
     };
 }

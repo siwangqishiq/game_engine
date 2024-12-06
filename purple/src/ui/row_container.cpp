@@ -9,6 +9,7 @@ namespace purple{
                                 int heightValue) {
         childWidgetMaxHeight = 0;
         childWidgetTotalWidth = 0;
+        hasWeightWidgets.clear();
 
         setWidth(LAYOUT_UNSET);
         if(widthSpecMode == MeasureSpecMode::Exactly){
@@ -35,6 +36,7 @@ namespace purple{
         if(needReMeasure 
             && this->width_ != LAYOUT_UNSET
             && this->height_ != LAYOUT_UNSET){
+            childWidgetTotalWidth = 0;
             measureChildWidgets(getWidth(), getHeight());
         }
     }
@@ -63,6 +65,36 @@ namespace purple{
                 childWidgetMaxHeight = costHeight;
             }
         }//end for each
+
+        measureWeightWidgets(limitMaxWdith, limitMaxHeight);
+    }
+
+    void RowContainer::measureWeightWidgets(int limitMaxWidth , int limitMaxHeight){
+        if(hasWeightWidgets.empty()){
+            return;
+        }
+
+        int totalWeightValue = 0;
+        for(auto &pWidget : hasWeightWidgets){
+            totalWeightValue += pWidget->getLayoutWeight();
+        }//end for each
+
+        const int remainWidth = getContentWidth() - childWidgetTotalWidth;
+        if(remainWidth > 0 && totalWeightValue > 0){
+            const int weightCube = remainWidth / totalWeightValue;
+            for(auto &pWidget : hasWeightWidgets){
+                MeasureSpecMode widthMode = MeasureSpecMode::Exactly;
+                int widthValue = weightCube * pWidget->getLayoutWeight();
+
+                MeasureSpecMode heightMode = MeasureSpecMode::Unset;
+                int heightValue = 0;
+                measureChildHeight(pWidget , heightMode , heightValue , limitMaxHeight);
+
+                pWidget->measure(widthMode , widthValue , heightMode , heightValue);
+            }//end for each
+        }
+
+        hasWeightWidgets.clear();
     }
 
     void RowContainer::measureChildWidth(PWidget widget, 
@@ -94,6 +126,11 @@ namespace purple{
             }else if(reqWidth == LAYOUT_UNSET){
                 outWidthMode = MeasureSpecMode::Exactly;
                 outWidthValue = 0;
+                if(widget->getLayoutWeight() > 0){
+                    outWidthMode = MeasureSpecMode::Unset;
+                    outWidthValue = 0;
+                    hasWeightWidgets.emplace_back(widget);
+                }
             }else{
                 outWidthMode = MeasureSpecMode::Exactly;
                 outWidthValue = reqWidth;
