@@ -20,12 +20,24 @@ namespace purple{
                                 int widthValue, 
                                 MeasureSpecMode heightSpecMode,
                                 int heightValue) override;
-
+        
         virtual void onLayout(int l,int t) override;
-
         virtual ~RowContainer();
 
     private:
+        int childWidgetMaxHeight = 0;
+        int childWidgetTotalWidth = 0;
+
+        void measureChildWidgets(int limitMaxWdith , int limitMaxHeight);
+
+        void measureChildWidth(PWidget widget , 
+                                MeasureSpecMode &outWidthMode , 
+                                int &outWidthValue ,
+                                int limitMaxWdith);
         
+        void measureChildHeight(PWidget widget, 
+                                MeasureSpecMode &outHeightMode , 
+                                int &outHeightValue ,
+                                int limitMaxHeight);
     };
 }

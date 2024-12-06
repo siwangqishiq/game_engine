@@ -624,7 +624,7 @@ void TestUi::testColumContainer(){
 
 void TestUi::onTick(){
     // purple::Log::i("test_ui", "Test Ui onTick");
-
+    
     if(this->ui != nullptr){
         this->ui->startRenderUI();
     }

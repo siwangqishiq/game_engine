@@ -7,78 +7,138 @@ namespace purple{
                                 int widthValue, 
                                 MeasureSpecMode heightSpecMode,
                                 int heightValue) {
-        int maxWidgetHeight = 0;
-        int totalWidgetWidth = 0;
-        const auto childWidgets = getChildrenWidgets();
-        std::vector<PWidget> hasWeightWidgetList;
-        
-        this->height_ = this->requestHeight_;
-        if(this->requestHeight_ == LAYOUT_MATCH_PARENT){
-            this->height_ = heightValue;
+        childWidgetMaxHeight = 0;
+        childWidgetTotalWidth = 0;
+
+        setWidth(LAYOUT_UNSET);
+        if(widthSpecMode == MeasureSpecMode::Exactly){
+            setWidth(widthValue);
         }
 
-        //set width
-        if(this->requestWidth_ == LAYOUT_MATCH_PARENT){
-            width_ = widthValue;
-        }else {
-            width_ = requestWidth_;
-        }//endif
+        setHeight(LAYOUT_UNSET);
+        if(heightSpecMode == MeasureSpecMode::Exactly){
+            setHeight(heightValue);
+        }
 
-        int costWidthSize = paddingLeft_ + paddingRight_;
-        for(auto widget: childWidgets){
-            if(widget == nullptr || widget->getVisible() == Gone){
+        measureChildWidgets(getWidth(), getHeight());
+        
+        bool needReMeasure = false;
+        if(widthSpecMode == MeasureSpecMode::Atmost){
+            setWidth(std::min(widthValue , childWidgetTotalWidth + getPaddingHorizontal()));
+            needReMeasure = true;
+        }
+        if(heightSpecMode == MeasureSpecMode::Atmost){
+            setHeight(std::min(heightValue , childWidgetMaxHeight + getPaddingVertial()));
+            needReMeasure = true;
+        }
+        
+        if(needReMeasure 
+            && this->width_ != LAYOUT_UNSET
+            && this->height_ != LAYOUT_UNSET){
+            measureChildWidgets(getWidth(), getHeight());
+        }
+    }
+
+    void RowContainer::measureChildWidgets(int limitMaxWdith , int limitMaxHeight){
+        for(auto pWidget : getChildrenWidgets()){
+            if(pWidget == nullptr){
                 continue;
             }
+            
+            MeasureSpecMode widthMode = MeasureSpecMode::Unset;
+            int widthValue = 0;
+            measureChildWidth(pWidget , widthMode , widthValue , limitMaxWdith);
 
-            widget->measure(widthSpecMode , width_ , heightSpecMode , height_);
-            if(widget->getLayoutWeight() > 0){
-                hasWeightWidgetList.emplace_back(widget);
-                costWidthSize += widget->getMarginLeft() + widget->getMarginRight();
-            }else{
-                costWidthSize += widget->getMarginLeft() + widget->getWidth() + widget->getMarginRight();
-            }
+            MeasureSpecMode heightMode = MeasureSpecMode::Unset;
+            int heightValue = 0;
+            measureChildHeight(pWidget , heightMode , heightValue , limitMaxHeight);
 
-            totalWidgetWidth += widget->getMarginLeft() + widget->getMarginRight() + widget->getWidth();
-            if(maxWidgetHeight < widget->getHeight()){
-                maxWidgetHeight = widget->getHeight();
+            pWidget->measure(widthMode , widthValue , heightMode , heightValue);
+
+            const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
+            childWidgetTotalWidth += costWidth;
+            
+            const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
+            if(childWidgetMaxHeight < costHeight) {
+                childWidgetMaxHeight = costHeight;
             }
         }//end for each
+    }
 
-        if(!hasWeightWidgetList.empty()){ //存在weight属性 重置关联widget width
-            int totalWeightValue = 0;
-            for(auto &widget: hasWeightWidgetList){
-                totalWeightValue += widget->getLayoutWeight();
-            }//end for each
-
-            const int cubeSize =  static_cast<int>(
-                static_cast<float>(this->width_ - costWidthSize) / static_cast<float>(totalWeightValue)
-            );
-
-            for(auto &widget: hasWeightWidgetList){
-                widget->setWidth(cubeSize * widget->getLayoutWeight());
-                // Log::i("ui","widget %s set width = %d" , widget->id.c_str(), widget->getWidth());
-            }
-        }//end if
-
-        
-        //set width
-        if(this->requestWidth_ == LAYOUT_WRAP_CONTENT){
-            if(hasWeightWidgetList.empty()){
-                this->width_ = totalWidgetWidth + paddingLeft_ + paddingRight_;
+    void RowContainer::measureChildWidth(PWidget widget, 
+                MeasureSpecMode &outWidthMode, 
+                int &outWidthValue,
+                int limitMaxWdith) {
+        const int reqWidth = widget->getRequestWidth();
+        if(limitMaxWdith == LAYOUT_UNSET){ //父宽度未知
+            if(reqWidth == LAYOUT_MATCH_PARENT){
+                outWidthMode = MeasureSpecMode::Atmost;
+                outWidthValue = WIDGET_MAX_WIDTH;
+            }else if(reqWidth == LAYOUT_WRAP_CONTENT){
+                outWidthMode = MeasureSpecMode::Atmost;
+                outWidthValue = WIDGET_MAX_WIDTH;
+            }else if(reqWidth == LAYOUT_UNSET){
+                outWidthMode = MeasureSpecMode::Exactly;
+                outWidthValue = 0;
             }else{
-                this->width_ = widthValue;
+                outWidthMode = MeasureSpecMode::Exactly;
+                outWidthValue = reqWidth;
             }
-        }//end if
+        }else{ //父宽度已知
+            if(reqWidth == LAYOUT_MATCH_PARENT){
+                outWidthMode = MeasureSpecMode::Exactly;
+                outWidthValue = limitMaxWdith;
+            }else if(reqWidth == LAYOUT_WRAP_CONTENT){
+                outWidthMode = MeasureSpecMode::Atmost;
+                outWidthValue = limitMaxWdith;
+            }else if(reqWidth == LAYOUT_UNSET){
+                outWidthMode = MeasureSpecMode::Exactly;
+                outWidthValue = 0;
+            }else{
+                outWidthMode = MeasureSpecMode::Exactly;
+                outWidthValue = reqWidth;
+            }
+        }
+    }
 
-        //set height
-        if(requestHeight_ == LAYOUT_WRAP_CONTENT){
-            height_ = std::min(maxWidgetHeight + paddingTop_ + paddingBottom_ , 
-                                heightValue);
+    void RowContainer::measureChildHeight(PWidget widget, 
+                            MeasureSpecMode &outHeightMode , 
+                            int &outHeightValue,
+                            int limitMaxHeight){
+        const int reqHeight = widget->getRequestHeight();
+        if(limitMaxHeight == LAYOUT_UNSET){//父控件高度未知
+            if(reqHeight == LAYOUT_MATCH_PARENT){
+                outHeightMode = MeasureSpecMode::Atmost;
+                outHeightValue = WIDGET_MAX_HEIGHT;
+            }else if(reqHeight == LAYOUT_WRAP_CONTENT){
+                outHeightMode = MeasureSpecMode::Atmost;
+                outHeightValue = WIDGET_MAX_HEIGHT;
+            }else if(reqHeight == LAYOUT_UNSET){
+                outHeightMode = MeasureSpecMode::Exactly;
+                outHeightValue = 0;
+            }else {
+                outHeightMode = MeasureSpecMode::Exactly;
+                outHeightValue = reqHeight;
+            }
+        }else{ //父控件高度已知
+            if(reqHeight == LAYOUT_MATCH_PARENT){
+                outHeightMode = MeasureSpecMode::Exactly;
+                outHeightValue = limitMaxHeight;
+            }else if(reqHeight == LAYOUT_WRAP_CONTENT){
+                outHeightMode = MeasureSpecMode::Atmost;
+                outHeightValue = limitMaxHeight;
+            }else if(reqHeight == LAYOUT_UNSET){
+                outHeightMode = MeasureSpecMode::Exactly;
+                outHeightValue = 0;
+            }else {
+                outHeightMode = MeasureSpecMode::Exactly;
+                outHeightValue = reqHeight;
+            }
         }//end if
     }
 
     void RowContainer::onLayout(int l,int t) {
-        this->Container::onLayout(l , t);
+        this->Widget::onLayout(l , t);
 
         int x = paddingLeft_ + left;
         int y = top - paddingTop_;
@@ -105,7 +165,6 @@ namespace purple{
             x += widget->getMarginLeft() + widget->getMarginRight() + widget->getWidth();
         }//end for each
     }
-
 
     RowContainer::~RowContainer(){
         
