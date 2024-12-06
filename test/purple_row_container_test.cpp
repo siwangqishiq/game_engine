@@ -260,7 +260,6 @@ TEST_F(PurpleUiRowContainerTest,row_container_test_wrap_poisition){
     EXPECT_EQ(child3->top , container->getTop());
 }
 
-
 TEST_F(PurpleUiRowContainerTest,row_container_test_poisition_with_margin){
     using namespace purple;
     
@@ -300,3 +299,129 @@ TEST_F(PurpleUiRowContainerTest,row_container_test_poisition_with_margin){
     EXPECT_EQ(child3->top , container->getTop());
 }
 
+TEST_F(PurpleUiRowContainerTest,row_container_test_layoutweight){
+    using namespace purple;
+    
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<RowContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100,300);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(200,100);
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(LAYOUT_UNSET,300);
+    child3->setLayoutWeight<Widget>(1);
+    container->addChild(child3);
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(300 , child3->getHeight());
+    EXPECT_EQ(purple::Engine::ScreenWidth - 200 - 100, child3->getWidth());
+}
+
+TEST_F(PurpleUiRowContainerTest,row_container_test_layoutweight2){
+    using namespace purple;
+    
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<RowContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100,300);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(LAYOUT_UNSET,100);
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(LAYOUT_UNSET,300);
+    child3->setLayoutWeight<Widget>(1);
+    container->addChild(child3);
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(300 , child3->getHeight());
+    EXPECT_EQ(purple::Engine::ScreenWidth - 100, child3->getWidth());
+}
+
+TEST_F(PurpleUiRowContainerTest,row_container_test_layoutweight3){
+    using namespace purple;
+    
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<RowContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100,300);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(LAYOUT_UNSET,100);
+    child2->setLayoutWeight<Widget>(2);
+    container->addChild(child2);
+
+    auto child3 = std::make_shared<Widget>(LAYOUT_UNSET,300);
+    child3->setLayoutWeight<Widget>(1);
+    container->addChild(child3);
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(300 , child3->getHeight());
+    int remainW = purple::Engine::ScreenWidth - 100;
+    EXPECT_EQ((remainW * 2) / 3, child2->getWidth());
+    EXPECT_EQ(remainW / 3, child3->getWidth());
+}
+
+
+TEST_F(PurpleUiRowContainerTest,row_container_test_layoutweight_margin){
+    using namespace purple;
+    
+    uiRoot = std::make_shared<purple::UiRoot>(
+        purple::Engine::ScreenWidth, 
+        purple::Engine::ScreenHeight
+    );
+
+    auto rootContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    uiRoot->setRootContainer(rootContainer);
+
+    auto container = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_WRAP_CONTENT);
+    container->setLayoutGravity<RowContainer>(LayoutGravity::TopLeft);
+    rootContainer->addChild(container);
+
+    auto child1 = std::make_shared<Widget>(100,300);
+    container->addChild(child1);
+
+    auto child2 = std::make_shared<Widget>(LAYOUT_UNSET,100);
+    child2->setLayoutWeight<Widget>(2)
+        .setMargin<Widget>(20,0,10,0);
+    container->addChild(child2);
+
+    uiRoot->startRenderUI();
+
+    EXPECT_EQ(100 , child2->getHeight());
+    int remainW = purple::Engine::ScreenWidth - 100;
+    EXPECT_EQ(remainW - 20 - 10, child2->getWidth());
+}
