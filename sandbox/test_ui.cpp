@@ -448,38 +448,25 @@ void TestUi::testContainerCompose(){
     auto headContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
     headContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
     container->addChild(headContainer);
-    // headContainer->setVisible(VisibleState::InVisible);
 
-    auto contentContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,0);
-    contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Yellow))
-        .setLayoutWeight<StackContainer>(1)
-        .setPadding<StackContainer>(20,20,20,20);
+    auto contentContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
+    contentContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Yellow))
+        .setLayoutWeight<RowContainer>(1)
+        .setPadding<RowContainer>(20,20,20,20);
     container->addChild(contentContainer);
 
-    // auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
-    // auto image2 = std::make_shared<Img>(LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
-    // image2->setLayoutGravity<Img>(LayoutGravity::CenterLeft)
-    //     .setBackgroundColor<Img>(ConverColorValue(Color::Red))
-    //     .setScaleMode<Img>(ImgScale::CenterCrop);
-    // contentContainer->addChild(image2);
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto image2 = std::make_shared<Img>(imgTexture2 , LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    image2->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Red))
+        .setScaleMode<Img>(ImgScale::CenterCrop);
+    contentContainer->addChild(image2);
 
-    auto text = std::make_shared<Text>(L"哈哈哈哈哈哈哈哈哈",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
-    text->setLayoutGravity<Text>(LayoutGravity::Center)
-        .setId<Text>("myText")
-        .setBackgroundColor<Text>(ConverColorValue(Color::Black));
-    contentContainer->addChild(text);
-
-    // auto contentText = std::make_shared<Text>(L"我是内容",LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
-    // contentText->setFontColor<Text>(ConverColorValue(Color::Black))
-    //     .setFontSize<Text>(64.0f)
-    //     .setLayoutGravity<Text>(LayoutGravity::Center);
-    // contentContainer->addChild(contentText);
-
-    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,150);
+    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
     footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
     container->addChild(footContainer);
 
-    auto tab1 = std::make_shared<Text>(L"Tab1",0,LAYOUT_MATCH_PARENT);
+    auto tab1 = std::make_shared<Text>(L"Tab1",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     tab1->setFontColor<Text>(ConverColorValue(Color::Black))
         .setBackgroundColor<Text>(glm::vec4(1.0f , 0.0f ,0.0f , 1.0f))
         .setTextGravity<Text>(TextGravity::Center)
@@ -488,7 +475,7 @@ void TestUi::testContainerCompose(){
     footContainer->addChild(tab1);
     // footContainer->setVisible(VisibleState::Gone);
 
-    auto tab2 = std::make_shared<Text>(L"Tab2",0,LAYOUT_MATCH_PARENT);
+    auto tab2 = std::make_shared<Text>(L"Tab2",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     tab2->setFontColor<Text>(ConverColorValue(Color::Black))
         .setBackgroundColor<Text>(glm::vec4(0.0f , 1.0f ,0.0f , 0.3f))
         .setTextGravity<Text>(TextGravity::Center)
@@ -496,7 +483,7 @@ void TestUi::testContainerCompose(){
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab2);
 
-    auto tab3 = std::make_shared<Text>(L"Tab3",0,LAYOUT_MATCH_PARENT);
+    auto tab3 = std::make_shared<Text>(L"Tab3",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     tab3->setFontColor<Text>(ConverColorValue(Color::Black))
         .setBackgroundColor<Text>(glm::vec4(0.0f , 0.0f ,1.0f , 0.3f))
         .setTextGravity<Text>(TextGravity::Center)
@@ -504,7 +491,7 @@ void TestUi::testContainerCompose(){
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab3);
 
-    auto tab4 = std::make_shared<Text>(L"Tab4",0,LAYOUT_MATCH_PARENT);
+    auto tab4 = std::make_shared<Text>(L"Tab4",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     tab4->setFontColor<Text>(ConverColorValue(Color::Black))
         .setBackgroundColor<Text>(ConverColorValue(Color::White))
         .setTextGravity<Text>(TextGravity::Center)
@@ -541,7 +528,186 @@ void TestUi::onInit(){
     // testContainerCompose();
     // testRootUI();
     // testStackContainerWithImage();
-    testColumContainer();
+    // testColumContainer();
+    // testContainerCompose2();
+    testContainerCompose3();
+}
+
+void TestUi::testContainerCompose2(){
+    using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>();
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setPadding<ColumContainer>(0,0,0,0);
+    
+    auto headContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    headContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
+    container->addChild(headContainer);
+
+    auto contentContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
+    contentContainer->setBackgroundColor<StackContainer>(ConverColorValue(Color::Purple))
+        .setLayoutWeight<StackContainer>(1)
+        .setPadding<StackContainer>(20,20,20,20)
+        .setId<StackContainer>("error_stack_container");
+    container->addChild(contentContainer);
+
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto image2 = std::make_shared<Img>(imgTexture2 , LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    image2->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Red))
+        .setScaleMode<Img>(ImgScale::CenterCrop);
+    contentContainer->addChild(image2);
+
+    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
+    container->addChild(footContainer);
+
+    auto tab1 = std::make_shared<Text>(L"Tab1",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab1->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(1.0f , 0.0f ,0.0f , 1.0f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab1")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab1);
+    // footContainer->setVisible(VisibleState::Gone);
+
+    auto tab2 = std::make_shared<Text>(L"Tab2",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab2->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 1.0f ,0.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab2")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab2);
+
+    auto tab3 = std::make_shared<Text>(L"Tab3",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab3->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 0.0f ,1.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab3")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab3);
+
+    auto tab4 = std::make_shared<Text>(L"Tab4",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab4->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(ConverColorValue(Color::White))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab4")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab4);
+
+
+    auto headText = std::make_shared<Text>(L"我是标题",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    headText->setMargin<Text>(20,0,0,0)
+        .setTextGravity<Text>(TextGravity::CenterLeft)
+        .setFontColor<Text>(ConverColorValue(Color::Black));
+    headContainer->addChild(headText);
+
+    ui->rootContainer_ = container;
+}
+
+void TestUi::testContainerCompose3(){
+     using namespace purple;
+
+    auto container = std::make_shared<ColumContainer>();
+    container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
+        .setPadding<ColumContainer>(0,0,0,0);
+    
+    auto headContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    headContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
+    container->addChild(headContainer);
+
+    auto contentContainer = std::make_shared<ColumContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
+    contentContainer->setBackgroundColor<ColumContainer>(ConverColorValue(Color::Purple))
+        .setLayoutWeight<ColumContainer>(1)
+        .setPadding<ColumContainer>(20,10,20,20)
+        .setId<ColumContainer>("error_ColumContainer");
+    container->addChild(contentContainer);
+
+    auto imgTexture1 = purple::ImageSource::fromAsset("img/small.png");
+    auto imgTexture2 = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto imgTexture3= purple::ImageSource::fromAsset("img/t2.jpg");
+    auto imgTexture4= purple::ImageSource::fromAsset("img/more_height.jpg");
+
+    auto contentRowChild1 = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
+    contentRowChild1->setLayoutWeight<RowContainer>(1)
+        .setBackgroundColor<RowContainer>(ConverColorValue(Color::Blue));
+    contentContainer->addChild(contentRowChild1);
+
+    auto img1 = std::make_shared<Img>(imgTexture1 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    img1->setLayoutWeight<Img>(1)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Gray));
+    contentRowChild1->addChild(img1);
+
+    auto img2 = std::make_shared<Img>(imgTexture2 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    img2->setLayoutWeight<Img>(1)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Red));
+    contentRowChild1->addChild(img2);
+
+    auto contentRowChild2 = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
+    contentRowChild2->setLayoutWeight<RowContainer>(1)
+        .setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
+    contentContainer->addChild(contentRowChild2);
+   
+    
+    auto img3 = std::make_shared<Img>(imgTexture3 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    img3->setLayoutWeight<Img>(1)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Gray));
+    contentRowChild2->addChild(img3);
+
+    auto img4 = std::make_shared<Img>(imgTexture4 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    img4->setLayoutWeight<Img>(1)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Red));
+    contentRowChild2->addChild(img4);
+
+    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
+    container->addChild(footContainer);
+
+    auto tab1 = std::make_shared<Text>(L"Tab1",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab1->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(1.0f , 0.0f ,0.0f , 1.0f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab1")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab1);
+    // footContainer->setVisible(VisibleState::Gone);
+
+    auto tab2 = std::make_shared<Text>(L"Tab2",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab2->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 1.0f ,0.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab2")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab2);
+
+    auto tab3 = std::make_shared<Text>(L"Tab3",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab3->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(glm::vec4(0.0f , 0.0f ,1.0f , 0.3f))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab3")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab3);
+
+    auto tab4 = std::make_shared<Text>(L"Tab4",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
+    tab4->setFontColor<Text>(ConverColorValue(Color::Black))
+        .setBackgroundColor<Text>(ConverColorValue(Color::White))
+        .setTextGravity<Text>(TextGravity::Center)
+        .setId<Text>("tab4")
+        .setLayoutWeight<Text>(1);
+    footContainer->addChild(tab4);
+
+
+    auto headText = std::make_shared<Text>(L"我是标题",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    headText->setMargin<Text>(20,0,0,0)
+        .setTextGravity<Text>(TextGravity::CenterLeft)
+        .setFontColor<Text>(ConverColorValue(Color::Black));
+    headContainer->addChild(headText);
+
+    ui->rootContainer_ = container;
 }
 
 void TestUi::testRootUI(){

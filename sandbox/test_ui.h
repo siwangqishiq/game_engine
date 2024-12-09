@@ -35,4 +35,8 @@ private:
     void testStackContainerWithImage();
 
     void testColumContainer();
+
+    void testContainerCompose2();
+
+    void testContainerCompose3();
 };

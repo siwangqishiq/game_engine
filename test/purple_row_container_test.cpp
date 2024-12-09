@@ -168,17 +168,20 @@ TEST_F(PurpleUiRowContainerTest,row_container_test_wrap_stack_child){
     rootContainer->addChild(container);
 
     auto childContainer = std::make_shared<StackContainer>(LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
+    childContainer->setMargin<StackContainer>(10, 20, 10, 20);
+    childContainer->setId<StackContainer>("StackContainer");
     container->addChild(childContainer);
 
     auto child1 = std::make_shared<Widget>(100,300);
-    child1->setMargin<Widget>(10, 20, 10,20)
+    child1->setMargin<Widget>(0, 0, 0, 0)
+        .setId<Widget>("child1")
         .setLayoutGravity<Widget>(LayoutGravity::Center);
     childContainer->addChild(child1);
 
     auto child2 = std::make_shared<Widget>(200,100);
     container->addChild(child2);
 
-    auto child3 = std::make_shared<Widget>(100,300);
+    auto child3 = std::make_shared<Widget>(100,200);
     container->addChild(child3);
 
     uiRoot->startRenderUI();
@@ -421,7 +424,8 @@ TEST_F(PurpleUiRowContainerTest,row_container_test_layoutweight_margin){
 
     uiRoot->startRenderUI();
 
-    EXPECT_EQ(100 , child2->getHeight());
     int remainW = purple::Engine::ScreenWidth - 100;
     EXPECT_EQ(remainW - 20 - 10, child2->getWidth());
+
+    EXPECT_EQ(100 , child2->getHeight());
 }

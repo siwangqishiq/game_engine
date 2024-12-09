@@ -23,6 +23,9 @@ namespace purple{
         virtual ~StackContainer();
         
     private:
-        
+        void measureChildWidgets(int parentLimitWidth , int parentLimitHeight);        
+
+        int childMaxWidth = 0;
+        int childMaxHeight = 0;
     };//end class
 }

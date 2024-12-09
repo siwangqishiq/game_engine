@@ -119,9 +119,9 @@ TEST_F(PurpleUiColumContainerTest,colum_container_test_width_matchparent_instack
     auto container = std::make_shared<ColumContainer>(LAYOUT_WRAP_CONTENT,LAYOUT_WRAP_CONTENT);
     uiRoot->setRootContainer(container);
 
-    auto subContainer = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT , LAYOUT_WRAP_CONTENT);
+    auto subContainer = std::make_shared<StackContainer>(LAYOUT_WRAP_CONTENT , LAYOUT_WRAP_CONTENT);
     container->addChild(subContainer);
-
+    
     auto child1 = std::make_shared<Widget>(300 , 200);
     subContainer->addChild(child1);
     

@@ -69,14 +69,18 @@ namespace purple{
             //子widget 大小自测
             pWidget->measure(widthMode , widthValue , heightMode , heightValue);
             
-            const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
-            if(chidlWidgetMaxWidth < costWidth){
-                chidlWidgetMaxWidth = costWidth;
+            if(widthMode != MeasureSpecMode::Unset){
+                const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
+                if(chidlWidgetMaxWidth < costWidth){
+                    chidlWidgetMaxWidth = costWidth;
+                }
             }
             
-            const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
-            // std::cout << pWidget->id << " meausre height = " << costHeight << std::endl;
-            childWidgetTotalHeight += costHeight;
+            if(heightMode != MeasureSpecMode::Unset){
+                const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
+                // std::cout << pWidget->id << " meausre height = " << costHeight << std::endl;
+                childWidgetTotalHeight += costHeight;
+            }
         }//end for each
         
         measureWeightWidgets(limitMaxWidth , limitMaxHeight);
@@ -103,7 +107,7 @@ namespace purple{
             }
         }else{
             const int limitMaxWidth = 
-                std::max(this->getWidth() - this->paddingLeft_ - this->paddingRight_ , 0);
+                std::max(getWidth() - getPaddingHorizontal(), 0);
 
             if(child->getRequestWidth() == LAYOUT_MATCH_PARENT){
                 mode = MeasureSpecMode::Exactly;
@@ -168,30 +172,28 @@ namespace purple{
         if(hasWeightWidgets_.empty()){
             return;
         }
+        
+        int totalWeight = 0;
+        int widgetTotalMargin = 0;
+        for(auto &widget : hasWeightWidgets_){
+            totalWeight += widget->getLayoutWeight();
+            widgetTotalMargin += widget->getMarginVertical();
+        }//end for each
 
         const int currentCostHeight = childWidgetTotalHeight;
-        const int remainTotal = std::max(getContentHeight() - currentCostHeight , 0);
+        const int remainTotal = std::max(getContentHeight() - currentCostHeight - widgetTotalMargin , 0);
 
         // std::cout << "measureWeightWidgets remainTotal = " 
         //     << remainTotal << " childWidghtTotalHeight = "
         //     << childWidgetTotalHeight << std::endl;
-        if(remainTotal > 0){
-            int totalWeight = 0;
-            for(auto &widget : hasWeightWidgets_){
-                totalWeight += widget->getLayoutWeight();
-            }//end for each
-            
+        if(remainTotal > 0 && totalWeight > 0){
             // std::cout << "measureWeightWidgets totalWeight = " << totalWeight << std::endl;
-            if(totalWeight == 0){
-                return;
-            }
-
             const int cubeSize = remainTotal/totalWeight;
             for(auto &pWidget : hasWeightWidgets_){
                 MeasureSpecMode widthMode = MeasureSpecMode::Unset;
                 int widthValue = 0;
                 measureChildWidth(pWidget, limitMaxWidth, widthMode , widthValue);
-
+                
                 MeasureSpecMode heightMode = MeasureSpecMode::Exactly;
                 int heightValue = pWidget->getLayoutWeight() * cubeSize;
                 // std::cout << "id : " << pWidget->id << " height = " << heightValue << std::endl;

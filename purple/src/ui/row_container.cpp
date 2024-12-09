@@ -11,34 +11,44 @@ namespace purple{
         childWidgetTotalWidth = 0;
         hasWeightWidgets.clear();
 
+        int limitMaxWidth = WIDGET_MAX_WIDTH;
         setWidth(LAYOUT_UNSET);
         if(widthSpecMode == MeasureSpecMode::Exactly){
+            limitMaxWidth = widthValue;
             setWidth(widthValue);
+        }else if(widthSpecMode == MeasureSpecMode::Atmost){
+            limitMaxWidth = widthValue;
         }
 
+        int limitMaxHeight = WIDGET_MAX_HEIGHT;
         setHeight(LAYOUT_UNSET);
         if(heightSpecMode == MeasureSpecMode::Exactly){
+            limitMaxHeight = heightValue;
             setHeight(heightValue);
+        }else if(heightSpecMode == MeasureSpecMode::Atmost){
+            limitMaxHeight = heightValue;
         }
 
-        measureChildWidgets(getWidth(), getHeight());
+        // std::cout << "limitMaxHeight = " << limitMaxHeight << "  id = " << this->id << std::endl;
+        measureChildWidgets(limitMaxWidth, limitMaxHeight);
         
         bool needReMeasure = false;
-        if(widthSpecMode == MeasureSpecMode::Atmost){
-            setWidth(std::min(widthValue , childWidgetTotalWidth + getPaddingHorizontal()));
+        if(widthSpecMode != MeasureSpecMode::Exactly){
+            setWidth(std::min(limitMaxWidth , childWidgetTotalWidth + getPaddingHorizontal()));
             needReMeasure = true;
         }
-        if(heightSpecMode == MeasureSpecMode::Atmost){
-            setHeight(std::min(heightValue , childWidgetMaxHeight + getPaddingVertial()));
+        if(heightSpecMode != MeasureSpecMode::Exactly){
+            setHeight(std::min(limitMaxHeight , childWidgetMaxHeight + getPaddingVertial()));
             needReMeasure = true;
         }
         
-        if(needReMeasure 
-            && this->width_ != LAYOUT_UNSET
-            && this->height_ != LAYOUT_UNSET){
+        if(needReMeasure){
             childWidgetTotalWidth = 0;
             measureChildWidgets(getWidth(), getHeight());
         }
+
+        // std::cout << "stack contaier " << this->id <<" width = " 
+        //     << width_ << "  height: " << height_ << std::endl;
     }
 
     void RowContainer::measureChildWidgets(int limitMaxWdith , int limitMaxHeight){
@@ -57,12 +67,17 @@ namespace purple{
 
             pWidget->measure(widthMode , widthValue , heightMode , heightValue);
 
-            const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
-            childWidgetTotalWidth += costWidth;
+            if(widthMode != MeasureSpecMode::Unset){
+                const int costWidth = pWidget->getWidth() + pWidget->getMarginHorizontal();
+                childWidgetTotalWidth += costWidth;
+            }
             
-            const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
-            if(childWidgetMaxHeight < costHeight) {
-                childWidgetMaxHeight = costHeight;
+            if(heightMode != MeasureSpecMode::Unset) {
+                const int costHeight = pWidget->getHeight() + pWidget->getMarginVertical();
+                // std::cout << "id = " << pWidget->id << "  costHeight = " << costHeight << std::endl;
+                if(childWidgetMaxHeight < costHeight) {
+                    childWidgetMaxHeight = costHeight;
+                }
             }
         }//end for each
 
@@ -75,11 +90,18 @@ namespace purple{
         }
 
         int totalWeightValue = 0;
+        int weightWidgetMargins = 0;
         for(auto &pWidget : hasWeightWidgets){
             totalWeightValue += pWidget->getLayoutWeight();
+            weightWidgetMargins += pWidget->getMarginHorizontal();
         }//end for each
 
-        const int remainWidth = getContentWidth() - childWidgetTotalWidth;
+        const int remainWidth = getContentWidth() - childWidgetTotalWidth - weightWidgetMargins;
+        // std::cout << "getWidth() = " << getWidth() << "   padding = " <<
+        //     getPaddingHorizontal() << std::endl;
+        // std::cout << "RowContainer remainWidth = " 
+        //     << getContentWidth() - childWidgetTotalWidth << std::endl;
+
         if(remainWidth > 0 && totalWeightValue > 0){
             const int weightCube = remainWidth / totalWeightValue;
             for(auto &pWidget : hasWeightWidgets){
@@ -119,10 +141,10 @@ namespace purple{
         }else{ //父宽度已知
             if(reqWidth == LAYOUT_MATCH_PARENT){
                 outWidthMode = MeasureSpecMode::Exactly;
-                outWidthValue = limitMaxWdith;
+                outWidthValue = limitMaxWdith - getPaddingHorizontal();
             }else if(reqWidth == LAYOUT_WRAP_CONTENT){
                 outWidthMode = MeasureSpecMode::Atmost;
-                outWidthValue = limitMaxWdith;
+                outWidthValue = limitMaxWdith - getPaddingHorizontal();
             }else if(reqWidth == LAYOUT_UNSET){
                 outWidthMode = MeasureSpecMode::Exactly;
                 outWidthValue = 0;
@@ -160,10 +182,10 @@ namespace purple{
         }else{ //父控件高度已知
             if(reqHeight == LAYOUT_MATCH_PARENT){
                 outHeightMode = MeasureSpecMode::Exactly;
-                outHeightValue = limitMaxHeight;
+                outHeightValue = limitMaxHeight - getPaddingVertial();
             }else if(reqHeight == LAYOUT_WRAP_CONTENT){
                 outHeightMode = MeasureSpecMode::Atmost;
-                outHeightValue = limitMaxHeight;
+                outHeightValue = limitMaxHeight - getPaddingVertial();
             }else if(reqHeight == LAYOUT_UNSET){
                 outHeightMode = MeasureSpecMode::Exactly;
                 outHeightValue = 0;
