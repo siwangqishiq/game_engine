@@ -26,4 +26,6 @@ private:
     void testImgScaleMode2();
     void testImgScaleMode3();
     void testImgScaleMode4();
+
+    void testImgScaleMode5();
 };

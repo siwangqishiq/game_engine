@@ -184,11 +184,12 @@ namespace purple{
 
         dstRect.left -= tranX;
         dstRect.top -= tranY;
-
+        
         // is in view quit
-        if(dstRect.left >= viewRect.left && dstRect.top <= viewRect.top){
-            return dstRect;
-        }
+        // if(dstRect.left >= viewRect.left && dstRect.top <= viewRect.top){
+        //     // std::cout << "this src is in view" << std::endl;
+        //     return dstRect;
+        // }
     
         //do scale and src crop
         const float srcWidth = srcRect.width;

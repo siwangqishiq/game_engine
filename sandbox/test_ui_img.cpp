@@ -15,7 +15,8 @@ void TestImgUi::onInit(){
     // testImgScaleMode();
     // testImgScaleMode2();
     // testImgScaleMode3();
-    testImgScaleMode4();
+    // testImgScaleMode4();
+    testImgScaleMode5();
 
     if(bgm != nullptr){
         return;
@@ -211,6 +212,27 @@ void TestImgUi::testImgScaleMode4(){
         .setScaleMode<Img>(ImgScale::Mode::CenterInside)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
     rightContainer->addChild(rightImage);
+
+    ui->setRootContainer(container);
+}
+
+void TestImgUi::testImgScaleMode5(){
+    using namespace purple;
+
+    auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
+    container->setBackgroundColor<StackContainer>(ConverColorValue(Color::Black));
+
+    // auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
+    auto imgTexture = purple::ImageSource::fromAsset("img/more_height.jpg");
+    // const int imageSizeWidth = 400;
+    // const int imageSizeHeight = 400;
+
+    auto image = std::make_shared<Img>(imgTexture , LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
+    image->setLayoutGravity<Img>(LayoutGravity::Center)
+        .setScaleMode<Img>(ImgScale::Mode::CenterCrop)
+        .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
+    container->addChild(image);
 
     ui->setRootContainer(container);
 }
