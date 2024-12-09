@@ -141,10 +141,10 @@ namespace purple{
         }else{ //父宽度已知
             if(reqWidth == LAYOUT_MATCH_PARENT){
                 outWidthMode = MeasureSpecMode::Exactly;
-                outWidthValue = limitMaxWdith - getPaddingHorizontal();
+                outWidthValue = limitMaxWdith - getPaddingHorizontal() - widget->getMarginHorizontal();
             }else if(reqWidth == LAYOUT_WRAP_CONTENT){
                 outWidthMode = MeasureSpecMode::Atmost;
-                outWidthValue = limitMaxWdith - getPaddingHorizontal();
+                outWidthValue = limitMaxWdith - getPaddingHorizontal() - widget->getMarginHorizontal();
             }else if(reqWidth == LAYOUT_UNSET){
                 outWidthMode = MeasureSpecMode::Exactly;
                 outWidthValue = 0;
@@ -182,10 +182,10 @@ namespace purple{
         }else{ //父控件高度已知
             if(reqHeight == LAYOUT_MATCH_PARENT){
                 outHeightMode = MeasureSpecMode::Exactly;
-                outHeightValue = limitMaxHeight - getPaddingVertial();
+                outHeightValue = limitMaxHeight - getPaddingVertial() - widget->getMarginVertical();
             }else if(reqHeight == LAYOUT_WRAP_CONTENT){
                 outHeightMode = MeasureSpecMode::Atmost;
-                outHeightValue = limitMaxHeight - getPaddingVertial();
+                outHeightValue = limitMaxHeight - getPaddingVertial() - widget->getMarginVertical();
             }else if(reqHeight == LAYOUT_UNSET){
                 outHeightMode = MeasureSpecMode::Exactly;
                 outHeightValue = 0;

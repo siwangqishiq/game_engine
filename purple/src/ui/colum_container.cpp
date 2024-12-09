@@ -107,7 +107,7 @@ namespace purple{
             }
         }else{
             const int limitMaxWidth = 
-                std::max(getWidth() - getPaddingHorizontal(), 0);
+                std::max(getWidth() - getPaddingHorizontal() - child->getMarginHorizontal(), 0);
 
             if(child->getRequestWidth() == LAYOUT_MATCH_PARENT){
                 mode = MeasureSpecMode::Exactly;
@@ -145,7 +145,7 @@ namespace purple{
                 value = std::min(child->getRequestHeight() , limitMaxHeight);
             }
         }else{ //父控件高度已经设置
-            limitMaxHeight = std::max(this->getHeight() - this->getPaddingVertial() , 0);
+            limitMaxHeight = std::max(getHeight() - getPaddingVertial() -child->getMarginVertical() , 0);
             if(child->getRequestHeight() == LAYOUT_MATCH_PARENT){
                 mode = MeasureSpecMode::Exactly;
                 value = std::max(0, limitMaxHeight);
