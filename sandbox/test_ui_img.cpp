@@ -222,9 +222,9 @@ void TestImgUi::testImgScaleMode5(){
     auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
     container->setBackgroundColor<StackContainer>(ConverColorValue(Color::Black));
 
-    // auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
     // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
-    auto imgTexture = purple::ImageSource::fromAsset("img/more_height.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/more_height.jpg");
     // const int imageSizeWidth = 400;
     // const int imageSizeHeight = 400;
 

@@ -103,6 +103,7 @@ void Application::onCreate(){
     // appInstanceList.push_back(std::make_shared<TestTextUi>());
 }
 
+
 void Application::tick(){
     // std::cout << " begin tick" << std::endl;
     purple::Engine::tick();

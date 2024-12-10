@@ -197,7 +197,8 @@ namespace purple{
 
         const float scaleW = viewRect.width / srcWidth;
         const float scaleH = viewRect.height / srcHeight;
-        const float scale = isCrop?std::max(scaleW , scaleH):std::min(scaleW , scaleH);
+        // const float scale = isCrop?std::max(scaleW , scaleH):std::min(scaleW , scaleH);
+        const float scale = isCrop?std::max(scaleH , scaleW):std::min(scaleW , scaleH);
         
         //scale with center point
         dstRect.width = scale * srcWidth;

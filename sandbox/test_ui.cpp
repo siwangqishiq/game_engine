@@ -619,7 +619,7 @@ void TestUi::testContainerCompose3(){
     auto contentContainer = std::make_shared<ColumContainer>(LAYOUT_MATCH_PARENT,LAYOUT_UNSET);
     contentContainer->setBackgroundColor<ColumContainer>(ConverColorValue(Color::Purple))
         .setLayoutWeight<ColumContainer>(1)
-        .setPadding<ColumContainer>(20,10,20,20)
+        .setPadding<ColumContainer>(20,20,20,20)
         .setId<ColumContainer>("error_ColumContainer");
     container->addChild(contentContainer);
 
@@ -641,7 +641,8 @@ void TestUi::testContainerCompose3(){
 
     auto img2 = std::make_shared<Img>(imgTexture2 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     img2->setLayoutWeight<Img>(1)
-        .setScaleMode<Img>(ImgScale::CenterInside)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
+        .setMargin<Img>(10,10,10,10)
         .setBackgroundColor<Img>(ConverColorValue(Color::Green));
     contentRowChild1->addChild(img2);
 
@@ -658,19 +659,22 @@ void TestUi::testContainerCompose3(){
 
     auto img4 = std::make_shared<Img>(imgTexture4 , LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     img4->setLayoutWeight<Img>(1)
-        .setScaleMode<Img>(ImgScale::CenterInside)
+        .setScaleMode<Img>(ImgScale::CenterCrop)
         .setBackgroundColor<Img>(ConverColorValue(Color::Red));
     contentRowChild2->addChild(img4);
 
-    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,100);
+    const int bottomHeight = 60;
+    auto footContainer = std::make_shared<RowContainer>(LAYOUT_MATCH_PARENT,bottomHeight);
     footContainer->setBackgroundColor<RowContainer>(ConverColorValue(Color::SkyBlue));
     container->addChild(footContainer);
 
     auto tab1 = std::make_shared<Text>(L"第一个",LAYOUT_UNSET,LAYOUT_MATCH_PARENT);
     tab1->setFontColor<Text>(ConverColorValue(Color::Black))
-        .setBackgroundColor<Text>(glm::vec4(1.0f , 1.0f ,0.0f , 1.0f))
+        .setBackgroundColor<Text>(ConverColorValue(Color::SkyBlue))
         .setTextGravity<Text>(TextGravity::Center)
         .setId<Text>("tab1")
+        .setFontSize<Text>(bottomHeight / 2.0f)
+        .setFontWeight<Text>(80.0f)
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab1);
     // footContainer->setVisible(VisibleState::Gone);
@@ -680,6 +684,8 @@ void TestUi::testContainerCompose3(){
         .setBackgroundColor<Text>(ConverColorValue(Color::Yellow))
         .setTextGravity<Text>(TextGravity::Center)
         .setId<Text>("tab2")
+        .setFontSize<Text>(bottomHeight / 2.0f)
+        .setFontWeight<Text>(80.0f)
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab2);
 
@@ -688,6 +694,8 @@ void TestUi::testContainerCompose3(){
         .setBackgroundColor<Text>(glm::vec4(0.0f , 0.0f ,1.0f , 1.0f))
         .setTextGravity<Text>(TextGravity::Center)
         .setId<Text>("tab3")
+        .setFontSize<Text>(bottomHeight / 2.0f)
+        .setFontWeight<Text>(80.0f)
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab3);
 
@@ -696,9 +704,10 @@ void TestUi::testContainerCompose3(){
         .setBackgroundColor<Text>(ConverColorValue(Color::White))
         .setTextGravity<Text>(TextGravity::Center)
         .setId<Text>("tab4")
+        .setFontSize<Text>(bottomHeight / 2.0f)
+        .setFontWeight<Text>(80.0f)
         .setLayoutWeight<Text>(1);
     footContainer->addChild(tab4);
-
 
     auto headText = std::make_shared<Text>(L"我是标题",LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
     headText->setMargin<Text>(20,0,0,0)
