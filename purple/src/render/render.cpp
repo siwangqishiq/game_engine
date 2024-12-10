@@ -92,7 +92,8 @@ namespace purple{
 
         //new add text render
         // loadTextRender("text/heiti.ttf");
-        loadTextRender("text/zhuhai.ttf");
+        // loadTextRender("text/zhuhai.ttf");
+        loadTextRender("text/fangzheng.ttf");
     }
 
     void RenderEngine::loadShapeShader(){

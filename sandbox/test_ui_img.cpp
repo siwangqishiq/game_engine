@@ -230,7 +230,7 @@ void TestImgUi::testImgScaleMode5(){
 
     auto image = std::make_shared<Img>(imgTexture , LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
-        .setScaleMode<Img>(ImgScale::Mode::CenterCrop)
+        .setScaleMode<Img>(ImgScale::Mode::CenterInside)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
     container->addChild(image);
 

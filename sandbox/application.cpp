@@ -98,8 +98,8 @@ void Application::onCreate(){
     
     // appInstanceList.push_back(std::make_shared<Test1App>());
     // appInstanceList.push_back(std::make_shared<TestTextRender>());
-    appInstanceList.push_back(std::make_shared<TestUi>());
-    // appInstanceList.push_back(std::make_shared<TestImgUi>());
+    // appInstanceList.push_back(std::make_shared<TestUi>());
+    appInstanceList.push_back(std::make_shared<TestImgUi>());
     // appInstanceList.push_back(std::make_shared<TestTextUi>());
 }
 
@@ -131,7 +131,7 @@ void Application::showExtensionInfo(){
 
 void Application::showDebugInfo(){
     purple::TextPaint paint;
-    paint.setTextSize(purple::Engine::ScreenHeight / 15.0f);
+    paint.setTextSize(50.0f);
     paint.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
     // std::wstring fpsStr = std::to_wstring(fps);
     purple::Rect outputRect;

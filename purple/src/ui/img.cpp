@@ -190,37 +190,66 @@ namespace purple{
         //     // std::cout << "this src is in view" << std::endl;
         //     return dstRect;
         // }
-    
-        //do scale and src crop
-        const float srcWidth = srcRect.width;
-        const float srcHeight = srcRect.height;
 
-        const float scaleW = viewRect.width / srcWidth;
-        const float scaleH = viewRect.height / srcHeight;
-        // const float scale = isCrop?std::max(scaleW , scaleH):std::min(scaleW , scaleH);
-        const float scale = isCrop?std::max(scaleH , scaleW):std::min(scaleW , scaleH);
-        
-        //scale with center point
-        dstRect.width = scale * srcWidth;
-        dstRect.height = scale * srcHeight;
+        if(isCrop){
+            dstRect.width = 0.0f;
+            dstRect.height = 0.0f;
+        }else{
+            // scale width
+            const float scaleWidth = viewRect.width / dstRect.width;
+            const float scaleHeight = viewRect.height / dstRect.height;
 
-        dstRect.left = scale * dstRect.left + viewCenter.x - viewCenter.x * scale;
-        dstRect.top = scale * dstRect.top + viewCenter.y - viewCenter.y * scale;
+            float wLeft = scaleWidth * dstRect.left + viewCenter.x - viewCenter.x * scaleWidth;
+            float wTop = scaleWidth * dstRect.top + viewCenter.y - viewCenter.y * scaleWidth;
 
-        // crop src 
-        if(dstRect.top > viewRect.top){
-            srcRect.top = srcRect.top - (dstRect.top  - viewRect.top) / (scale);
-            srcRect.height = viewRect.height / scale;
-                        
-            dstRect.top = viewRect.top;
-            dstRect.height = viewRect.height;
-        }else if(dstRect.left < viewRect.left){
-            srcRect.left = srcRect.left + (viewRect.left - dstRect.left) / (scale);
-            srcRect.width = viewRect.width / scale;
+            float hLeft = scaleHeight * dstRect.left + viewCenter.x - viewCenter.x * scaleHeight;
+            float hTop = scaleHeight * dstRect.top + viewCenter.y - viewCenter.y * scaleHeight;
+            
+            float scale = 1.0f;
 
-            dstRect.left = viewRect.left;
-            dstRect.width = viewRect.height;
+            
+            
+            dstRect.width = dstRect.width * scale;
+            dstRect.height = dstRect.height * scale;
+
+            // dstRect.left = scaleWidth * dstRect.left + viewCenter.x - viewCenter.x * scaleWidth;
+            // dstRect.top = scaleWidth * dstRect.top + viewCenter.y - viewCenter.y * scaleWidth;
+            // dstRect.width = scaleWidth * dstRect.width;
+            // dstRect.height = scaleWidth * dstRect.height;
         }
+
+      
+
+        // //do scale and src crop
+        // const float srcWidth = srcRect.width;
+        // const float srcHeight = srcRect.height;
+
+        // const float scaleW = viewRect.width / srcWidth;
+        // const float scaleH = viewRect.height / srcHeight;
+        // // const float scale = isCrop?std::max(scaleW , scaleH):std::min(scaleW , scaleH);
+        // const float scale = isCrop?std::max(scaleH , scaleW):std::min(scaleW , scaleH);
+        
+        // //scale with center point
+        // dstRect.width = scale * srcWidth;
+        // dstRect.height = scale * srcHeight;
+
+        // dstRect.left = scale * dstRect.left + viewCenter.x - viewCenter.x * scale;
+        // dstRect.top = scale * dstRect.top + viewCenter.y - viewCenter.y * scale;
+
+        // // crop src 
+        // if(dstRect.top > viewRect.top){
+        //     srcRect.top = srcRect.top - (dstRect.top  - viewRect.top) / (scale);
+        //     srcRect.height = viewRect.height / scale;
+
+        //     dstRect.top = viewRect.top;
+        //     dstRect.height = viewRect.height;
+        // }else if(dstRect.left < viewRect.left){
+        //     srcRect.left = srcRect.left + (viewRect.left - dstRect.left) / (scale);
+        //     srcRect.width = viewRect.width / scale;
+
+        //     dstRect.left = viewRect.left;
+        //     dstRect.width = viewRect.height;
+        // }
         return dstRect;
     }
 
