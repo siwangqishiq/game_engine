@@ -1,6 +1,7 @@
 #include "ui/img.h"
 #include "purple.h"
 #include <algorithm>
+#include "utils.h"
 
 namespace purple{
     
@@ -197,18 +198,20 @@ namespace purple{
         }else{
             // scale width
             const float scaleWidth = viewRect.width / dstRect.width;
-            const float scaleHeight = viewRect.height / dstRect.height;
+            Point pw{dstRect.left , dstRect.top};
+            ScaleWithPoint(pw , scaleWidth , dstCenter);
+            float wLeft = pw.x;
+            float wTop = pw.y;
 
-            float wLeft = scaleWidth * dstRect.left + viewCenter.x - viewCenter.x * scaleWidth;
-            float wTop = scaleWidth * dstRect.top + viewCenter.y - viewCenter.y * scaleWidth;
+            const float scaleHeight = viewRect.height / dstRect.height;
+            Point ph{dstRect.left , dstRect.top};
+            ScaleWithPoint(ph , scaleHeight , dstCenter);
 
             float hLeft = scaleHeight * dstRect.left + viewCenter.x - viewCenter.x * scaleHeight;
             float hTop = scaleHeight * dstRect.top + viewCenter.y - viewCenter.y * scaleHeight;
             
             float scale = 1.0f;
 
-            
-            
             dstRect.width = dstRect.width * scale;
             dstRect.height = dstRect.height * scale;
 

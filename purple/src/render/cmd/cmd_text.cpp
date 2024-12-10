@@ -1,4 +1,5 @@
 #include "render/cmd/cmd_text.h"
+#include "utils.h"
 
 namespace purple{
     float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){

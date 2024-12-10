@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "widget/timer.h"
 #include <algorithm>
+#include "utils.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"

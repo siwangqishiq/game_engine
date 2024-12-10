@@ -2,6 +2,7 @@
 #include "log.h"
 #include "render/render.h"
 #include "render/sprite.h"
+#include "utils.h"
 
 namespace purple{
     void Batch::allocatorMemory(){
@@ -478,8 +479,9 @@ namespace purple{
         const int offset = index_ + vertexIndex * attrCountPerVertex_;
 
         //rotate transform
-        Point point(x , y);
-        point.rotate(cx , cy , angle);
+        Point point{x , y};
+        Rotate(point , cx , cy , angle);        
+        // point.rotate(cx , cy , angle);
         
         //position
         vertexBuffer_[offset + 0] = point.x;

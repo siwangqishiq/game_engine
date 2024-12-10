@@ -20,33 +20,6 @@ namespace purple{
         }
 
         Point(float _x , float _y):x(_x) , y(_y){}
-
-        /**
-        * @brief 
-        * 
-        * @param cx 
-        * @param cy 
-        * @param angle rad
-        */
-        inline void rotate(float cx , float cy , float angle){
-            
-            float s = sin(angle);
-            float c = cos(angle);
-
-            float originX = x;
-            float originY = y;
-            // translate point back to origin:
-            originX -= cx;
-            originY -= cy;
-
-            // rotate point
-            float xnew = originX * c - originY * s;
-            float ynew = originX * s + originY * c;
-
-            // translate point back:
-            x = xnew + cx;
-            y = ynew + cy;
-        }
     };
 
     enum ShapeType{
