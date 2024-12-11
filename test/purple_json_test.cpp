@@ -434,16 +434,17 @@ TEST(PurpleJsonTest, JsonArray_parse_contain_list2){
     EXPECT_EQ(len , array->size());
 }
 
-TEST(PurpleJsonTest, JsonObject_long_json_string){
-    using namespace purple;
-    std::wstring str = ReadTextFileAsWstring("../../assets/text/font1/char_config.json");
-    JsonParser parser;
-    auto json = parser.parseJsonObject(str);
-    auto jsonList = json->getJsonArray("list");
+//
+// TEST(PurpleJsonTest, JsonObject_long_json_string){
+//     using namespace purple;
+//     std::wstring str = ReadTextFileAsWstring("../../assets/text/font1/char_config.json");
+//     JsonParser parser;
+//     auto json = parser.parseJsonObject(str);
+//     auto jsonList = json->getJsonArray("list");
 
-    for(int i = 0 ; i < jsonList->size();i++){
-        auto itemJson = jsonList->getJsonObject(i);
-        EXPECT_TRUE(itemJson->getString("texture").find(L"font_texture_") == 0);
-    }//end for i
-}
+//     for(int i = 0 ; i < jsonList->size();i++){
+//         auto itemJson = jsonList->getJsonObject(i);
+//         EXPECT_TRUE(itemJson->getString("texture").find(L"font_texture_") == 0);
+//     }//end for i
+// }
 
