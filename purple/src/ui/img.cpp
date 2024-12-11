@@ -192,36 +192,83 @@ namespace purple{
         //     return dstRect;
         // }
 
+        const float scaleWidth = viewRect.width / dstRect.width;
+        Point pw{dstRect.left , dstRect.top};
+        ScaleWithPoint(pw , scaleWidth , viewCenter);
+        int wLeft = pw.x;
+        int wTop = pw.y;
+
+        const float scaleHeight = viewRect.height / dstRect.height;
+        Point ph{dstRect.left , dstRect.top};
+        ScaleWithPoint(ph , scaleHeight , viewCenter);
+        int hLeft = ph.x;
+        int hTop = ph.y;
+        
+        float scale = 1.0f;
+
+        const int viewLeft = viewRect.left;
+        const int viewTop = viewRect.top;
+
         if(isCrop){
-            dstRect.width = 0.0f;
-            dstRect.height = 0.0f;
+            dstRect= viewRect;
+            // std::cout << "scale Width " << scaleWidth  
+            //     << "  scale Height: " << scaleHeight << std::endl;
+            // std::cout << "Width wleft " << wLeft << " wTop: " << wTop  
+            //     << " Height hLeft: " << hLeft << "  hTop: " << hTop << std::endl;
+
+            if(wLeft >= viewLeft && wTop < viewTop){
+                scale = scaleHeight;
+            }else if(hLeft > viewRect.left && hTop >= viewTop) {
+                scale = scaleWidth;
+            }
+            // std::cout << "use scale = " << scale << std::endl;
+
+            Rect copySrcRect;
+            copySrcRect.width = scale * srcRect.width;
+            copySrcRect.height = scale * srcRect.height;
+            copySrcRect.left = 0.0f;
+            copySrcRect.top = copySrcRect.height;
+
+            float deltaW = (copySrcRect.width - dstRect.width) / 2.0f;
+            float deltaH = (copySrcRect.height - dstRect.height) / 2.0f;
+            copySrcRect.left = copySrcRect.left + deltaW;
+            copySrcRect.top = copySrcRect.top - deltaH;
+            copySrcRect.width = copySrcRect.width - 2.0f * deltaW;
+            copySrcRect.height = copySrcRect.height - 2.0f * deltaH;
+
+            //  std::cout << "copySrcRect : " << copySrcRect.left << ","
+            //     << copySrcRect.top << ", " << copySrcRect.width << " , "
+            //     << copySrcRect.height << std::endl;
+
+            // Point srcPoint{copySrcRect.left, copySrcRect.top};
+            const float inverseScale = 1.0f / scale;
+            // ScaleWithPoint(srcPoint , inverseScale , dstRect.center());
+            srcRect.left = copySrcRect.left * inverseScale;
+            srcRect.top = copySrcRect.top * inverseScale;
+            srcRect.width = copySrcRect.width * inverseScale;
+            srcRect.height = copySrcRect.height * inverseScale;
+            // std::cout << "srcRect : " << srcRect.left << ","
+            //     << srcRect.top << ", " << srcRect.width << " , "
+            //     << srcRect.height << std::endl;
+        
         }else{
-            // scale width
-            const float scaleWidth = viewRect.width / dstRect.width;
-            Point pw{dstRect.left , dstRect.top};
-            ScaleWithPoint(pw , scaleWidth , dstCenter);
-            float wLeft = pw.x;
-            float wTop = pw.y;
-
-            const float scaleHeight = viewRect.height / dstRect.height;
-            Point ph{dstRect.left , dstRect.top};
-            ScaleWithPoint(ph , scaleHeight , dstCenter);
-
-            float hLeft = scaleHeight * dstRect.left + viewCenter.x - viewCenter.x * scaleHeight;
-            float hTop = scaleHeight * dstRect.top + viewCenter.y - viewCenter.y * scaleHeight;
-            
-            float scale = 1.0f;
+            if(wLeft >= viewLeft && wTop < viewTop){
+                scale = scaleWidth;
+                dstRect.left = wLeft;
+                dstRect.top = wTop;
+            }else if(hLeft > viewRect.left && hTop >= viewTop){
+                scale = scaleHeight;
+                dstRect.left = hLeft;
+                dstRect.top = hTop;
+            }else{
+                // std::cout << "set scale 0" << std::endl;
+                scale = 0.0f;
+            }
 
             dstRect.width = dstRect.width * scale;
             dstRect.height = dstRect.height * scale;
-
-            // dstRect.left = scaleWidth * dstRect.left + viewCenter.x - viewCenter.x * scaleWidth;
-            // dstRect.top = scaleWidth * dstRect.top + viewCenter.y - viewCenter.y * scaleWidth;
-            // dstRect.width = scaleWidth * dstRect.width;
-            // dstRect.height = scaleWidth * dstRect.height;
         }
 
-      
 
         // //do scale and src crop
         // const float srcWidth = srcRect.width;
@@ -234,15 +281,15 @@ namespace purple{
         
         // //scale with center point
         // dstRect.width = scale * srcWidth;
-        // dstRect.height = scale * srcHeight;
+        // dstRect.heig
+        // if(dstRect.top > viewRect.top){
+        //     srcRect.top = srcRect.top - (dstRect.top  - viewRect.top) / (scale);
+        //     srcRect.heightht = scale * srcHeight;
 
         // dstRect.left = scale * dstRect.left + viewCenter.x - viewCenter.x * scale;
         // dstRect.top = scale * dstRect.top + viewCenter.y - viewCenter.y * scale;
 
-        // // crop src 
-        // if(dstRect.top > viewRect.top){
-        //     srcRect.top = srcRect.top - (dstRect.top  - viewRect.top) / (scale);
-        //     srcRect.height = viewRect.height / scale;
+        // // crop src  = viewRect.height / scale;
 
         //     dstRect.top = viewRect.top;
         //     dstRect.height = viewRect.height;

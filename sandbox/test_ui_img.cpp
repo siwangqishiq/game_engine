@@ -222,15 +222,16 @@ void TestImgUi::testImgScaleMode5(){
     auto container = std::make_shared<StackContainer>(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT);
     container->setBackgroundColor<StackContainer>(ConverColorValue(Color::Black));
 
-    auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/g2.jpg");
     // auto imgTexture = purple::ImageSource::fromAsset("img/small.png");
-    // auto imgTexture = purple::ImageSource::fromAsset("img/more_height.jpg");
+    auto imgTexture = purple::ImageSource::fromAsset("img/more_height.jpg");
+    // auto imgTexture = purple::ImageSource::fromAsset("img/more_width.png");
     // const int imageSizeWidth = 400;
     // const int imageSizeHeight = 400;
 
     auto image = std::make_shared<Img>(imgTexture , LAYOUT_MATCH_PARENT,LAYOUT_MATCH_PARENT);
     image->setLayoutGravity<Img>(LayoutGravity::Center)
-        .setScaleMode<Img>(ImgScale::Mode::CenterInside)
+        .setScaleMode<Img>(ImgScale::Mode::CenterCrop)
         .setBackgroundColor<Img>(ConverColorValue(Color::Pink));
     container->addChild(image);
 
