@@ -28,8 +28,12 @@ TEST_F(PurpleInputTest,input_manager_init){
 
 TEST_F(PurpleInputTest,input_manager_update_callback){
     using namespace purple;
-    auto cb1 = [](InputEvent &e){};
-    auto cb2 = [](InputEvent &e){};
+    auto cb1 = [](InputEvent &e){
+        return false;
+    };
+    auto cb2 = [](InputEvent &e){
+        return false;
+    };
     InputManager::getInstance()->addEventListener("cb1", cb1);
     InputManager::getInstance()->addEventListener("cb2", cb2);
     InputManager::getInstance()->addEventListener("cb2", cb2);
@@ -39,8 +43,12 @@ TEST_F(PurpleInputTest,input_manager_update_callback){
 
 TEST_F(PurpleInputTest,input_manager_remove_callback){
     using namespace purple;
-    auto cb1 = [](InputEvent &e){};
-    auto cb2 = [](InputEvent &e){};
+    auto cb1 = [](InputEvent &e){
+        return false;
+    };
+    auto cb2 = [](InputEvent &e){
+        return false;
+    };
     InputManager::getInstance()->addEventListener("cb1", cb1);
     InputManager::getInstance()->addEventListener("cb2", cb2);
     InputManager::getInstance()->addEventListener("cb2", cb2);
@@ -55,9 +63,11 @@ TEST_F(PurpleInputTest,input_manager_run_callback){
 
     auto cb1 = [&counter](InputEvent &e){
         counter++;
+        return false;
     };
     auto cb2 = [&counter](InputEvent &e){
         counter--;
+        return false;
     };
 
     InputManager::getInstance()->addEventListener("cb1", cb1);
@@ -70,6 +80,35 @@ TEST_F(PurpleInputTest,input_manager_run_callback){
     InputManager::getInstance()->onEvent(event);
 
     EXPECT_EQ(0 , counter);
+}
+
+
+TEST_F(PurpleInputTest,input_manager_run_callback_block){
+    using namespace purple;
+    int counter = 0;
+
+    auto cb1 = [&counter](InputEvent &e){
+        counter++;
+        return false;
+    };
+    auto cb2 = [&counter](InputEvent &e){
+        counter++;
+        return true;
+    };
+    auto cb3 = [&counter](InputEvent &e){
+        counter++;
+        return true;
+    };
+
+    InputManager::getInstance()->addEventListener("cb1", cb1);
+    InputManager::getInstance()->addEventListener("cb2", cb2);
+    InputManager::getInstance()->addEventListener("cb3", cb3);
+
+    InputEvent event;
+    event.action = EVENT_ACTION_BEGIN;
+    InputManager::getInstance()->onEvent(event);
+
+    EXPECT_EQ(2 , counter);
 }
 
 

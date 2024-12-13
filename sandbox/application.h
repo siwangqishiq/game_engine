@@ -6,6 +6,7 @@
 #include <memory>
 #include "purple.h"
 
+
 class Application{
 public:
     const std::string TAG = "SandBoxApp";
@@ -47,6 +48,8 @@ public:
     }
 
     void tick();
+
+    bool onInputEvent(purple::InputEvent &event);
 
     static int fps;
 private:

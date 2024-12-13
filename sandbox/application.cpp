@@ -50,7 +50,7 @@ void Application::init(){
             glfwSetWindowShouldClose(windows_, true);
         }
 
-        
+
     });
 
     glfwSetCursorPosCallback(window , [](GLFWwindow* window, double xpos, double ypos){
@@ -58,7 +58,10 @@ void Application::init(){
     });
 
     glfwSetMouseButtonCallback(window , [](GLFWwindow* window, int button, int action, int mods){
-
+        std::cout << "button : " << button << "  action: " << action 
+            << " mods : " << mods << std::endl;
+        // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(window));
+        
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
@@ -178,6 +181,10 @@ void Application::runLoop(){
 
     purple::Engine::dispose();
     glfwTerminate();
+}
+
+bool Application::onInputEvent(purple::InputEvent &event){
+    return false;
 }
 
 void Application::dispose(){

@@ -25,7 +25,10 @@ namespace purple{
     void InputManager::onEvent(InputEvent &event){
         for(auto &pair : onEventCallbacks){
             if(pair.second != nullptr){
-                pair.second(event);
+                bool cost = pair.second(event);
+                if(cost){
+                    break;
+                }
             }
         }//end for each
     }
