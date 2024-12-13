@@ -441,7 +441,6 @@ TEST(PurpleJsonTest, JsonArray_parse_contain_list2){
 //     JsonParser parser;
 //     auto json = parser.parseJsonObject(str);
 //     auto jsonList = json->getJsonArray("list");
-
 //     for(int i = 0 ; i < jsonList->size();i++){
 //         auto itemJson = jsonList->getJsonObject(i);
 //         EXPECT_TRUE(itemJson->getString("texture").find(L"font_texture_") == 0);

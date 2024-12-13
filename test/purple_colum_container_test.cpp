@@ -2,8 +2,6 @@
 #include "purple.h"
 #include "purple_ui.h"
 
-std::shared_ptr<purple::UiRoot> uiRoot = nullptr;
-
 class PurpleUiColumContainerTest : public ::testing::Test{
 public:
     const int screenWidth = 1280;

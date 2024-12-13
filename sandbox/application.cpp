@@ -49,6 +49,16 @@ void Application::init(){
         if(glfwGetKey(windows_, GLFW_KEY_ESCAPE) == GLFW_PRESS){
             glfwSetWindowShouldClose(windows_, true);
         }
+
+        
+    });
+
+    glfwSetCursorPosCallback(window , [](GLFWwindow* window, double xpos, double ypos){
+
+    });
+
+    glfwSetMouseButtonCallback(window , [](GLFWwindow* window, int button, int action, int mods){
+
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
