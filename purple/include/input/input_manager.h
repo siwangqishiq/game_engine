@@ -25,7 +25,7 @@ namespace purple{
         InputManager();
         ~InputManager();
 
-        void onEvent(InputEvent &event);
+        void onEvent(InputEvent event);
 
         void addEventListener(std::string callbackId, OnEventCallback callback);
 

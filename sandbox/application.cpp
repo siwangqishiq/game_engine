@@ -1,5 +1,6 @@
 #include "application.h"
 #include "purple.h"
+#include "input/input_manager.h"
 
 #include "test1_app.h"
 #include "test_render_text.h"
@@ -14,6 +15,10 @@
 
 int Application::fps = 0;
 bool isFullScreen = false;
+
+bool isMouseLeftPressed = false;
+bool isMouseMiddlePressed = false;
+bool isMouseRightPressed = false;
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -50,18 +55,75 @@ void Application::init(){
             glfwSetWindowShouldClose(windows_, true);
         }
 
-
     });
 
     glfwSetCursorPosCallback(window , [](GLFWwindow* window, double xpos, double ypos){
+        if(isMouseLeftPressed){
+            purple::InputEvent event;
+            event.action = purple::EVENT_ACTION_MOVE;
+            event.x = xpos;
+            event.y = Application::screenHeight - ypos;
 
+            purple::InputManager::getInstance()->onEvent(event);
+        }
+        
+        if(isMouseMiddlePressed){
+            purple::InputEvent event;
+            event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_MOVE;
+            event.x = xpos;
+            event.y = Application::screenHeight - ypos;
+
+            purple::InputManager::getInstance()->onEvent(event);
+        }
+        
+        if(isMouseRightPressed){
+            purple::InputEvent event;
+            event.action = purple::EVENT_ACTION_MOUSE_RIGHT_MOVE;
+            event.x = xpos;
+            event.y = Application::screenHeight - ypos;
+            
+            purple::InputManager::getInstance()->onEvent(event);
+        }
     });
 
     glfwSetMouseButtonCallback(window , [](GLFWwindow* window, int button, int action, int mods){
-        std::cout << "button : " << button << "  action: " << action 
-            << " mods : " << mods << std::endl;
-        // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(window));
+        // std::cout << "button : " << button << "  action: " << action 
+        //     << " mods : " << mods << std::endl;
+        purple::InputEvent event;
         
+        // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(window));
+        if(button == GLFW_MOUSE_BUTTON_LEFT){
+            if(action == GLFW_PRESS){
+                isMouseLeftPressed = true;
+                event.action = purple::EVENT_ACTION_BEGIN; 
+            }else if(action == GLFW_RELEASE){
+                isMouseLeftPressed = false;
+                event.action = purple::EVENT_ACTION_END;
+            }
+        }else if(button == GLFW_MOUSE_BUTTON_MIDDLE){
+            if(action == GLFW_PRESS){
+                isMouseMiddlePressed = true;
+                event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_BEGIN; 
+            }else if(action == GLFW_RELEASE){
+                isMouseMiddlePressed = false;
+                event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_END; 
+            }
+        }else if(button == GLFW_MOUSE_BUTTON_RIGHT){
+             if(action == GLFW_PRESS){
+                isMouseRightPressed = true;
+                event.action = purple::EVENT_ACTION_MOUSE_RIGHT_BEGIN; 
+            }else if(action == GLFW_RELEASE){
+                isMouseRightPressed = false;
+                event.action = purple::EVENT_ACTION_MOUSE_RIGHT_END; 
+            }
+        }
+        double x = 0;
+        double y = 0;
+        glfwGetCursorPos(window, &x, &y);
+        event.x = x;
+        event.y = Application::screenHeight - y;
+
+        purple::InputManager::getInstance()->onEvent(event);
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* windows_,int w,int h){
