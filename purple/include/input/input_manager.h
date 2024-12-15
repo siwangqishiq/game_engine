@@ -25,6 +25,10 @@ namespace purple{
         InputManager();
         ~InputManager();
 
+        bool isMouseLeftPressed = false;
+        bool isMouseMiddlePressed = false;
+        bool isMouseRightPressed = false;
+
         void onEvent(InputEvent event);
 
         void addEventListener(std::string callbackId, OnEventCallback callback);

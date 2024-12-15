@@ -13,12 +13,9 @@
 #include "GLFW/glfw3.h"
 #endif
 
+//app config opt
 int Application::fps = 0;
 bool isFullScreen = false;
-
-bool isMouseLeftPressed = false;
-bool isMouseMiddlePressed = false;
-bool isMouseRightPressed = false;
 
 void Application::init(){
     purple::Log::i(TAG , "Application init");
@@ -58,7 +55,7 @@ void Application::init(){
     });
 
     glfwSetCursorPosCallback(window , [](GLFWwindow* window, double xpos, double ypos){
-        if(isMouseLeftPressed){
+        if(purple::InputManager::getInstance()->isMouseLeftPressed){
             purple::InputEvent event;
             event.action = purple::EVENT_ACTION_MOVE;
             event.x = xpos;
@@ -67,7 +64,7 @@ void Application::init(){
             purple::InputManager::getInstance()->onEvent(event);
         }
         
-        if(isMouseMiddlePressed){
+        if(purple::InputManager::getInstance()->isMouseMiddlePressed){
             purple::InputEvent event;
             event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_MOVE;
             event.x = xpos;
@@ -76,7 +73,7 @@ void Application::init(){
             purple::InputManager::getInstance()->onEvent(event);
         }
         
-        if(isMouseRightPressed){
+        if(purple::InputManager::getInstance()->isMouseRightPressed){
             purple::InputEvent event;
             event.action = purple::EVENT_ACTION_MOUSE_RIGHT_MOVE;
             event.x = xpos;
@@ -94,26 +91,26 @@ void Application::init(){
         // Application* app_ = static_cast<Application *>(glfwGetWindowUserPointer(window));
         if(button == GLFW_MOUSE_BUTTON_LEFT){
             if(action == GLFW_PRESS){
-                isMouseLeftPressed = true;
+                purple::InputManager::getInstance()->isMouseLeftPressed = true;
                 event.action = purple::EVENT_ACTION_BEGIN; 
             }else if(action == GLFW_RELEASE){
-                isMouseLeftPressed = false;
+                purple::InputManager::getInstance()->isMouseLeftPressed = false;
                 event.action = purple::EVENT_ACTION_END;
             }
         }else if(button == GLFW_MOUSE_BUTTON_MIDDLE){
             if(action == GLFW_PRESS){
-                isMouseMiddlePressed = true;
+                purple::InputManager::getInstance()->isMouseMiddlePressed = true;
                 event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_BEGIN; 
             }else if(action == GLFW_RELEASE){
-                isMouseMiddlePressed = false;
+                purple::InputManager::getInstance()->isMouseMiddlePressed = false;
                 event.action = purple::EVENT_ACTION_MOUSE_MIDDLE_END; 
             }
         }else if(button == GLFW_MOUSE_BUTTON_RIGHT){
              if(action == GLFW_PRESS){
-                isMouseRightPressed = true;
+                purple::InputManager::getInstance()->isMouseRightPressed = true;
                 event.action = purple::EVENT_ACTION_MOUSE_RIGHT_BEGIN; 
             }else if(action == GLFW_RELEASE){
-                isMouseRightPressed = false;
+                purple::InputManager::getInstance()->isMouseRightPressed = false;
                 event.action = purple::EVENT_ACTION_MOUSE_RIGHT_END; 
             }
         }
