@@ -1,5 +1,6 @@
 #include "test_ui.h"
 #include "purple_ui.h"
+#include "input/input_manager.h"
 
 void TestUi::testContainer(){
     using namespace purple;
@@ -514,6 +515,13 @@ void TestUi::onInit(){
 
     this->ui = std::make_shared<purple::UiRoot>(purple::Engine::ScreenWidth , 
         purple::Engine::ScreenHeight);
+    
+    purple::InputManager::getInstance()->addEventListener("ui",[this](purple::InputEvent &e){
+        if(ui != nullptr){
+            return ui->dispatchInputEvent(e);
+        }
+        return false;
+    });
 
     // testContainer();
     // testColoumContainer();
@@ -806,4 +814,5 @@ void TestUi::onTick(){
 
 void TestUi::onDispose(){
     purple::Log::i("test_ui", "Test Ui onDispose");
+    purple::InputManager::getInstance()->removeEventListener("ui");
 }

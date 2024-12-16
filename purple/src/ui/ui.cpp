@@ -22,6 +22,19 @@ namespace purple{
         this->rootContainer_ = container;
     }
 
+    bool UiRoot::dispatchInputEvent(InputEvent &event){
+        // Log::i("ui" , "event %d , %f %f" , event.action , event.x , event.y);
+        if(rootContainer_ == nullptr){
+            return false;
+        }
+
+        if(targetWidget != nullptr){
+            return targetWidget->onInputEvent(event);
+        }
+
+        return false;
+    }
+
     void UiRoot::measure(){
         // Log::i("widget" , "UiRoot start measure");
         if(this->rootContainer_ == nullptr){
@@ -249,6 +262,23 @@ namespace purple{
         this->Widget::onRender();
     }
 
+    bool Container::dispatchInputEvent(InputEvent &event){
+        if(isInterceptInputEvent(event)){
+            return onInputEvent(event);
+        }else{
+            for(auto &child : getChildrenWidgets()){
+                if(child->dispatchInputEvent(event)){
+                    return true;
+                }
+            }//end for each
+            return false;
+        }
+    }
+
+    bool Container::isInterceptInputEvent(InputEvent &event){
+        return false;
+    }
+
     std::vector<PWidget>& Container::getChildrenWidgets(){
         return this->children_;
     }
@@ -261,6 +291,12 @@ namespace purple{
         return container;
     }
 
+    bool Widget::onInputEvent(InputEvent &event){
+        return false;
+    }
 
+    bool Widget::dispatchInputEvent(InputEvent &event){
+        return onInputEvent(event);
+    }
 }
 

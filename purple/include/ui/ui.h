@@ -8,6 +8,7 @@
 #include "log.h"
 #include "render/common.h"
 #include "ui/color.h"
+#include "input/input_common.h"
 
 namespace purple{
     const int LAYOUT_MATCH_PARENT = -1;
@@ -63,6 +64,10 @@ namespace purple{
 
         virtual int contentWidth();
         virtual int contentHeight();
+
+        virtual bool dispatchInputEvent(InputEvent &event);
+
+        virtual bool onInputEvent(InputEvent &event);
 
         void setParentWidget(Container *parent);
 
@@ -232,6 +237,12 @@ namespace purple{
             this->id = id;
             return static_cast<T&>(*this);
         }
+
+        template<typename T>
+        T& setOnClick(std::function<void(Widget &)> clickFn){
+            this->onClickFn = clickFn;
+            return static_cast<T&>(*this);
+        }
     protected:
         Container *parent_ = nullptr;
 
@@ -260,6 +271,8 @@ namespace purple{
         int layoutWeight_ = 0;
 
         VisibleState visible_ = Normal;
+
+        std::function<void(Widget &)> onClickFn = nullptr;
     };//end class
 
     class Container:public Widget{
@@ -285,6 +298,10 @@ namespace purple{
 
         virtual void onRender() override;
 
+        virtual bool dispatchInputEvent(InputEvent &event) override;
+
+        virtual bool isInterceptInputEvent(InputEvent &event);
+
         void renderContainerSelf();
 
         std::vector<PWidget>& getChildrenWidgets();
@@ -307,7 +324,11 @@ namespace purple{
 
         void setRootContainer(PContainer container);
 
+        bool dispatchInputEvent(InputEvent &event);
+
         PContainer rootContainer_ = nullptr;
+
+        PWidget targetWidget = nullptr;
 
         ~UiRoot();
     private:

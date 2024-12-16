@@ -2,12 +2,21 @@
 #include "ui/img.h"
 #include "purple_ui.h"
 #include "log.h"
+#include "input/input_common.h"
+#include "input/input_manager.h"
 
 void TestImgUi::onInit(){
     ui = std::make_shared<purple::UiRoot>(
         purple::Engine::ScreenWidth , 
         purple::Engine::ScreenHeight
     );
+
+    purple::InputManager::getInstance()->addEventListener("ui",[this](purple::InputEvent &e){
+        if(ui != nullptr){
+            return ui->dispatchInputEvent(e);
+        }
+        return false;
+    });
 
     // testImg();
     // testImgMatchParent();
@@ -246,6 +255,8 @@ void TestImgUi::onTick(){
 
 void TestImgUi::onDispose(){
     purple::Log::i("TestImgUi","TestImgUi::onDispose");
+    purple::InputManager::getInstance()->removeEventListener("ui");
+
     if(bgm != nullptr){
         purple::AudioManager::getInstance()->releaseAudioEntity(bgm);
     }
