@@ -16,7 +16,7 @@ namespace purple{
 
     std::unique_ptr<InputManager>& InputManager::getInstance(){
         if(instance_ == nullptr){
-            std::lock_guard lock(mtx);
+            std::lock_guard<std::mutex> lock(mtx);
             instance_ = std::make_unique<InputManager>();
         }
         return instance_;
