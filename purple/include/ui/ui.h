@@ -38,6 +38,9 @@ namespace purple{
         Gone = -2
     };
 
+    
+    class UiRoot;
+
     class Widget{
     public:
         Widget(){
@@ -176,6 +179,10 @@ namespace purple{
 
         Rect getWidgetRect();
 
+        UiRoot* findRootUi();
+
+        void setRootUi(UiRoot *root);
+
         template<typename T>
         T& setPosition(int l,int t){
             left = l;
@@ -243,10 +250,10 @@ namespace purple{
             this->onClickFn = clickFn;
             return static_cast<T&>(*this);
         }
+
     protected:
         Container *parent_ = nullptr;
-
-
+        
         glm::vec4 bgColor_ = ConverColorValue(Color::Transparent);
         float bgConnerRadius_ = 0.0f;
 
@@ -273,6 +280,9 @@ namespace purple{
         VisibleState visible_ = Normal;
 
         std::function<void(Widget &)> onClickFn = nullptr;
+
+    private:
+        UiRoot *rootUi = nullptr;
     };//end class
 
     class Container:public Widget{
@@ -326,15 +336,16 @@ namespace purple{
 
         bool dispatchInputEvent(InputEvent &event);
 
-        PContainer rootContainer_ = nullptr;
-
-        PWidget targetWidget = nullptr;
+        void setTargetWidget(PWidget target);
 
         ~UiRoot();
+        
+        PContainer rootContainer_ = nullptr;
     private:
         int rootWidth_;
         int rootHeight_;
+
         std::shared_ptr<TextureInfo> textureInfo_ = nullptr;
-        
+        PWidget targetWidget = nullptr;
     };//end class
 }

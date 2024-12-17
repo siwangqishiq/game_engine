@@ -614,7 +614,7 @@ void TestUi::testContainerCompose2(){
 }
 
 void TestUi::testContainerCompose3(){
-     using namespace purple;
+    using namespace purple;
 
     auto container = std::make_shared<ColumContainer>();
     container->setBackgroundColor<ColumContainer>(ConverColorValue(Color::White))
@@ -723,7 +723,10 @@ void TestUi::testContainerCompose3(){
         .setFontColor<Text>(ConverColorValue(Color::Black));
     headContainer->addChild(headText);
 
-    ui->rootContainer_ = container;
+    ui->setRootContainer(container);
+
+    UiRoot* uiRoot = tab4->findRootUi();
+    // Log::e("TestUI","find root is %ld , uiroot : %ld" , uiRoot , ui.get());
 }
 
 void TestUi::testRootUI(){

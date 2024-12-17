@@ -20,6 +20,7 @@ namespace purple{
 
     void UiRoot::setRootContainer(PContainer container){
         this->rootContainer_ = container;
+        container->setRootUi(this);
     }
 
     bool UiRoot::dispatchInputEvent(InputEvent &event){
@@ -33,6 +34,10 @@ namespace purple{
         }
 
         return false;
+    }
+
+    void UiRoot::setTargetWidget(PWidget target){
+        this->targetWidget = target;
     }
 
     void UiRoot::measure(){
@@ -201,6 +206,14 @@ namespace purple{
         return Rect(l, t, w ,h);
     }
 
+    UiRoot* Widget::findRootUi(){
+        UiRoot* root = this->rootUi;
+        if(root == nullptr && parent_ != nullptr){
+            root = this->parent_->findRootUi();
+        }
+        return root;
+    }
+
     void Container::addChild(PWidget widget){
         this->children_.push_back(widget);
         widget->setParentWidget(this);
@@ -283,11 +296,13 @@ namespace purple{
         return this->children_;
     }
 
+    void Widget::setRootUi(UiRoot *root){
+        this->rootUi = root;
+    }
+    
     PWidget FunContainer(std::vector<PWidget> children){
         std::shared_ptr<Container> container = std::make_shared<Container>();
-
         //set container
-        
         return container;
     }
 
