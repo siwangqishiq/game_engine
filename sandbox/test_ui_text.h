@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "purple.h"
-#include "ui/ui.h"
+#include "purple_ui.h"
 
 class TestTextUi : public purple::IApp{
 public:

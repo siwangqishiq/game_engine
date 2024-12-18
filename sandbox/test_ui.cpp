@@ -724,9 +724,9 @@ void TestUi::testContainerCompose3(){
     headContainer->addChild(headText);
 
     ui->setRootContainer(container);
-
+    
     UiRoot* uiRoot = tab4->findRootUi();
-    // Log::e("TestUI","find root is %ld , uiroot : %ld" , uiRoot , ui.get());
+    Log::i("TestUI","find root is %ld , uiroot : %ld" , uiRoot , ui.get());
 }
 
 void TestUi::testRootUI(){
