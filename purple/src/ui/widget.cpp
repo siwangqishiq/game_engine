@@ -124,19 +124,21 @@ namespace purple{
         bool ret = false;
         const float x = event.x;
         const float y = event.y;
-        auto rect = getWidgetRect();
         
         switch(event.action){
             case EVENT_ACTION_BEGIN:
                 if(needEatInputBeginEvent()){
-                    if(rect.isPointInRect(x, y)){
-                        ret = true;
-                    }
+                    ret = true;
+                    // if(rect.isPointInRect(x, y)){
+                    //     ret = true;
+                    // }
                 }
                 break;
-            case EVENT_ACTION_MOVE:
-                if(!rect.isPointInRect(x, y) && !actionMoveOutScope){
-                    actionMoveOutScope = true;
+            case EVENT_ACTION_MOVE:{
+                    auto rect = getWidgetRect();
+                    if(!rect.isPointInRect(x, y) && !actionMoveOutScope){
+                        actionMoveOutScope = true;
+                    }
                 }
                 break;
             case EVENT_ACTION_END:
@@ -147,6 +149,8 @@ namespace purple{
                 break;
             case EVENT_ACTION_CANCEL:
                 actionMoveOutScope = false;
+                break;
+            default:
                 break;
         }//end switch
 
