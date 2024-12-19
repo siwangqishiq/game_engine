@@ -65,6 +65,7 @@ namespace purple{
         float top;
         float width;
         float height;
+        
         Rect(float l , float t , float w , float h){
             left = l;
             top = t;
@@ -99,6 +100,10 @@ namespace purple{
             p.x = (left + getRight()) / 2.0f;
             p.y = (getBottom() + top) / 2.0f;
             return p;
+        }
+
+        inline bool isPointInRect(float x , float y){
+            return x >= left && x <= left + width && y <= top && y >= top - height;
         }
     };
 

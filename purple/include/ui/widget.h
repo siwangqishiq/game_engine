@@ -153,6 +153,8 @@ namespace purple{
 
         void setRootUi(UiRoot *root);
 
+        void performClick(InputEvent &event);
+
         template<typename T>
         T& setPosition(int l,int t){
             left = l;
@@ -248,12 +250,14 @@ namespace purple{
         int layoutWeight_ = 0;
 
         VisibleState visible_ = Normal;
-
+        
         std::function<void(InputEvent&)> onClickFn = nullptr;
 
         bool needEatInputBeginEvent();
     private:
         UiRoot *rootUi = nullptr;
+
+        bool actionMoveOutScope = false;
     };//end class
 }
 

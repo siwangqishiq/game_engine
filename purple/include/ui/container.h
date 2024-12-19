@@ -12,7 +12,7 @@ namespace purple{
         
         Container():Widget(LAYOUT_MATCH_PARENT, LAYOUT_MATCH_PARENT){
         }
-
+        
         virtual ~Container();
 
         virtual void addChild(PWidget widget);

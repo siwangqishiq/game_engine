@@ -6,6 +6,7 @@ namespace purple{
     const int EVENT_ACTION_BEGIN = 1;
     const int EVENT_ACTION_MOVE = 2;
     const int EVENT_ACTION_END = 3;
+    const int EVENT_ACTION_CANCEL = 4;
 
     const int EVENT_ACTION_MOUSE_MIDDLE_BEGIN = 101;
     const int EVENT_ACTION_MOUSE_MIDDLE_MOVE = 102;

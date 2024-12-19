@@ -113,12 +113,51 @@ namespace purple{
     void Widget::setRootUi(UiRoot *root){
         this->rootUi = root;
     }
+
+    void Widget::performClick(InputEvent &event){
+        if(onClickFn != nullptr){
+            onClickFn(event);
+        }
+    }
     
     bool Widget::onInputEvent(InputEvent &event){
-        return false;
+        bool ret = false;
+        const float x = event.x;
+        const float y = event.y;
+        auto rect = getWidgetRect();
+        
+        switch(event.action){
+            case EVENT_ACTION_BEGIN:
+                if(needEatInputBeginEvent()){
+                    if(rect.isPointInRect(x, y)){
+                        ret = true;
+                    }
+                }
+                break;
+            case EVENT_ACTION_MOVE:
+                if(!rect.isPointInRect(x, y) && !actionMoveOutScope){
+                    actionMoveOutScope = true;
+                }
+                break;
+            case EVENT_ACTION_END:
+                if(!actionMoveOutScope){
+                    performClick(event);
+                }
+                actionMoveOutScope = false;
+                break;
+            case EVENT_ACTION_CANCEL:
+                actionMoveOutScope = false;
+                break;
+        }//end switch
+
+        return ret;
     }
 
     bool Widget::dispatchInputEvent(InputEvent &event){
+        if(visible_ != VisibleState::Normal){
+            return false;
+        }
+        
         return onInputEvent(event);
     }
 }
